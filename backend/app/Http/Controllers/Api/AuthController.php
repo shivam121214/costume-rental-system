@@ -9,8 +9,29 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // public function login(Request $request)
+    // {
+    //     $data = $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required'
+    //     ]);
+
+    //     $user = User::where('email', $data['email'])->first();
+
+    //     if (!$user || !Hash::check($data['password'], $user->password)) {
+    //         return response()->json([
+    //             'message' => 'Invalid credentials'
+    //         ], 401);
+    //     }
+
+    //     return response()->json([
+    //         'message' => 'Login successful',
+    //         'user' => $user
+    //     ]);
+    // }
     public function login(Request $request)
-    {
+{
+    try {
         $data = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -18,15 +39,20 @@ class AuthController extends Controller
 
         $user = User::where('email', $data['email'])->first();
 
-        if (!$user || !Hash::check($data['password'], $user->password)) {
-            return response()->json([
-                'message' => 'Invalid credentials'
-            ], 401);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         return response()->json([
-            'message' => 'Login successful',
-            'user' => $user
+            'user' => $user,
+            'password_column' => $user->password
         ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile()
+        ], 500);
     }
+}
 }
