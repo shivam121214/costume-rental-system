@@ -19,7 +19,7 @@ function Dashboard() {
   }, []);
 
   const getStats = async () => {
-    const res = await axios.get("http://127.0.0.1:8000/api/dashboard");
+    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/dashboard");
     setStats(res.data);
   };
 

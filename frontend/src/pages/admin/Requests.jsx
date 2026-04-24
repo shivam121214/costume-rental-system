@@ -9,19 +9,19 @@ function Requests() {
   }, []);
 
   const getRequests = async () => {
-    const res = await axios.get("http://127.0.0.1:8000/api/requests");
+    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/requests");
     setRequests(res.data);
   };
 
   const acceptRequest = async (id) => {
-    await axios.post(`http://127.0.0.1:8000/api/requests/${id}/accept`);
+    await axios.post(`https://costume-rental-system-production-c63d.up.railway.app/api/requests/${id}/accept`);
     getRequests();
   };
 
   const rejectRequest = async (id) => {
     const reason = prompt("Enter reject reason:");
 
-    await axios.post(`http://127.0.0.1:8000/api/requests/${id}/reject`, {
+    await axios.post(`https://costume-rental-system-production-c63d.up.railway.app/api/requests/${id}/reject`, {
       reject_reason: reason || "Not available",
     });
 

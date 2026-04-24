@@ -9,7 +9,7 @@ function Bookings() {
   }, []);
 
   const getBookings = async () => {
-    const res = await axios.get("http://127.0.0.1:8000/api/bookings");
+    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/bookings");
     setBookings(res.data);
   };
 
@@ -20,7 +20,7 @@ function Bookings() {
       if (!received) return;
     }
 
-    await axios.post(`http://127.0.0.1:8000/api/bookings/${id}/status`, {
+    await axios.post(`https://costume-rental-system-production-c63d.up.railway.app/api/bookings/${id}/status`, {
       status,
     });
 
@@ -34,7 +34,7 @@ function Bookings() {
 
     if (!confirmReturn) return;
 
-    await axios.post(`http://127.0.0.1:8000/api/bookings/${id}/return`);
+    await axios.post(`https://costume-rental-system-production-c63d.up.railway.app/api/bookings/${id}/return`);
 
     getBookings();
   };

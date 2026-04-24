@@ -15,7 +15,7 @@ function Availability() {
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get("http://127.0.0.1:8000/api/products");
+    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/products");
     setProducts(res.data);
   };
 
@@ -27,7 +27,7 @@ function Availability() {
     e.preventDefault();
 
     const res = await axios.post(
-      "http://127.0.0.1:8000/api/check-availability",
+      "https://costume-rental-system-production-c63d.up.railway.app/api/check-availability",
       form
     );
 

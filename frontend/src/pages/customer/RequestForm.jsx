@@ -17,7 +17,7 @@ function RequestForm() {
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get("http://127.0.0.1:8000/api/products");
+    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/products");
     setProducts(res.data);
   };
 
@@ -28,7 +28,7 @@ function RequestForm() {
   const submitRequest = async (e) => {
     e.preventDefault();
 
-    await axios.post("http://127.0.0.1:8000/api/requests", form);
+    await axios.post("https://costume-rental-system-production-c63d.up.railway.app/api/requests", form);
 
     alert("Request Sent!");
 

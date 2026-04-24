@@ -30,7 +30,7 @@ function Products() {
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get("http://127.0.0.1:8000/api/products");
+    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/products");
     setProducts(res.data);
   };
 
@@ -93,11 +93,11 @@ function Products() {
     try {
       if (editId) {
         await axios.post(
-          `http://127.0.0.1:8000/api/products/${editId}?_method=PUT`,
+          `https://costume-rental-system-production-c63d.up.railway.app/api/products/${editId}?_method=PUT`,
           data,
         );
       } else {
-        await axios.post("http://127.0.0.1:8000/api/products", data);
+        await axios.post("https://costume-rental-system-production-c63d.up.railway.app/api/products", data);
       }
 
       setForm(emptyForm);
@@ -131,7 +131,7 @@ function Products() {
       return;
     }
 
-    await axios.delete(`http://127.0.0.1:8000/api/products/${id}`);
+    await axios.delete(`https://costume-rental-system-production-c63d.up.railway.app/api/products/${id}`);
     getProducts();
   };
 

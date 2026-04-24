@@ -13,7 +13,7 @@ function Products() {
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get("http://127.0.0.1:8000/api/products");
+    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/products");
     setProducts(res.data);
   };
 

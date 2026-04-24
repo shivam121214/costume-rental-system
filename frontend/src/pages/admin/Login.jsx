@@ -22,7 +22,7 @@ function Login() {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/admin/login",
+        "https://costume-rental-system-production-c63d.up.railway.app/api/admin/login",
         form
       );
 
