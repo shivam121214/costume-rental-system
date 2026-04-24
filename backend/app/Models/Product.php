@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Product extends Model
+{
+    protected $fillable = [
+        'name',
+        'category',
+        'description',
+        'image',
+        'gallery',
+        'rent_price',
+        'security_deposit',
+        'total_quantity',
+        'variants',
+        'sizes',
+        'status'
+    ];
+
+    protected $casts = [
+        'variants' => 'array',
+        'gallery' => 'array',
+    ];
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function requests()
+    {
+        return $this->hasMany(BookingRequest::class);
+    }
+}

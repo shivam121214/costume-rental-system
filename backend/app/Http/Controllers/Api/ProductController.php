@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Product;
+use Illuminate\Http\Request;
+
+class ProductController extends Controller
+{
+    public function index()
+    {
+        return response()->json(
+            Product::where('status', 'available')
+                ->latest()
+                ->get()
+        );
+    }
+
+    public function show($id)
+    {
+        return response()->json(Product::findOrFail($id));
+    }
+
+    public function store(Request $request)
+    {
+        $request->merge([
+            'variants' => json_decode($request->variants, true)
+        ]);
+
+        $data = $request->validate([
+            'name' => 'required',
+            'category' => 'nullable',
+            'description' => 'nullable',
+            'image' => 'nullable|file|image|max:5120',
+            'gallery' => 'nullable|array',
+            'gallery.*' => 'image|max:5120',
+            'rent_price' => 'required|numeric',
+            'security_deposit' => 'required|numeric|min:0',
+            'variants' => 'nullable|array',
+            'total_quantity' => 'required|integer',
+            'sizes' => 'nullable',
+            'status' => 'required'
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        if ($request->hasFile('gallery')) {
+            $gallery = [];
+
+            foreach ($request->file('gallery') as $file) {
+                $gallery[] = $file->store('products', 'public');
+            }
+
+            $data['gallery'] = $gallery;
+        }
+
+        $product = Product::create($data);
+
+        return response()->json($product, 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->merge([
+            'variants' => json_decode($request->variants, true)
+        ]);
+
+        $product = Product::findOrFail($id);
+
+        $data = $request->validate([
+            'name' => 'required',
+            'category' => 'nullable',
+            'description' => 'nullable',
+            'image' => 'nullable|file|image|max:5120',
+            'gallery' => 'nullable|array',
+            'gallery.*' => 'image|max:5120',
+            'existingGallery' => 'nullable',
+            'rent_price' => 'required|numeric',
+            'security_deposit' => 'required|numeric|min:0',
+            'variants' => 'nullable|array',
+            'total_quantity' => 'required|integer',
+            'sizes' => 'nullable',
+            'status' => 'required',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $gallery = [];
+
+        if ($request->filled('existingGallery')) {
+            $gallery = json_decode($request->existingGallery, true) ?? [];
+        }
+
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $file) {
+                $gallery[] = $file->store('products', 'public');
+            }
+        }
+
+        $data['gallery'] = $gallery;
+
+        $product->update($data);
+
+        return response()->json($product);
+    }
+
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return response()->json([
+            'message' => 'Product deleted permanently'
+        ]);
+    }
+}
