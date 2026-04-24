@@ -33,3 +33,17 @@ Route::get('/dashboard', [DashboardController::class, 'stats']);
 
 
 Route::post('/admin/login', [AuthController::class, 'login']);
+
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+Route::get('/fix-admin', function () {
+    $user = User::where('email', 'admin@gmail.com')->first();
+
+    if (!$user) return 'No user';
+
+    $user->password = Hash::make('12345678');
+    $user->save();
+
+    return 'Password fixed';
+});
