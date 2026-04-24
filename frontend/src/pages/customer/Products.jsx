@@ -7,13 +7,14 @@ function Products() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
+  const API_URL = "https://costume-rental-system-production-c63d.up.railway.app";
 
   useEffect(() => {
     getProducts();
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/products");
+    const res = await axios.get(`${API_URL}/api/products`);
     setProducts(res.data);
   };
 
@@ -85,7 +86,7 @@ function Products() {
               <div className="h-52 bg-slate-200 flex items-center justify-center text-slate-500">
                 {item.image ? (
                   <img
-                    src={`http://127.0.0.1:8000/storage/${item.image}`}
+                    src={`${API_URL}/storage/${item.image}`}
                     alt={item.name}
                     className="w-full h-full object-cover"
                   />

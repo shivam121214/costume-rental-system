@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 
 function ProductDetails() {
   const { id } = useParams();
+  const API_URL = "https://costume-rental-system-production-c63d.up.railway.app";
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
@@ -30,7 +31,7 @@ function ProductDetails() {
   }, []);
 
   const getProduct = async () => {
-    const res = await axios.get(`https://costume-rental-system-production-c63d.up.railway.app/api/products/${id}`);
+    const res = await axios.get(`${API_URL}/api/products/${id}`);
     setProduct(res.data);
 
     if (res.data.image) {
@@ -42,7 +43,7 @@ function ProductDetails() {
     e.preventDefault();
 
     const res = await axios.post(
-      "https://costume-rental-system-production-c63d.up.railway.app/api/check-availability",
+      `${API_URL}/api/check-availability`,
       {
         product_id: id,
         ...availabilityForm,
@@ -55,7 +56,7 @@ function ProductDetails() {
   const submitRequest = async (e) => {
     e.preventDefault();
 
-    await axios.post("https://costume-rental-system-production-c63d.up.railway.app/api/requests", {
+    await axios.post(`${API_URL}/api/requests`, {
       product_id: id,
       ...requestForm,
     });
@@ -92,7 +93,7 @@ function ProductDetails() {
           <div className="h-96 bg-slate-200 rounded-xl overflow-hidden">
             {selectedImage ? (
               <img
-                src={`http://127.0.0.1:8000/storage/${selectedImage}`}
+                src={`${API_URL}/storage/${selectedImage}`}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
@@ -107,7 +108,7 @@ function ProductDetails() {
             {images.map((img, index) => (
               <img
                 key={index}
-                src={`http://127.0.0.1:8000/storage/${img}`}
+                src={`${API_URL}/storage/${img}`}
                 alt=""
                 onClick={() => setSelectedImage(img)}
                 className="w-20 h-20 object-cover rounded-lg cursor-pointer border"
