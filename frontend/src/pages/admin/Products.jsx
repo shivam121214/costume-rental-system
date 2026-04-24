@@ -21,6 +21,7 @@ function Products() {
     },
   };
 
+  const API_URL = "https://costume-rental-system-production-c63d.up.railway.app";
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editId, setEditId] = useState(null);
@@ -30,7 +31,7 @@ function Products() {
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/products");
+    const res = await axios.get(`${API_URL}/api/products`);
     setProducts(res.data);
   };
 
@@ -93,11 +94,11 @@ function Products() {
     try {
       if (editId) {
         await axios.post(
-          `https://costume-rental-system-production-c63d.up.railway.app/api/products/${editId}?_method=PUT`,
+          `${API_URL}/api/products/${editId}?_method=PUT`,
           data,
         );
       } else {
-        await axios.post("https://costume-rental-system-production-c63d.up.railway.app/api/products", data);
+        await axios.post(`${API_URL}/api/products`, data);
       }
 
       setForm(emptyForm);
@@ -131,7 +132,7 @@ function Products() {
       return;
     }
 
-    await axios.delete(`https://costume-rental-system-production-c63d.up.railway.app/api/products/${id}`);
+    await axios.delete(`${API_URL}/api/products/${id}`);
     getProducts();
   };
 
@@ -210,7 +211,7 @@ function Products() {
             {form.existingGallery.map((img, index) => (
               <div key={index} className="relative">
                 <img
-                  src={`http://127.0.0.1:8000/storage/${img}`}
+                  src={`${API_URL}/storage/${img}`}
                   alt=""
                   className="w-full h-24 object-cover rounded-lg"
                 />
@@ -302,7 +303,7 @@ function Products() {
           <div key={item.id} className="bg-white rounded-2xl shadow-md p-5">
             {item.image && (
               <img
-                src={`http://127.0.0.1:8000/storage/${item.image}`}
+                src={`${API_URL}/storage/${item.image}`}
                 alt={item.name}
                 className="w-full h-48 object-cover rounded-xl mb-3"
               />
