@@ -83,14 +83,35 @@ class AuthController extends Controller
 //     ]);
 // }
 
+// public function login(Request $request)
+// {
+//     $user = User::where('email', $request->email)->first();
+
+//     if (!$user) {
+//         return response()->json([
+//             'message' => 'User not found'
+//         ], 404);
+//     }
+
+//     return response()->json([
+//         'message' => 'Login successful',
+//         'user' => $user
+//     ]);
+// }
+
 public function login(Request $request)
 {
-    $user = User::where('email', $request->email)->first();
+    $data = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
+    ]);
 
-    if (!$user) {
+    $user = User::where('email', $data['email'])->first();
+
+    if (!$user || !Hash::check($data['password'], $user->password)) {
         return response()->json([
-            'message' => 'User not found'
-        ], 404);
+            'message' => 'Invalid credentials'
+        ], 401);
     }
 
     return response()->json([
