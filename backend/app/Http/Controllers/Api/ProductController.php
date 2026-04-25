@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductController extends Controller
 {
@@ -45,14 +46,20 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $data['image'] = Cloudinary::upload(
+                $request->file('image')->getRealPath(),
+                ['folder' => 'products']
+            )->getSecurePath();
         }
 
         if ($request->hasFile('gallery')) {
             $gallery = [];
 
             foreach ($request->file('gallery') as $file) {
-                $gallery[] = $file->store('products', 'public');
+                $gallery[] = Cloudinary::upload(
+                    $file->getRealPath(),
+                    ['folder' => 'products']
+                )->getSecurePath();
             }
 
             $data['gallery'] = $gallery;
