@@ -21,7 +21,7 @@ function Products() {
     },
   };
 
-  const API_URL = "https://costume-rental-system-production-c63d.up.railway.app";
+  const API_URL = "https://costume-rental-system.onrender.com";
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editId, setEditId] = useState(null);

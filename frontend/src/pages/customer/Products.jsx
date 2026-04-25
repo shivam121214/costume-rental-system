@@ -7,7 +7,7 @@ function Products() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
-  const API_URL = "https://costume-rental-system-production-c63d.up.railway.app";
+  const API_URL = "https://costume-rental-system.onrender.com";
 
   useEffect(() => {
     getProducts();

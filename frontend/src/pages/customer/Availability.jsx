@@ -15,7 +15,7 @@ function Availability() {
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/products");
+    const res = await axios.get("https://costume-rental-system.onrender.com/api/products");
     setProducts(res.data);
   };
 
@@ -27,7 +27,7 @@ function Availability() {
     e.preventDefault();
 
     const res = await axios.post(
-      "https://costume-rental-system-production-c63d.up.railway.app/api/check-availability",
+      "https://costume-rental-system.onrender.com/api/check-availability",
       form
     );
 

@@ -22,7 +22,7 @@ function Login() {
 
     try {
       const res = await axios.post(
-        "https://costume-rental-system-production-c63d.up.railway.app/api/admin/login",
+        "https://costume-rental-system.onrender.com/api/admin/login",
         form
       );
 

@@ -18,7 +18,7 @@ function DirectOrder() {
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get("https://costume-rental-system-production-c63d.up.railway.app/api/products");
+    const res = await axios.get("https://costume-rental-system.onrender.com/api/products");
     setProducts(res.data);
   };
 
@@ -39,7 +39,7 @@ function DirectOrder() {
   const submitOrder = async (e) => {
     e.preventDefault();
 
-    await axios.post("https://costume-rental-system-production-c63d.up.railway.app/api/direct-order", form);
+    await axios.post("https://costume-rental-system.onrender.com/api/direct-order", form);
 
     alert("Walk-in Order Created!");
 

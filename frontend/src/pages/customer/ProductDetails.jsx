@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 function ProductDetails() {
   const { id } = useParams();
-  const API_URL = "https://costume-rental-system-production-c63d.up.railway.app";
+  const API_URL = "https://costume-rental-system.onrender.com";
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
