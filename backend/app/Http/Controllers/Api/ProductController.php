@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Cloudinary;
 
 class ProductController extends Controller
 {
@@ -45,21 +45,29 @@ class ProductController extends Controller
             'status' => 'required'
         ]);
 
+        $cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_KEY'),
+                'api_secret' => env('CLOUDINARY_SECRET'),
+            ],
+        ]);
+
         if ($request->hasFile('image')) {
-            $data['image'] = Cloudinary::upload(
+            $data['image'] = $cloudinary->uploadApi()->upload(
                 $request->file('image')->getRealPath(),
                 ['folder' => 'products']
-            )->getSecurePath();
+            )['secure_url'];
         }
 
         if ($request->hasFile('gallery')) {
             $gallery = [];
 
             foreach ($request->file('gallery') as $file) {
-                $gallery[] = Cloudinary::upload(
+                $gallery[] = $cloudinary->uploadApi()->upload(
                     $file->getRealPath(),
                     ['folder' => 'products']
-                )->getSecurePath();
+                )['secure_url'];
             }
 
             $data['gallery'] = $gallery;
