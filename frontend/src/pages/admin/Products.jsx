@@ -22,6 +22,11 @@ function Products() {
   };
 
   const API_URL = "https://costume-rental-system.onrender.com";
+  const getImageUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    return `${API_URL}/storage/${path}`;
+  };
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editId, setEditId] = useState(null);
@@ -93,10 +98,7 @@ function Products() {
 
     try {
       if (editId) {
-        await axios.post(
-          `${API_URL}/api/products/${editId}?_method=PUT`,
-          data,
-        );
+        await axios.post(`${API_URL}/api/products/${editId}?_method=PUT`, data);
       } else {
         await axios.post(`${API_URL}/api/products`, data);
       }
@@ -211,7 +213,7 @@ function Products() {
             {form.existingGallery.map((img, index) => (
               <div key={index} className="relative">
                 <img
-                  src={`${API_URL}/storage/${img}`}
+                  src={getImageUrl(img)}
                   alt=""
                   className="w-full h-24 object-cover rounded-lg"
                 />
@@ -303,7 +305,7 @@ function Products() {
           <div key={item.id} className="bg-white rounded-2xl shadow-md p-5">
             {item.image && (
               <img
-                src={`${API_URL}/storage/${item.image}`}
+                src={getImageUrl(item.image)}
                 alt={item.name}
                 className="w-full h-48 object-cover rounded-xl mb-3"
               />
