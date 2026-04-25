@@ -5,6 +5,11 @@ import { useParams } from "react-router-dom";
 function ProductDetails() {
   const { id } = useParams();
   const API_URL = "https://costume-rental-system.onrender.com";
+  const getImageUrl = (path) => {
+  if (!path) return "";
+  if (path.startsWith("http")) return path;
+  return `${API_URL}/storage/${path}`;
+};
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
@@ -93,7 +98,7 @@ function ProductDetails() {
           <div className="h-96 bg-slate-200 rounded-xl overflow-hidden">
             {selectedImage ? (
               <img
-                src={`${API_URL}/storage/${selectedImage}`}
+                src={getImageUrl(selectedImage)}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
@@ -108,7 +113,7 @@ function ProductDetails() {
             {images.map((img, index) => (
               <img
                 key={index}
-                src={`${API_URL}/storage/${img}`}
+                src={getImageUrl(img)}
                 alt=""
                 onClick={() => setSelectedImage(img)}
                 className="w-20 h-20 object-cover rounded-lg cursor-pointer border"
