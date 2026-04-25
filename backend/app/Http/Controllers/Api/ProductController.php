@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -112,6 +113,17 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+
+        if ($product->gallery && is_array($product->gallery)) {
+            foreach ($product->gallery as $img) {
+                Storage::disk('public')->delete($img);
+            }
+        }
+
         $product->delete();
 
         return response()->json([
