@@ -143,13 +143,31 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
-        }
+        $cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_KEY'),
+                'api_secret' => env('CLOUDINARY_SECRET'),
+            ],
+        ]);
+
+        $deleteFromCloudinary = function ($url) use ($cloudinary) {
+            if (!$url || !str_contains($url, 'res.cloudinary.com')) return;
+
+            $parts = explode('/upload/', $url);
+            if (count($parts) < 2) return;
+
+            $path = preg_replace('/^v\d+\//', '', $parts[1]);
+            $publicId = pathinfo($path, PATHINFO_DIRNAME) . '/' . pathinfo($path, PATHINFO_FILENAME);
+
+            $cloudinary->uploadApi()->destroy($publicId);
+        };
+
+        $deleteFromCloudinary($product->image);
 
         if ($product->gallery && is_array($product->gallery)) {
             foreach ($product->gallery as $img) {
-                Storage::disk('public')->delete($img);
+                $deleteFromCloudinary($img);
             }
         }
 
