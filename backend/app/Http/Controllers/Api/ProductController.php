@@ -102,8 +102,19 @@ class ProductController extends Controller
             'status' => 'required',
         ]);
 
+        $cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_KEY'),
+                'api_secret' => env('CLOUDINARY_SECRET'),
+            ],
+        ]);
+
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $data['image'] = $cloudinary->uploadApi()->upload(
+                $request->file('image')->getRealPath(),
+                ['folder' => 'products']
+            )['secure_url'];
         }
 
         $gallery = [];
@@ -114,7 +125,10 @@ class ProductController extends Controller
 
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
-                $gallery[] = $file->store('products', 'public');
+                $gallery[] = $cloudinary->uploadApi()->upload(
+                    $file->getRealPath(),
+                    ['folder' => 'products']
+                )['secure_url'];
             }
         }
 
