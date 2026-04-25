@@ -8,6 +8,11 @@ function Products() {
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
   const API_URL = "https://costume-rental-system.onrender.com";
+  const getImageUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    return `${API_URL}/storage/${path}`;
+  };
 
   useEffect(() => {
     getProducts();
@@ -86,7 +91,7 @@ function Products() {
               <div className="h-52 bg-slate-200 flex items-center justify-center text-slate-500">
                 {item.image ? (
                   <img
-                    src={`${API_URL}/storage/${item.image}`}
+                    src={getImageUrl(item.image)}
                     alt={item.name}
                     className="w-full h-full object-cover"
                   />
