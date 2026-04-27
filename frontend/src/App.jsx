@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/customer/Home";
 import Products from "./pages/customer/Products";
 import ProductDetails from "./pages/customer/ProductDetails";
-import Availability from "./pages/customer/Availability";
-import RequestForm from "./pages/customer/RequestForm";
+// import Availability from "./pages/customer/Availability";
+// import RequestForm from "./pages/customer/RequestForm";
 
 import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
