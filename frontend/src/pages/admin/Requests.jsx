@@ -73,6 +73,7 @@ function Requests() {
               {item.product?.name || "Deleted Product"}
             </p>
             <p className="mt-2">Qty: {item.quantity}</p>
+            <p>Available: {item.available_quantity}</p>
             <p>
               {item.start_date} → {item.end_date}
             </p>
@@ -81,7 +82,12 @@ function Requests() {
               <div className="flex gap-3 mt-4">
                 <button
                   onClick={() => acceptRequest(item.id)}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg"
+                  disabled={item.available_quantity < item.quantity}
+                  className={`px-4 py-2 rounded-lg text-white ${
+                    item.available_quantity < item.quantity
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-green-600"
+                  }`}
                 >
                   Accept
                 </button>
