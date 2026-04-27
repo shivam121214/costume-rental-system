@@ -20,13 +20,6 @@ function Home() {
           >
             Book Now
           </Link>
-
-          <Link
-            to="/availability"
-            className="border border-white px-6 py-3 rounded-xl"
-          >
-            Check Availability
-          </Link>
         </div>
       </section>
 
