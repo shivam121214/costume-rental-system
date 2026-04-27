@@ -16,10 +16,16 @@ function Navbar() {
   };
 
   useEffect(() => {
-    if (admin) {
+    if (!admin) return;
+
+    getPendingRequests();
+
+    const interval = setInterval(() => {
       getPendingRequests();
-    }
-  }, []);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [admin]);
 
   const getPendingRequests = async () => {
     const res = await axios.get(`${API_URL}/api/requests`);
