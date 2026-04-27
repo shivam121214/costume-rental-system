@@ -15,15 +15,9 @@ function ProductDetails() {
   const [selectedImage, setSelectedImage] = useState("");
   const [message, setMessage] = useState("");
 
-  const [availabilityForm, setAvailabilityForm] = useState({
-    variant: "",
-    start_date: "",
-    end_date: "",
-  });
-
   const [availability, setAvailability] = useState(null);
 
-  const [requestForm, setRequestForm] = useState({
+  const [form, setForm] = useState({
     customer_name: "",
     phone: "",
     variant: "",
@@ -50,10 +44,11 @@ function ProductDetails() {
 
     const res = await axios.post(`${API_URL}/api/check-availability`, {
       product_id: id,
-      ...availabilityForm,
+      ...form,
     });
 
     setAvailability(res.data);
+    setMessage("");
   };
 
   const submitRequest = async (e) => {
@@ -61,7 +56,7 @@ function ProductDetails() {
 
     if (
       availability &&
-      Number(requestForm.quantity) > availability.available_quantity
+      Number(form.quantity) > availability.available_quantity
     ) {
       setMessage("Selected quantity is not available");
       return;
@@ -70,12 +65,12 @@ function ProductDetails() {
     try {
       await axios.post(`${API_URL}/api/requests`, {
         product_id: id,
-        ...requestForm,
+        ...form,
       });
 
       setMessage("Request sent successfully!");
 
-      setRequestForm({
+      setForm({
         customer_name: "",
         phone: "",
         variant: "",
@@ -157,96 +152,10 @@ function ProductDetails() {
             <form onSubmit={checkAvailability} className="grid gap-3">
               <select
                 className="border p-3 rounded-lg"
-                value={availabilityForm.variant}
+                value={form.variant}
                 onChange={(e) =>
-                  setAvailabilityForm({
-                    ...availabilityForm,
-                    variant: e.target.value,
-                  })
-                }
-                required
-              >
-                <option value="">Select Age Group</option>
-                {ageGroups.map((group, i) => (
-                  <option key={i}>{group}</option>
-                ))}
-              </select>
-
-              <input
-                type="date"
-                className="border p-3 rounded-lg"
-                value={availabilityForm.start_date}
-                onChange={(e) =>
-                  setAvailabilityForm({
-                    ...availabilityForm,
-                    start_date: e.target.value,
-                  })
-                }
-                required
-              />
-
-              <input
-                type="date"
-                className="border p-3 rounded-lg"
-                value={availabilityForm.end_date}
-                onChange={(e) =>
-                  setAvailabilityForm({
-                    ...availabilityForm,
-                    end_date: e.target.value,
-                  })
-                }
-                required
-              />
-
-              <button className="bg-slate-900 text-white py-3 rounded-lg">
-                Check
-              </button>
-            </form>
-
-            {availability && (
-              <p className="mt-3 font-semibold">
-                Available: {availability.available_quantity}
-              </p>
-            )}
-          </div>
-
-          {/* Request Form */}
-          <div className="mt-8 border-t pt-6">
-            <h2 className="text-xl font-semibold mb-3">Send Booking Request</h2>
-
-            <form onSubmit={submitRequest} className="grid gap-3">
-              <input
-                className="border p-3 rounded-lg"
-                placeholder="Your Name"
-                value={requestForm.customer_name}
-                onChange={(e) =>
-                  setRequestForm({
-                    ...requestForm,
-                    customer_name: e.target.value,
-                  })
-                }
-                required
-              />
-
-              <input
-                className="border p-3 rounded-lg"
-                placeholder="Phone Number"
-                value={requestForm.phone}
-                onChange={(e) =>
-                  setRequestForm({
-                    ...requestForm,
-                    phone: e.target.value,
-                  })
-                }
-                required
-              />
-
-              <select
-                className="border p-3 rounded-lg"
-                value={requestForm.variant}
-                onChange={(e) =>
-                  setRequestForm({
-                    ...requestForm,
+                  setForm({
+                    ...form,
                     variant: e.target.value,
                   })
                 }
@@ -261,23 +170,19 @@ function ProductDetails() {
               <input
                 type="number"
                 className="border p-3 rounded-lg"
-                value={requestForm.quantity}
-                onChange={(e) =>
-                  setRequestForm({
-                    ...requestForm,
-                    quantity: e.target.value,
-                  })
-                }
+                placeholder="Quantity"
+                value={form.quantity}
+                onChange={(e) => setForm({ ...form, quantity: e.target.value })}
                 required
               />
 
               <input
                 type="date"
                 className="border p-3 rounded-lg"
-                value={requestForm.start_date}
+                value={form.start_date}
                 onChange={(e) =>
-                  setRequestForm({
-                    ...requestForm,
+                  setForm({
+                    ...form,
                     start_date: e.target.value,
                   })
                 }
@@ -287,24 +192,67 @@ function ProductDetails() {
               <input
                 type="date"
                 className="border p-3 rounded-lg"
-                value={requestForm.end_date}
+                value={form.end_date}
                 onChange={(e) =>
-                  setRequestForm({
-                    ...requestForm,
+                  setForm({
+                    ...form,
                     end_date: e.target.value,
                   })
                 }
                 required
               />
 
-              {message && (
-                <p className="text-sm font-medium text-red-600">{message}</p>
-              )}
-
-              <button className="bg-yellow-400 py-3 rounded-lg font-semibold">
-                Send Request
+              <button className="bg-slate-900 text-white py-3 rounded-lg">
+                Check
               </button>
             </form>
+
+            {availability && (
+              <p className="mt-3 font-semibold">
+                <span
+                  className={
+                    availability.available_quantity > 0
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }
+                >
+                  Available: {availability.available_quantity}
+                </span>
+              </p>
+            )}
+
+            {availability?.available_quantity > 0 && (
+              <div className="grid gap-3 mt-4">
+                <input
+                  className="border p-3 rounded-lg"
+                  placeholder="Your Name"
+                  value={form.customer_name}
+                  onChange={(e) =>
+                    setForm({ ...form, customer_name: e.target.value })
+                  }
+                  required
+                />
+
+                <input
+                  className="border p-3 rounded-lg"
+                  placeholder="Phone Number"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  required
+                />
+
+                {message && (
+                  <p className="text-sm font-medium text-red-600">{message}</p>
+                )}
+
+                <button
+                  onClick={submitRequest}
+                  className="bg-yellow-400 py-3 rounded-lg font-semibold"
+                >
+                  Send Booking Request
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
