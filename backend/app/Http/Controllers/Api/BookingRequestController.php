@@ -12,9 +12,27 @@ class BookingRequestController extends Controller
 {
     public function index()
     {
-        return response()->json(
-            BookingRequest::with('product')->latest()->get()
-        );
+        $requests = BookingRequest::with('product')->latest()->get();
+
+        foreach ($requests as $item) {
+            if (!$item->product) {
+                $item->available_quantity = 0;
+                continue;
+            }
+
+            $stock = $item->product->variants[$item->variant] ?? 0;
+
+            $booked = Booking::where('product_id', $item->product_id)
+                ->where('variant', $item->variant)
+                ->whereIn('status', ['reserved', 'picked', 'late'])
+                ->whereDate('start_date', '<=', $item->end_date)
+                ->whereDate('end_date', '>=', $item->start_date)
+                ->sum('quantity');
+
+            $item->available_quantity = $stock - $booked;
+        }
+
+        return response()->json($requests);
     }
 
     public function store(Request $request)
