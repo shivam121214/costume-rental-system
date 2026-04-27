@@ -9,21 +9,35 @@ function Requests() {
   }, []);
 
   const getRequests = async () => {
-    const res = await axios.get("https://costume-rental-system.onrender.com/api/requests");
+    const res = await axios.get(
+      "https://costume-rental-system.onrender.com/api/requests",
+    );
     setRequests(res.data);
   };
 
   const acceptRequest = async (id) => {
-    await axios.post(`https://costume-rental-system.onrender.com/api/requests/${id}/accept`);
-    getRequests();
+    try {
+      await axios.post(
+        `https://costume-rental-system.onrender.com/api/requests/${id}/accept`,
+      );
+
+      getRequests();
+    } catch (error) {
+      alert(
+        error.response?.data?.message || "Cannot accept request right now.",
+      );
+    }
   };
 
   const rejectRequest = async (id) => {
     const reason = prompt("Enter reject reason:");
 
-    await axios.post(`https://costume-rental-system.onrender.com/api/requests/${id}/reject`, {
-      reject_reason: reason || "Not available",
-    });
+    await axios.post(
+      `https://costume-rental-system.onrender.com/api/requests/${id}/reject`,
+      {
+        reject_reason: reason || "Not available",
+      },
+    );
 
     getRequests();
   };
