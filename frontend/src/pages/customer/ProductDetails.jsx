@@ -13,6 +13,7 @@ function ProductDetails() {
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
+  const [message, setMessage] = useState("");
 
   const [availabilityForm, setAvailabilityForm] = useState({
     variant: "",
@@ -64,7 +65,7 @@ function ProductDetails() {
         ...requestForm,
       });
 
-      alert("Request Sent Successfully!");
+      setMessage("Request sent successfully!");
 
       setRequestForm({
         customer_name: "",
@@ -75,8 +76,8 @@ function ProductDetails() {
         end_date: "",
       });
     } catch (error) {
-      alert(
-        error.response?.data?.message || "Unable to send request right now.",
+      setMessage(
+        error.response?.data?.message || "Selected quantity is not available",
       );
     }
   };
@@ -287,6 +288,10 @@ function ProductDetails() {
                 }
                 required
               />
+
+              {message && (
+                <p className="text-sm font-medium text-red-600">{message}</p>
+              )}
 
               <button className="bg-yellow-400 py-3 rounded-lg font-semibold">
                 Send Request
