@@ -6,10 +6,10 @@ function ProductDetails() {
   const { id } = useParams();
   const API_URL = "https://costume-rental-system.onrender.com";
   const getImageUrl = (path) => {
-  if (!path) return "";
-  if (path.startsWith("http")) return path;
-  return `${API_URL}/storage/${path}`;
-};
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    return `${API_URL}/storage/${path}`;
+  };
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
@@ -47,13 +47,10 @@ function ProductDetails() {
   const checkAvailability = async (e) => {
     e.preventDefault();
 
-    const res = await axios.post(
-      `${API_URL}/api/check-availability`,
-      {
-        product_id: id,
-        ...availabilityForm,
-      },
-    );
+    const res = await axios.post(`${API_URL}/api/check-availability`, {
+      product_id: id,
+      ...availabilityForm,
+    });
 
     setAvailability(res.data);
   };
@@ -61,21 +58,27 @@ function ProductDetails() {
   const submitRequest = async (e) => {
     e.preventDefault();
 
-    await axios.post(`${API_URL}/api/requests`, {
-      product_id: id,
-      ...requestForm,
-    });
+    try {
+      await axios.post(`${API_URL}/api/requests`, {
+        product_id: id,
+        ...requestForm,
+      });
 
-    alert("Request Sent Successfully!");
+      alert("Request Sent Successfully!");
 
-    setRequestForm({
-      customer_name: "",
-      phone: "",
-      variant: "",
-      quantity: 1,
-      start_date: "",
-      end_date: "",
-    });
+      setRequestForm({
+        customer_name: "",
+        phone: "",
+        variant: "",
+        quantity: 1,
+        start_date: "",
+        end_date: "",
+      });
+    } catch (error) {
+      alert(
+        error.response?.data?.message || "Unable to send request right now.",
+      );
+    }
   };
 
   if (!product) return <div className="p-6">Loading...</div>;
@@ -137,7 +140,7 @@ function ProductDetails() {
               Returned after costume is returned in proper condition.
             </p>
           </div>
-          
+
           {/* Availability */}
           <div className="mt-8 border-t pt-6">
             <h2 className="text-xl font-semibold mb-3">Check Availability</h2>
