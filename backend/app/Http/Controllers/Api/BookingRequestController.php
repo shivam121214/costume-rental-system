@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\BookingRequest;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Booking;
 
 class BookingRequestController extends Controller
 {
@@ -22,10 +24,29 @@ class BookingRequestController extends Controller
             'phone' => 'required',
             'product_id' => 'required',
             'variant' => 'required',
-            'quantity' => 'required|integer',
+            'quantity' => 'required|integer|min:1',
             'start_date' => 'required|date',
             'end_date' => 'required|date'
         ]);
+
+        $product = Product::findOrFail($data['product_id']);
+
+        $stock = $product->variants[$data['variant']] ?? 0;
+
+        $booked = Booking::where('product_id', $data['product_id'])
+            ->where('variant', $data['variant'])
+            ->whereIn('status', ['reserved', 'picked', 'late'])
+            ->whereDate('start_date', '<=', $data['end_date'])
+            ->whereDate('end_date', '>=', $data['start_date'])
+            ->sum('quantity');
+
+        $available = $stock - $booked;
+
+        if ($data['quantity'] > $available) {
+            return response()->json([
+                'message' => 'Requested quantity not available'
+            ], 422);
+        }
 
         $booking = BookingRequest::create($data);
 
