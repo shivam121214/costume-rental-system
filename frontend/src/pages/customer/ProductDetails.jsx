@@ -68,7 +68,7 @@ function ProductDetails() {
         ...form,
       });
 
-      setMessage("Request sent successfully!");
+      setMessage("Request sent successfully! We will contact you soon.");
 
       setForm({
         customer_name: "",
@@ -147,7 +147,9 @@ function ProductDetails() {
 
           {/* Availability */}
           <div className="mt-8 border-t pt-6">
-            <h2 className="text-xl font-semibold mb-3">Check Availability</h2>
+            <h2 className="text-xl font-semibold mb-3">
+              Check Availability & Send Request
+            </h2>
 
             <form onSubmit={checkAvailability} className="grid gap-3">
               <select
@@ -221,38 +223,50 @@ function ProductDetails() {
               </p>
             )}
 
-            {availability?.available_quantity > 0 && (
-              <div className="grid gap-3 mt-4">
-                <input
-                  className="border p-3 rounded-lg"
-                  placeholder="Your Name"
-                  value={form.customer_name}
-                  onChange={(e) =>
-                    setForm({ ...form, customer_name: e.target.value })
-                  }
-                  required
-                />
+            {availability &&
+              Number(form.quantity) > availability.available_quantity && (
+                <p className="text-red-600 mt-2">
+                  Selected quantity is not available
+                </p>
+              )}
 
-                <input
-                  className="border p-3 rounded-lg"
-                  placeholder="Phone Number"
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  required
-                />
+            {availability &&
+              Number(form.quantity) <= availability.available_quantity && (
+                <div className="grid gap-3 mt-4">
+                  <input
+                    className="border p-3 rounded-lg"
+                    placeholder="Your Name"
+                    value={form.customer_name}
+                    onChange={(e) =>
+                      setForm({ ...form, customer_name: e.target.value })
+                    }
+                    required
+                  />
 
-                {message && (
-                  <p className="text-sm font-medium text-red-600">{message}</p>
-                )}
+                  <input
+                    className="border p-3 rounded-lg"
+                    placeholder="Phone Number"
+                    value={form.phone}
+                    onChange={(e) =>
+                      setForm({ ...form, phone: e.target.value })
+                    }
+                    required
+                  />
 
-                <button
-                  onClick={submitRequest}
-                  className="bg-yellow-400 py-3 rounded-lg font-semibold"
-                >
-                  Send Booking Request
-                </button>
-              </div>
-            )}
+                  {message && (
+                    <p className="text-sm font-medium text-red-600">
+                      {message}
+                    </p>
+                  )}
+
+                  <button
+                    onClick={submitRequest}
+                    className="bg-yellow-400 py-3 rounded-lg font-semibold"
+                  >
+                    Send Booking Request
+                  </button>
+                </div>
+              )}
           </div>
         </div>
       </div>
