@@ -59,6 +59,14 @@ function ProductDetails() {
   const submitRequest = async (e) => {
     e.preventDefault();
 
+    if (
+      availability &&
+      Number(requestForm.quantity) > availability.available_quantity
+    ) {
+      setMessage("Selected quantity is not available");
+      return;
+    }
+
     try {
       await axios.post(`${API_URL}/api/requests`, {
         product_id: id,
