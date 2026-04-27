@@ -69,11 +69,30 @@ class BookingRequestController extends Controller
     {
         $requestItem = BookingRequest::findOrFail($id);
 
+        $product = Product::findOrFail($requestItem->product_id);
+
+        $stock = $product->variants[$requestItem->variant] ?? 0;
+
+        $booked = Booking::where('product_id', $requestItem->product_id)
+            ->where('variant', $requestItem->variant)
+            ->whereIn('status', ['reserved', 'picked', 'late'])
+            ->whereDate('start_date', '<=', $requestItem->end_date)
+            ->whereDate('end_date', '>=', $requestItem->start_date)
+            ->sum('quantity');
+
+        $available = $stock - $booked;
+
+        if ($requestItem->quantity > $available) {
+            return response()->json([
+                'message' => 'Cannot accept. Stock not available.'
+            ], 422);
+        }
+
         $requestItem->update([
             'status' => 'accepted'
         ]);
 
-        $booking = \App\Models\Booking::create([
+        $booking = Booking::create([
             'customer_name' => $requestItem->customer_name,
             'phone' => $requestItem->phone,
             'product_id' => $requestItem->product_id,
