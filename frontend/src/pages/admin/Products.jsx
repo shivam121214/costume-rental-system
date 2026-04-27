@@ -138,6 +138,27 @@ function Products() {
     getProducts();
   };
 
+  const toggleVisibility = async (item) => {
+    const data = new FormData();
+
+    data.append("name", item.name);
+    data.append("category", item.category || "");
+    data.append("description", item.description || "");
+    data.append("rent_price", item.rent_price);
+    data.append("security_deposit", item.security_deposit);
+    data.append("sizes", item.sizes || "");
+    data.append("variants", JSON.stringify(item.variants || {}));
+    data.append("total_quantity", item.total_quantity);
+    data.append("existingGallery", JSON.stringify(item.gallery || []));
+    data.append(
+      "status",
+      item.status === "available" ? "unavailable" : "available",
+    );
+
+    await axios.post(`${API_URL}/api/products/${item.id}?_method=PUT`, data);
+    getProducts();
+  };
+
   const removeGalleryImage = (index) => {
     const updated = [...form.gallery];
     updated.splice(index, 1);
@@ -321,6 +342,13 @@ function Products() {
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg"
               >
                 Edit
+              </button>
+
+              <button
+                onClick={() => toggleVisibility(item)}
+                className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
+              >
+                {item.status === "available" ? "Hide" : "Unhide"}
               </button>
 
               <button
