@@ -97,6 +97,8 @@ function ProductDetails() {
     ...(product.gallery || []),
   ];
 
+  const today = new Date().toISOString().split("T")[0];
+
   return (
     <div className="min-h-screen bg-slate-100 p-6">
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-md overflow-hidden grid md:grid-cols-2 gap-6 p-6">
@@ -180,6 +182,7 @@ function ProductDetails() {
 
               <input
                 type="date"
+                min={today}
                 className="border p-3 rounded-lg"
                 value={form.start_date}
                 onChange={(e) =>
@@ -193,6 +196,7 @@ function ProductDetails() {
 
               <input
                 type="date"
+                min={form.start_date || today}
                 className="border p-3 rounded-lg"
                 value={form.end_date}
                 onChange={(e) =>
