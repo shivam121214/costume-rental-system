@@ -15,7 +15,7 @@ function Home() {
 
         <div className="flex gap-4 justify-center mt-8 flex-wrap">
           <Link
-            to="/request"
+            to="/products"
             className="bg-yellow-400 text-slate-900 px-6 py-3 rounded-xl font-semibold"
           >
             Book Now
