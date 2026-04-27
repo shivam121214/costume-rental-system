@@ -36,7 +36,7 @@ function Products() {
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get(`${API_URL}/api/products`);
+    const res = await axios.get(`${API_URL}/api/admin/products`);
     setProducts(res.data);
   };
 

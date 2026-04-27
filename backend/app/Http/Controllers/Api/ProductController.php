@@ -19,6 +19,13 @@ class ProductController extends Controller
         );
     }
 
+    public function all()
+    {
+        return response()->json(
+            Product::latest()->get()
+        );
+    }
+
     public function show($id)
     {
         return response()->json(Product::findOrFail($id));
