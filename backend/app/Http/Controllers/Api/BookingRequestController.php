@@ -18,7 +18,7 @@ class BookingRequestController extends Controller
             $query->where('status', request('status'));
         }
 
-        $requests = $query->get();
+        $requests = $query->paginate(10);
 
         foreach ($requests as $item) {
             if (!$item->product) {
@@ -38,7 +38,10 @@ class BookingRequestController extends Controller
             $item->available_quantity = $stock - $booked;
         }
 
-        return response()->json($requests);
+        return response()->json([
+            'data' => $requests->items(),
+            'next_page_url' => $requests->nextPageUrl()
+        ]);
     }
 
     public function store(Request $request)
