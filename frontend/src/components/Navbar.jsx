@@ -28,9 +28,9 @@ function Navbar() {
   }, [admin]);
 
   const getPendingRequests = async () => {
-    const res = await axios.get(`${API_URL}/api/requests`);
+    const res = await axios.get(`${API_URL}/api/requests?status=pending`);
 
-    const pending = res.data.filter((item) => item.status === "pending").length;
+    const pending = res.data.data.length;
 
     setPendingCount(pending);
   };
