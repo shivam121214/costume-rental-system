@@ -89,9 +89,7 @@ function Requests() {
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {requests
-          .filter((item) => (filter === "all" ? true : item.status === filter))
-          .map((item) => {
+        {requests.map((item) => {
             const remaining = Math.max(
               0,
               item.available_quantity - item.quantity,
