@@ -43,6 +43,18 @@ class BookingRequestController extends Controller
         $nextPage = $requests->nextPageUrl();
 
         if ($nextPage) {
+            // add status param again
+            $status = request('status');
+
+            if ($status && $status !== 'all') {
+                $nextPage .= '&status=' . $status;
+            }
+
+            // fix https
+            $nextPage = str_replace('http://', 'https://', $nextPage);
+        }
+
+        if ($nextPage) {
             $nextPage = str_replace('http://', 'https://', $nextPage);
         }
 
