@@ -20,13 +20,15 @@ class BookingRequestController extends Controller
 
         $requests = $query->paginate(10);
 
-        foreach ($requests as $item) {
+        foreach ($requests->items() as $item) {
             if (!$item->product) {
                 $item->available_quantity = 0;
                 continue;
             }
 
-            $stock = $item->product->variants[$item->variant] ?? 0;
+            // $stock = $item->product->variants[$item->variant] ?? 0;
+            $variants = $item->product->variants ?? [];
+            $stock = $variants[$item->variant] ?? 0;
 
             $booked = Booking::where('product_id', $item->product_id)
                 ->where('variant', $item->variant)
@@ -38,9 +40,15 @@ class BookingRequestController extends Controller
             $item->available_quantity = $stock - $booked;
         }
 
+        $nextPage = $requests->nextPageUrl();
+
+        if ($nextPage) {
+            $nextPage = str_replace('http://', 'https://', $nextPage);
+        }
+
         return response()->json([
             'data' => $requests->items(),
-            'next_page_url' => $requests->nextPageUrl()
+            'next_page_url' => $nextPage
         ]);
     }
 
@@ -58,7 +66,9 @@ class BookingRequestController extends Controller
 
         $product = Product::findOrFail($data['product_id']);
 
-        $stock = $product->variants[$data['variant']] ?? 0;
+        // $stock = $product->variants[$data['variant']] ?? 0;
+        $variants = $product->variants ?? [];
+        $stock = $variants[$data['variant']] ?? 0;
 
         $booked = Booking::where('product_id', $data['product_id'])
             ->where('variant', $data['variant'])
@@ -98,7 +108,9 @@ class BookingRequestController extends Controller
 
         $product = Product::findOrFail($requestItem->product_id);
 
-        $stock = $product->variants[$requestItem->variant] ?? 0;
+        // $stock = $product->variants[$requestItem->variant] ?? 0;
+        $variants = $product->variants ?? [];
+        $stock = $variants[$requestItem->variant] ?? 0;
 
         $booked = Booking::where('product_id', $requestItem->product_id)
             ->where('variant', $requestItem->variant)
