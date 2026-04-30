@@ -3,8 +3,9 @@ import axios from "axios";
 
 function Requests() {
   const [requests, setRequests] = useState([]);
-
   const [filter, setFilter] = useState("pending");
+  const [nextPageUrl, setNextPageUrl] = useState(null);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
     getRequests();
@@ -14,7 +15,22 @@ function Requests() {
     const res = await axios.get(
       `https://costume-rental-system.onrender.com/api/requests?status=${filter}`,
     );
-    setRequests(res.data);
+
+    setRequests(res.data.data);
+    setNextPageUrl(res.data.next_page_url);
+  };
+
+  const loadMore = async () => {
+    if (!nextPageUrl) return;
+
+    setLoadingMore(true);
+
+    const res = await axios.get(nextPageUrl);
+
+    setRequests((prev) => [...prev, ...res.data.data]);
+    setNextPageUrl(res.data.next_page_url);
+
+    setLoadingMore(false);
   };
 
   const acceptRequest = async (id) => {
@@ -147,6 +163,17 @@ function Requests() {
             );
           })}
       </div>
+      {nextPageUrl && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={loadMore}
+            disabled={loadingMore}
+            className="px-6 py-3 bg-slate-900 text-white rounded-lg"
+          >
+            {loadingMore ? "Loading..." : "Load More"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
