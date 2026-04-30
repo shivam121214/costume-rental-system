@@ -12,7 +12,13 @@ class BookingRequestController extends Controller
 {
     public function index()
     {
-        $requests = BookingRequest::with('product')->latest()->get();
+        $query = BookingRequest::with('product')->latest();
+
+        if (request()->has('status') && request('status') !== 'all') {
+            $query->where('status', request('status'));
+        }
+
+        $requests = $query->get();
 
         foreach ($requests as $item) {
             if (!$item->product) {

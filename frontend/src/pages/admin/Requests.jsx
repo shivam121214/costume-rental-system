@@ -8,11 +8,11 @@ function Requests() {
 
   useEffect(() => {
     getRequests();
-  }, []);
+  }, [filter]);
 
   const getRequests = async () => {
     const res = await axios.get(
-      "https://costume-rental-system.onrender.com/api/requests",
+      `https://costume-rental-system.onrender.com/api/requests?status=${filter}`,
     );
     setRequests(res.data);
   };
