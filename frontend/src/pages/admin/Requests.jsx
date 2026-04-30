@@ -22,6 +22,7 @@ function Requests() {
       );
 
       getRequests();
+      alert("Request Accepted");
     } catch (error) {
       alert(
         error.response?.data?.message || "Cannot accept request right now.",
@@ -52,6 +53,8 @@ function Requests() {
     return styles[status] || "bg-slate-100 text-slate-700";
   };
 
+  const remaining = Math.max(0, item.available_quantity - item.quantity);
+
   return (
     <div className="min-h-screen bg-slate-100 p-6">
       <h1 className="text-3xl font-bold mb-6">Requests</h1>
@@ -74,6 +77,18 @@ function Requests() {
             </p>
             <p className="mt-2">Qty: {item.quantity}</p>
             <p>Available: {item.available_quantity}</p>
+            <p>
+              After accept:{" "}
+              <span
+                className={
+                  item.available_quantity < item.quantity
+                    ? "text-red-600 font-semibold"
+                    : "text-green-600 font-semibold"
+                }
+              >
+                {remaining}
+              </span>
+            </p>
             <p>
               {item.start_date} → {item.end_date}
             </p>
