@@ -5,7 +5,6 @@ function Loader() {
     <div className="flex flex-col items-center justify-center mt-16">
       <div className="w-28 h-28">
         <Lottie
-          animationData={null}
           path="/dance-loader.json"
           loop={true}
         />
