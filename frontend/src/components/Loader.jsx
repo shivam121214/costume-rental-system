@@ -1,7 +1,17 @@
+import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
-import animationData from "../assets/loader.json";
 
 function Loader() {
+  const [animationData, setAnimationData] = useState(null);
+
+  useEffect(() => {
+    fetch("/loader.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data));
+  }, []);
+
+  if (!animationData) return null;
+
   return (
     <div className="flex flex-col items-center justify-center mt-16">
       <div className="w-32 h-32">
