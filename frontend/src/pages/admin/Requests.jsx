@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Loader from "../components/Loader";
 
 function Requests() {
   const [requests, setRequests] = useState([]);
   const [filter, setFilter] = useState("pending");
   const [nextPageUrl, setNextPageUrl] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getRequests();
   }, [filter]);
 
   const getRequests = async () => {
+    setLoading(true);
     const res = await axios.get(
       `https://costume-rental-system.onrender.com/api/requests?status=${filter}`,
     );
 
     setRequests(res.data.data);
     setNextPageUrl(res.data.next_page_url);
+    setLoading(false);
   };
 
   const loadMore = async () => {
@@ -88,7 +92,9 @@ function Requests() {
         ))}
       </div>
 
-      {requests.length === 0 ? (
+      {loading ? (
+        <Loader />
+      ) : requests.length === 0 ? (
         <div className="text-center mt-16">
           <p className="text-xl font-semibold text-slate-600">
             No {filter === "all" ? "" : filter} requests
