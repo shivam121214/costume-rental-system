@@ -88,8 +88,16 @@ function Requests() {
         ))}
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {requests.map((item) => {
+      {requests.length === 0 ? (
+        <div className="text-center mt-16">
+          <p className="text-xl font-semibold text-slate-600">
+            No {filter === "all" ? "" : filter} requests
+          </p>
+          <p className="text-slate-400 mt-2">You're all caught up 🎉</p>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {requests.map((item) => {
             const remaining = Math.max(
               0,
               item.available_quantity - item.quantity,
@@ -160,7 +168,8 @@ function Requests() {
               </div>
             );
           })}
-      </div>
+        </div>
+      )}
       {nextPageUrl && (
         <div className="flex justify-center mt-6">
           <button
