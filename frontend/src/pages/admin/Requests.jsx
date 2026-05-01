@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Loader from "../../components/Loader";
 
 function Requests() {
   const [requests, setRequests] = useState([]);
@@ -93,10 +92,9 @@ function Requests() {
       </div>
 
       {loading ? (
-        // <div className="text-center mt-16 text-slate-500">
-        //   Loading requests...
-        // </div>
-        <Loader />
+        <div className="text-center mt-16 text-slate-500">
+          Loading requests...
+        </div>
       ) : requests.length === 0 ? (
         <div className="text-center mt-16">
           <p className="text-xl font-semibold text-slate-600">
