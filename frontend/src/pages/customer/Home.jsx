@@ -33,10 +33,10 @@ function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
-              className="text-6xl md:text-7xl lg:text-8xl font-chewy text-black mb-6 leading-[1.1] drop-shadow-[3px_3px_0_rgba(255,255,255,1)]"
+              className="text-6xl md:text-7xl lg:text-8xl text-black mb-6 leading-[1.1]"
             >
-              Unleash Your <br/>
-              <span className="text-[#ef476f] drop-shadow-[3px_3px_0_rgba(0,0,0,1)]">Imagination!</span>
+              <span className="font-black">Unleash Your</span> <br/>
+              <span className="font-chewy text-[#ef476f] drop-shadow-[3px_3px_0_rgba(0,0,0,1)]" style={{WebkitTextStroke: '2px #ef476f'}}>Imagination!</span>
             </motion.h1>
 
             <motion.p 
