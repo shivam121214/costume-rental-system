@@ -12,6 +12,7 @@ function Dashboard() {
     paid_amount: 0,
     pending_amount: 0,
     partial_count: 0,
+    todays_returns: 0,
   });
 
   useEffect(() => {
@@ -87,6 +88,13 @@ function Dashboard() {
             <p className="text-slate-500">Partial Payments</p>
             <h2 className="text-4xl font-bold mt-2 text-orange-500">
               {stats.partial_count}
+            </h2>
+          </div>
+
+          <div className={card}>
+            <p className="text-slate-500">Today's Returns</p>
+            <h2 className="text-4xl font-bold mt-2 text-blue-600">
+              {stats.todays_returns}
             </h2>
           </div>
         </div>
