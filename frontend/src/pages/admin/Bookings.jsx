@@ -103,10 +103,10 @@ function Bookings() {
               </button>
 
               <button
-                onClick={() => updateStatus(item.id, "no-show")}
+                onClick={() => updateStatus(item.id, "cancelled")}
                 className="bg-slate-700 text-white py-2 rounded-lg"
               >
-                No-show
+                Cancel
               </button>
 
               <button
