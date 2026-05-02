@@ -6,9 +6,15 @@ function Navbar() {
   const navigate = useNavigate();
   const admin = localStorage.getItem("admin");
   const [pendingCount, setPendingCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
   const API_URL = "https://costume-rental-system.onrender.com";
 
   const link = "text-white hover:text-yellow-300 transition";
+
+  const getCartCount = () => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    setCartCount(cart.length);
+  };
 
   const logout = () => {
     localStorage.removeItem("admin");
@@ -16,12 +22,20 @@ function Navbar() {
   };
 
   useEffect(() => {
-    if (!admin) return;
+    if (admin) {
+      getPendingRequests();
 
-    getPendingRequests();
+      const interval = setInterval(() => {
+        getPendingRequests();
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+
+    getCartCount();
 
     const interval = setInterval(() => {
-      getPendingRequests();
+      getCartCount();
     }, 5000);
 
     return () => clearInterval(interval);
@@ -46,6 +60,17 @@ function Navbar() {
       <Link to="/products" className={link}>
         Products
       </Link>
+
+      {!admin && (
+        <Link to="/cart" className={link}>
+          Cart
+          {cartCount > 0 && (
+            <span className="ml-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-full">
+              {cartCount}
+            </span>
+          )}
+        </Link>
+      )}
 
       <div className="ml-auto flex gap-4 items-center">
         {!admin ? (
