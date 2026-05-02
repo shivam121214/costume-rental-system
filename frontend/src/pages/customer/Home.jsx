@@ -4,6 +4,7 @@ import { Sparkles, ArrowRight } from 'lucide-react';
 import { Categories } from "./Categories";
 import { FeaturedProducts } from "./FeaturedProducts";
 import { Testimonials } from "./Testimonials";
+import { ContactUs } from "./ContactUs";
 
 function Home() {
   return (
@@ -106,6 +107,9 @@ function Home() {
 
       {/* Testimonials Section */}
       <Testimonials />
+
+      {/* Contact Us Section */}
+      <ContactUs />
     </div>
   );
 }
