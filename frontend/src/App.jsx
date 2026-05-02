@@ -13,6 +13,7 @@ import DirectOrder from "./pages/admin/DirectOrder";
 
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TodaysReturns from "./pages/admin/TodaysReturns";
 
 function App() {
   return (
@@ -70,6 +71,15 @@ function App() {
           element={
             <ProtectedRoute>
               <DirectOrder />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/todays-returns"
+          element={
+            <ProtectedRoute>
+              <TodaysReturns />
             </ProtectedRoute>
           }
         />
