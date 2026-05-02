@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Search, ShoppingCart, User } from 'lucide-react';
+import { Search, ShoppingCart, User, Menu, X } from 'lucide-react';
 import { motion } from 'motion/react';
 
 function Navbar() {
@@ -9,6 +9,7 @@ function Navbar() {
   const admin = localStorage.getItem("admin");
   const [pendingCount, setPendingCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
   const API_URL = "https://costume-rental-system.onrender.com";
 
   const getCartCount = () => {
@@ -18,6 +19,7 @@ function Navbar() {
 
   const logout = () => {
     localStorage.removeItem("admin");
+    setMenuOpen(false);
     navigate("/admin/login");
   };
 
@@ -79,7 +81,7 @@ function Navbar() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 relative">
             <Link to="/products" className="hover:scale-110 transition-transform bg-[#ffd166] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
               <Search className="w-5 h-5 text-black stroke-[3]" />
             </Link>
@@ -92,10 +94,104 @@ function Navbar() {
               )}
             </Link>
             
-            {admin && (
-              <Link to="/admin" className="hover:scale-110 transition-transform bg-[#a8dadc] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
-                <User className="w-5 h-5 text-black stroke-[3]" />
-              </Link>
+            <button 
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="hover:scale-110 transition-transform bg-[#a8dadc] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]"
+            >
+              {menuOpen ? (
+                <X className="w-5 h-5 text-black stroke-[3]" />
+              ) : (
+                <Menu className="w-5 h-5 text-black stroke-[3]" />
+              )}
+            </button>
+
+            {/* Dropdown Menu */}
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute top-24 right-0 bg-[#fdf8e6] border-2 border-black rounded-lg shadow-[4px_4px_0_0_rgba(0,0,0,1)] py-2 min-w-max"
+              >
+                {admin ? (
+                  <>
+                    <Link 
+                      to="/admin" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link 
+                      to="/admin/products" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                    >
+                      Add Products
+                    </Link>
+                    <Link 
+                      to="/admin/requests" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black relative"
+                    >
+                      Requests
+                      {pendingCount > 0 && (
+                        <span className="ml-2 bg-[#ef476f] text-white text-xs font-bold px-2 py-1 rounded-full inline-block">
+                          {pendingCount}
+                        </span>
+                      )}
+                    </Link>
+                    <Link 
+                      to="/admin/bookings" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                    >
+                      Bookings
+                    </Link>
+                    <Link 
+                      to="/admin/direct-order" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                    >
+                      Direct Order
+                    </Link>
+                    <Link 
+                      to="/admin/todays-returns" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                    >
+                      Today's Returns
+                    </Link>
+                    <Link 
+                      to="/admin/active-rentals" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                    >
+                      Active Rentals
+                    </Link>
+                    <Link 
+                      to="/admin/late-returns" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                    >
+                      Late Returns
+                    </Link>
+                    <button
+                      onClick={logout}
+                      className="w-full text-left px-6 py-2 text-black font-bold hover:bg-[#ef476f] hover:text-white transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <Link 
+                    to="/admin/login" 
+                    onClick={() => setMenuOpen(false)}
+                    className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors"
+                  >
+                    Admin Login
+                  </Link>
+                )}
+              </motion.div>
             )}
           </div>
         </div>
