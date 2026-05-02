@@ -56,6 +56,13 @@ function Dashboard() {
               {stats.todays_returns}
             </h2>
           </div>
+
+          <div className={card}>
+            <p className="text-slate-500">Late Returns</p>
+            <h2 className="text-4xl font-bold mt-2 text-red-500">
+              {stats.late_returns}
+            </h2>
+          </div>
         </div>
 
         <h2 className="text-xl font-semibold mb-4 text-slate-700">Status</h2>
