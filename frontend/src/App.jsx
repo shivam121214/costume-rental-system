@@ -14,6 +14,7 @@ import DirectOrder from "./pages/admin/DirectOrder";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TodaysReturns from "./pages/admin/TodaysReturns";
+import ActiveRentals from "./pages/admin/ActiveRentals";
 
 function App() {
   return (
@@ -80,6 +81,15 @@ function App() {
           element={
             <ProtectedRoute>
               <TodaysReturns />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/active-rentals"
+          element={
+            <ProtectedRoute>
+              <ActiveRentals />
             </ProtectedRoute>
           }
         />
