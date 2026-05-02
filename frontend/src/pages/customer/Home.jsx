@@ -36,10 +36,9 @@ function Home() {
               className="text-6xl md:text-7xl lg:text-8xl mb-6 leading-[1.1]"
             >
               <span className="font-fredoka font-black text-black">Unleash Your</span> <br/>
-              <span className="font-chewy text-[#ef476f] font-bold" style={{
-                WebkitTextStroke: '2px #000',
-                paintOrder: 'stroke fill',
-                textShadow: '4px 4px 0px rgba(0,0,0,0.4)',
+              <span className="font-fingerPaint text-[#ef476f]" style={{
+                fontSize: '1.2em',
+                textShadow: '3px 3px 0px rgba(0,0,0,0.4)',
               }}>Imagination!</span>
             </motion.h1>
 
