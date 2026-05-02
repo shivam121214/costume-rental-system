@@ -62,7 +62,7 @@ function Bookings() {
     const today = new Date().setHours(0, 0, 0, 0);
     const end = new Date(item.end_date).setHours(0, 0, 0, 0);
 
-    if (item.status !== "returned" && end < today) {
+    if (item.status !== "returned" && item.status !== "cancelled" && end < today) {
       return "late";
     }
 
