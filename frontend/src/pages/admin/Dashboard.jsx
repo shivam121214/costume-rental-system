@@ -37,16 +37,14 @@ function Dashboard() {
 
         <h2 className="text-xl font-semibold mb-4 text-slate-700">Priority</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className={card}>
-            <div
-              onClick={() => navigate("/admin/requests")}
-              className={`${card} cursor-pointer hover:shadow-lg transition`}
-            >
-              <p className="text-slate-500">Pending Requests</p>
-              <h2 className="text-4xl font-bold mt-2 text-orange-500">
-                {stats.pending_requests}
-              </h2>
-            </div>
+          <div
+            onClick={() => navigate("/admin/requests")}
+            className={`${card} cursor-pointer hover:shadow-lg transition`}
+          >
+            <p className="text-slate-500">Pending Requests</p>
+            <h2 className="text-4xl font-bold mt-2 text-orange-500">
+              {stats.pending_requests}
+            </h2>
           </div>
 
           <div className={card}>

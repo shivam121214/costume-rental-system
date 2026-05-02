@@ -26,6 +26,7 @@ Route::get('/bookings', [BookingController::class, 'index']);
 Route::post('/bookings/{id}/status', [BookingController::class, 'updateStatus']);
 Route::post('/bookings/{id}/return', [BookingController::class, 'markReturn']);
 Route::post('/direct-order', [BookingController::class, 'directOrder']);
+Route::get('/bookings/todays-returns', [BookingController::class, 'todaysReturns']);
 
 Route::post('/check-availability', [AvailabilityController::class, 'check']);
 

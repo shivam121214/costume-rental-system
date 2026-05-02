@@ -67,4 +67,15 @@ class BookingController extends Controller
 
         return response()->json($booking, 201);
     }
+
+    public function todaysReturns()
+    {
+        $bookings = Booking::with('product')
+            ->whereDate('end_date', now())
+            ->whereIn('status', ['reserved', 'picked', 'late'])
+            ->latest()
+            ->get();
+
+        return response()->json($bookings);
+    }
 }
