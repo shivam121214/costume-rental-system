@@ -65,7 +65,7 @@ function Navbar() {
               <span className="text-3xl font-bold text-[#ff5c8d] drop-shadow-[2px_2px_0_rgba(0,0,0,1)] tracking-wide" style={{
                 fontFamily: "'Chewy', cursive",
               }}>
-                Party Palooza!
+                Aadya Fancy Dresses
               </span>
             </Link>
 
