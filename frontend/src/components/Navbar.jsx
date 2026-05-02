@@ -103,12 +103,15 @@ function Navbar() {
             
             <button 
               onClick={() => setMenuOpen(!menuOpen)}
-              className="hover:scale-110 transition-transform bg-[#a8dadc] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]"
+              className="hover:scale-110 transition-transform bg-[#a8dadc] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] relative"
             >
               {menuOpen ? (
                 <X className="w-5 h-5 text-black stroke-[3]" />
               ) : (
                 <Menu className="w-5 h-5 text-black stroke-[3]" />
+              )}
+              {admin && pendingCount > 0 && (
+                <span className="absolute -top-2 -right-2 w-3 h-3 bg-[#ef476f] rounded-full border-2 border-black"></span>
               )}
             </button>
 
