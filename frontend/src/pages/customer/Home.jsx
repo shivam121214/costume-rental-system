@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import { Categories } from "./Categories";
 import { FeaturedProducts } from "./FeaturedProducts";
+import { Testimonials } from "./Testimonials";
 
 function Home() {
   return (
@@ -97,50 +98,8 @@ function Home() {
       {/* Featured Products Section */}
       <FeaturedProducts />
 
-      {/* Why Choose Us Section */}
-      <section className="px-6 py-16 max-w-6xl mx-auto">
-        <h2 className="text-5xl font-['Chewy'] font-bold text-center mb-10 text-black drop-shadow-[2px_2px_0_rgba(0,0,0,1)]">
-          Why Choose Us
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-white p-6 rounded-2xl border-[3px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all"
-          >
-            <h3 className="text-xl font-bold text-black">Huge Collection</h3>
-            <p className="text-neutral-700 mt-2">
-              Superheroes, cultural dresses, school characters and more.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="bg-white p-6 rounded-2xl border-[3px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all"
-          >
-            <h3 className="text-xl font-bold text-black">Affordable Prices</h3>
-            <p className="text-neutral-700 mt-2">
-              Budget-friendly rentals for all events and occasions.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white p-6 rounded-2xl border-[3px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all"
-          >
-            <h3 className="text-xl font-bold text-black">Easy Booking</h3>
-            <p className="text-neutral-700 mt-2">
-              Check availability and send requests in minutes.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Testimonials Section */}
+      <Testimonials />
     </div>
   );
 }
