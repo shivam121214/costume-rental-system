@@ -3,10 +3,7 @@ import { motion } from 'motion/react';
 
 export function Footer() {
   const handleReviewClick = () => {
-    // This will later be connected to Google Maps link
-    // For now, just log the action
-    console.log('Opening Google Maps for reviews');
-    // window.open('https://maps.google.com/...', '_blank');
+    window.open('https://www.google.com/maps/place/AADYA+FANCY+DRESSES+ULWE/@18.9776338,73.0281489,17z/data=!3m1!4b1!4m6!3m5!1s0x3be7c3adc74b8865:0x6862f3049dc12fa8!8m2!3d18.9776338!4d73.0281489!16s%2Fg%2F11j0w8_rcq?hl=en-IN&entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D', '_blank');
   };
 
   return (
