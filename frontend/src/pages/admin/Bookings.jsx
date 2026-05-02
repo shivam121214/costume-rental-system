@@ -62,7 +62,11 @@ function Bookings() {
     const today = new Date().setHours(0, 0, 0, 0);
     const end = new Date(item.end_date).setHours(0, 0, 0, 0);
 
-    if (item.status !== "returned" && item.status !== "cancelled" && end < today) {
+    if (
+      item.status !== "returned" &&
+      item.status !== "no-show" &&
+      end < today
+    ) {
       return "late";
     }
 
@@ -103,10 +107,10 @@ function Bookings() {
               </button>
 
               <button
-                onClick={() => updateStatus(item.id, "cancelled")}
+                onClick={() => updateStatus(item.id, "no-show")}
                 className="bg-slate-700 text-white py-2 rounded-lg"
               >
-                Cancel
+                No-show
               </button>
 
               <button
