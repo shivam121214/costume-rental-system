@@ -4,6 +4,39 @@ import axios from "axios";
 
 function Cart() {
   const [cart, setCart] = useState([]);
+  const [customerName, setCustomerName] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const handleSendRequest = async () => {
+    if (!customerName || !phone) {
+      alert("Enter name and phone");
+      return;
+    }
+
+    try {
+      for (let item of cart) {
+        await axios.post(
+          "https://costume-rental-system.onrender.com/api/requests",
+          {
+            product_id: item.product_id,
+            variant: item.variant,
+            quantity: item.quantity,
+            start_date: item.start_date,
+            end_date: item.end_date,
+            customer_name: customerName,
+            phone: phone,
+          },
+        );
+      }
+
+      alert("Request sent successfully");
+
+      localStorage.removeItem("cart");
+      setCart([]);
+    } catch (err) {
+      alert("Error sending request");
+    }
+  };
 
   useEffect(() => {
     loadCart();
@@ -63,6 +96,9 @@ function Cart() {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     setCart(updatedCart);
   };
+
+  const allAvailable =
+    cart.length > 0 && cart.every((item) => item.is_available === true);
 
   return (
     <div className="min-h-screen bg-slate-100 p-6">
@@ -141,6 +177,34 @@ function Cart() {
             </div>
           ))}
         </div>
+        {allAvailable && (
+          <div className="mt-6 bg-white p-4 rounded-xl shadow">
+            <h2 className="text-xl font-semibold mb-3">Send Request</h2>
+
+            <input
+              type="text"
+              placeholder="Your Name"
+              className="border p-3 rounded-lg w-full mb-3"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+            />
+
+            <input
+              type="text"
+              placeholder="Phone Number"
+              className="border p-3 rounded-lg w-full mb-3"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+
+            <button
+              onClick={handleSendRequest}
+              className="bg-yellow-400 py-3 rounded-lg w-full font-semibold"
+            >
+              Send Request
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
