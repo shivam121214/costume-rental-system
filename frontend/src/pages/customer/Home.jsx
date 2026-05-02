@@ -35,7 +35,8 @@ function Home() {
               transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
               className="text-6xl md:text-7xl lg:text-8xl mb-6 leading-[1.1]"
             >
-              <span className="text-6xl md:text-7xl lg:text-8xl text-[#000000]" style={{
+              <span className="font-fredoka font-black text-black" >Unleash Your</span> <br/>
+              <span className="text-6xl md:text-7xl lg:text-8xl text-[#ef476f]" style={{
                 fontFamily: "'Chewy', cursive",
                 textShadow: '3px 3px 0px rgba(0,0,0,0.5)',
               }}>Unleash Your</span> <br/>
