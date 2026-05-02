@@ -47,7 +47,10 @@ function Dashboard() {
             </h2>
           </div>
 
-          <div className={card}>
+          <div
+            onClick={() => navigate("/admin/todays-returns")}
+            className={`${card} cursor-pointer hover:shadow-lg transition`}
+          >
             <p className="text-slate-500">Today's Returns</p>
             <h2 className="text-4xl font-bold mt-2 text-purple-600">
               {stats.todays_returns}
