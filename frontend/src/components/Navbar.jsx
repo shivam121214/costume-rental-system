@@ -90,10 +90,10 @@ function Navbar() {
 
           <div className="flex items-center gap-6 relative">
             <Link to="/products" className="hover:scale-110 transition-transform bg-[#ffd166] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
-              <Search className="w-5 h-5 text-black stroke-[3]" />
+              <Search className="w-5 h-5 text-black" strokeWidth={3} />
             </Link>
             <Link to="/cart" className="hover:scale-110 transition-transform bg-[#06d6a0] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] relative">
-              <ShoppingCart className="w-5 h-5 text-black stroke-[3]" />
+              <ShoppingCart className="w-5 h-5 text-black" strokeWidth={3} />
               {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#ef476f] text-white text-xs font-bold rounded-full border-2 border-black flex items-center justify-center">
                   {cartCount}
@@ -106,9 +106,9 @@ function Navbar() {
               className="hover:scale-110 transition-transform bg-[#a8dadc] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] relative"
             >
               {menuOpen ? (
-                <X className="w-5 h-5 text-black stroke-[3]" />
+                <X className="w-5 h-5 text-black" strokeWidth={3} />
               ) : (
-                <Menu className="w-5 h-5 text-black stroke-[3]" />
+                <Menu className="w-5 h-5 text-black" strokeWidth={3} />
               )}
               {admin && pendingCount > 0 && (
                 <span className="absolute -top-2 -right-2 w-3 h-3 bg-[#ef476f] rounded-full border-2 border-black"></span>
