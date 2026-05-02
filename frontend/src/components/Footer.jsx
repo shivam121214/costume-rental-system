@@ -23,7 +23,7 @@ export function Footer() {
               <span className="text-4xl text-[#ef476f] drop-shadow-[2px_2px_0_rgba(0,0,0,1)] tracking-wide" style={{
                 fontFamily: "'Chewy', cursive",
               }}>
-                Party Palooza!
+                Aadya Fancy Dresses
               </span>
             </a>
             <p className="text-lg font-bold leading-relaxed max-w-sm mb-6">

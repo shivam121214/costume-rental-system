@@ -5,7 +5,7 @@ import { Categories } from "./Categories";
 import { FeaturedProducts } from "./FeaturedProducts";
 import { Testimonials } from "./Testimonials";
 import { ContactUs } from "./ContactUs";
-import { Footer } from "../components/Footer";
+import { Footer } from "../../components/Footer";
 
 function Home() {
   return (
