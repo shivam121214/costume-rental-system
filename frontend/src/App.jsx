@@ -15,6 +15,7 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TodaysReturns from "./pages/admin/TodaysReturns";
 import ActiveRentals from "./pages/admin/ActiveRentals";
+import LateReturns from "./pages/admin/LateReturns";
 
 function App() {
   return (
@@ -93,6 +94,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/admin/late-returns"
+          element={
+            <ProtectedRoute>
+              <LateReturns />
+            </ProtectedRoute>
+          }
+        />
+        
       </Routes>
     </BrowserRouter>
   );
