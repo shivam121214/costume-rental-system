@@ -55,7 +55,7 @@ function ActiveRentals() {
                   <tr
                     key={b.id}
                     className={`border-t ${
-                      new Date(b.end_date) < new Date() &&
+                      new Date(b.end_date).setHours(0,0,0,0) < new Date().setHours(0,0,0,0) &&
                       b.status !== "returned"
                         ? "bg-red-50"
                         : ""

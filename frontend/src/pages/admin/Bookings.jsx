@@ -9,7 +9,9 @@ function Bookings() {
   }, []);
 
   const getBookings = async () => {
-    const res = await axios.get("https://costume-rental-system.onrender.com/api/bookings");
+    const res = await axios.get(
+      "https://costume-rental-system.onrender.com/api/bookings",
+    );
     setBookings(res.data);
   };
 
@@ -20,9 +22,12 @@ function Bookings() {
       if (!received) return;
     }
 
-    await axios.post(`https://costume-rental-system.onrender.com/api/bookings/${id}/status`, {
-      status,
-    });
+    await axios.post(
+      `https://costume-rental-system.onrender.com/api/bookings/${id}/status`,
+      {
+        status,
+      },
+    );
 
     getBookings();
   };
@@ -34,7 +39,9 @@ function Bookings() {
 
     if (!confirmReturn) return;
 
-    await axios.post(`https://costume-rental-system.onrender.com/api/bookings/${id}/return`);
+    await axios.post(
+      `https://costume-rental-system.onrender.com/api/bookings/${id}/return`,
+    );
 
     getBookings();
   };
@@ -51,6 +58,17 @@ function Bookings() {
     return styles[status] || "bg-slate-100 text-slate-700";
   };
 
+  const getDisplayStatus = (item) => {
+    const today = new Date().setHours(0, 0, 0, 0);
+    const end = new Date(item.end_date).setHours(0, 0, 0, 0);
+
+    if (item.status !== "returned" && end < today) {
+      return "late";
+    }
+
+    return item.status;
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 p-6">
       <h1 className="text-3xl font-bold mb-6">Bookings</h1>
@@ -62,9 +80,9 @@ function Bookings() {
               <h3 className="text-xl font-semibold">{item.customer_name}</h3>
 
               <span
-                className={`px-3 py-1 rounded-full text-sm ${badge(item.status)}`}
+                className={`px-3 py-1 rounded-full text-sm ${badge(getDisplayStatus(item))}`}
               >
-                {item.status}
+                {getDisplayStatus(item).toUpperCase()}
               </span>
             </div>
 
@@ -82,13 +100,6 @@ function Bookings() {
                 className="bg-yellow-500 text-white py-2 rounded-lg"
               >
                 Picked
-              </button>
-
-              <button
-                onClick={() => updateStatus(item.id, "late")}
-                className="bg-red-600 text-white py-2 rounded-lg"
-              >
-                Late
               </button>
 
               <button
