@@ -82,7 +82,13 @@ class BookingController extends Controller
     public function activeRentals()
     {
         $bookings = Booking::with('product')
-            ->whereIn('status', ['reserved', 'picked', 'late'])
+            ->where(function ($q) {
+                $q->whereIn('status', ['reserved', 'picked'])
+                    ->orWhere(function ($q2) {
+                        $q2->where('status', '!=', 'returned')
+                            ->whereDate('end_date', '<', now());
+                    });
+            })
             ->latest()
             ->get();
 
