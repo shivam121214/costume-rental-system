@@ -28,6 +28,7 @@ Route::post('/bookings/{id}/return', [BookingController::class, 'markReturn']);
 Route::post('/direct-order', [BookingController::class, 'directOrder']);
 Route::get('/bookings/todays-returns', [BookingController::class, 'todaysReturns']);
 Route::get('/bookings/active-rentals', [BookingController::class, 'activeRentals']);
+Route::get('/bookings/late-returns', [BookingController::class, 'lateReturns']);
 
 Route::post('/check-availability', [AvailabilityController::class, 'check']);
 

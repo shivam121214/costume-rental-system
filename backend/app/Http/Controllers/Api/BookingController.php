@@ -80,12 +80,21 @@ class BookingController extends Controller
     }
 
     public function activeRentals()
-{
-    $bookings = Booking::with('product')
-        ->whereIn('status', ['reserved', 'picked', 'late'])
-        ->latest()
-        ->get();
+    {
+        $bookings = Booking::with('product')
+            ->whereIn('status', ['reserved', 'picked', 'late'])
+            ->latest()
+            ->get();
 
-    return response()->json($bookings);
-}
+        return response()->json($bookings);
+    }
+    public function lateReturns()
+    {
+        $bookings = Booking::with('product')
+            ->where('status', 'late')
+            ->latest()
+            ->get();
+
+        return response()->json($bookings);
+    }
 }
