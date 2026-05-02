@@ -5,6 +5,7 @@ import { Categories } from "./Categories";
 import { FeaturedProducts } from "./FeaturedProducts";
 import { Testimonials } from "./Testimonials";
 import { ContactUs } from "./ContactUs";
+import { Footer } from "../components/Footer";
 
 function Home() {
   return (
@@ -110,6 +111,9 @@ function Home() {
 
       {/* Contact Us Section */}
       <ContactUs />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
