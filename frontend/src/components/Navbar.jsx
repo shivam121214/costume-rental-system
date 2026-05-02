@@ -61,16 +61,14 @@ function Navbar() {
         Products
       </Link>
 
-      {!admin && (
-        <Link to="/cart" className={link}>
-          Cart
-          {cartCount > 0 && (
-            <span className="ml-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-full">
-              {cartCount}
-            </span>
-          )}
-        </Link>
-      )}
+      <Link to="/cart" className={link}>
+        Cart
+        {cartCount > 0 && (
+          <span className="ml-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-full">
+            {cartCount}
+          </span>
+        )}
+      </Link>
 
       <div className="ml-auto flex gap-4 items-center">
         {!admin ? (
