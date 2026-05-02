@@ -18,6 +18,10 @@ class DashboardController extends Controller
             'active_rentals' => Booking::whereIn('status', ['reserved', 'picked', 'late'])->count(),
             'late_returns' => Booking::where('status', 'late')->count(),
 
+            'todays_returns' => Booking::whereDate('end_date', now())
+                ->whereIn('status', ['reserved', 'picked', 'late'])
+                ->count(),
+
             'total_revenue' => Booking::sum('total_amount'),
             'paid_amount' => Booking::where('payment_status', 'paid')->sum('total_amount'),
             'pending_amount' => Booking::where('payment_status', 'pending')->sum('total_amount'),
