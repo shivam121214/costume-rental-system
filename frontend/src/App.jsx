@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TodaysReturns from "./pages/admin/TodaysReturns";
 import ActiveRentals from "./pages/admin/ActiveRentals";
 import LateReturns from "./pages/admin/LateReturns";
+import Cart from "./pages/customer/Cart";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
 
         {/* Admin Login */}
         <Route path="/admin/login" element={<Login />} />
