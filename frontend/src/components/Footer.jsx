@@ -1,4 +1,4 @@
-import { Share2, Instagram, Twitter, MapPin } from 'lucide-react';
+import { Heart, Phone, MapPin } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function Footer() {
@@ -31,13 +31,10 @@ export function Footer() {
             </p>
             <div className="flex gap-4">
               <a href="#" className="bg-[#ef476f] p-3 rounded-xl border-2 border-black shadow-[3px_3px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[1px_1px_0_0_rgba(0,0,0,1)] transition-all text-white">
-                <Instagram className="w-6 h-6" style={{ strokeWidth: 3 }} />
-              </a>
-              <a href="#" className="bg-[#06d6a0] p-3 rounded-xl border-2 border-black shadow-[3px_3px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[1px_1px_0_0_rgba(0,0,0,1)] transition-all text-black">
-                <Twitter className="w-6 h-6" style={{ strokeWidth: 3 }} />
+                <Heart className="w-6 h-6" style={{ strokeWidth: 3 }} />
               </a>
               <a href="#" className="bg-[#ffd166] p-3 rounded-xl border-2 border-black shadow-[3px_3px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[1px_1px_0_0_rgba(0,0,0,1)] transition-all text-black">
-                <Share2 className="w-6 h-6" style={{ strokeWidth: 3 }} />
+                <Phone className="w-6 h-6" style={{ strokeWidth: 3 }} />
               </a>
             </div>
           </div>
