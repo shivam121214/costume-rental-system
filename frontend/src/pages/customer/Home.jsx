@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from 'motion/react';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import { Categories } from "./Categories";
+import { FeaturedProducts } from "./FeaturedProducts";
 
 function Home() {
   return (
@@ -92,6 +93,9 @@ function Home() {
 
       {/* Categories Section */}
       <Categories />
+
+      {/* Featured Products Section */}
+      <FeaturedProducts />
 
       {/* Why Choose Us Section */}
       <section className="px-6 py-16 max-w-6xl mx-auto">
