@@ -4,6 +4,7 @@ export default {
     extend: {
       fontFamily: {
         chewy: ['Chewy', 'cursive'],
+        fredoka: ['Fredoka', 'sans-serif'],
       },
     },
   },
