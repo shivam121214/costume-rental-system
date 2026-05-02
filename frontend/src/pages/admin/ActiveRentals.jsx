@@ -52,7 +52,15 @@ function ActiveRentals() {
               </thead>
               <tbody>
                 {bookings.map((b) => (
-                  <tr key={b.id} className="border-t">
+                  <tr
+                    key={b.id}
+                    className={`border-t ${
+                      new Date(b.end_date) < new Date() &&
+                      b.status !== "returned"
+                        ? "bg-red-50"
+                        : ""
+                    }`}
+                  >
                     <td className="p-4">{b.customer_name}</td>
                     <td className="p-4">{b.phone}</td>
                     <td className="p-4">{b.product?.name}</td>
