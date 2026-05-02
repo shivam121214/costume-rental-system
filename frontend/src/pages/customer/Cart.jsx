@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  getCart,
-  removeFromCart,
-  updateCartItem,
-} from "../../utils/cart";
+import { getCart, removeFromCart, updateCartItem } from "../../utils/cart";
+import axios from "axios";
 
 function Cart() {
   const [cart, setCart] = useState([]);
@@ -27,17 +24,58 @@ function Cart() {
   };
 
   if (cart.length === 0) {
-    return (
-      <div className="p-6 text-center text-slate-500">
-        Cart is empty
-      </div>
-    );
+    return <div className="p-6 text-center text-slate-500">Cart is empty</div>;
   }
+
+  const checkAllAvailability = async () => {
+    const updatedCart = await Promise.all(
+      cart.map(async (item) => {
+        try {
+          const res = await axios.post(
+            "https://costume-rental-system.onrender.com/api/check-availability",
+            {
+              product_id: item.product_id,
+              variant: item.variant,
+              quantity: item.quantity,
+              start_date: item.start_date,
+              end_date: item.end_date,
+            },
+          );
+
+          return {
+            ...item,
+            is_available: res.data.available_quantity >= item.quantity,
+            message:
+              res.data.available_quantity >= item.quantity
+                ? ""
+                : `Only ${res.data.available_quantity} available`,
+          };
+        } catch (err) {
+          return {
+            ...item,
+            is_available: false,
+            message: "Error checking availability",
+          };
+        }
+      }),
+    );
+
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCart(updatedCart);
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 p-6">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
+        <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
+
+        <button
+          onClick={checkAllAvailability}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg mb-4"
+        >
+          Check All Availability
+        </button>
 
         <div className="space-y-4">
           {cart.map((item) => (
@@ -52,13 +90,9 @@ function Cart() {
               />
 
               <div className="flex-1">
-                <h2 className="font-semibold text-lg">
-                  {item.product_name}
-                </h2>
+                <h2 className="font-semibold text-lg">{item.product_name}</h2>
 
-                <p className="text-sm text-slate-500">
-                  Size: {item.variant}
-                </p>
+                <p className="text-sm text-slate-500">Size: {item.variant}</p>
 
                 <div className="flex gap-3 mt-2">
                   <input
@@ -88,6 +122,15 @@ function Cart() {
                     className="border p-2 rounded"
                   />
                 </div>
+                {item.is_available !== null && (
+                  <p
+                    className={`mt-2 text-sm font-medium ${
+                      item.is_available ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {item.is_available ? "Available" : item.message}
+                  </p>
+                )}
               </div>
 
               <button
