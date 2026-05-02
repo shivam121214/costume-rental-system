@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from 'motion/react';
 import { Sparkles, ArrowRight } from 'lucide-react';
+import { Categories } from "./Categories";
 
 function Home() {
   return (
@@ -51,11 +52,11 @@ function Home() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-6 items-center justify-center md:justify-start"
             >
-              <Link to="/products" className="group relative bg-[#06d6a0] text-black px-8 py-4 rounded-xl text-lg font-bold border-[3px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] transition-all flex items-center gap-3">
+              <Link to="/products" className="group relative bg-[#06d6a0] text-black px-8 py-4 rounded-xl text-lg font-bold border-[3px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center gap-3">
                 Shop Kids
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" strokeWidth={3} />
               </Link>
-              <button className="group relative bg-[#118ab2] text-white px-8 py-4 rounded-xl text-lg font-bold border-[3px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] transition-all flex items-center gap-3">
+              <button className="group relative bg-[#118ab2] text-white px-8 py-4 rounded-xl text-lg font-bold border-[3px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center gap-3">
                 Shop Adults
               </button>
             </motion.div>
@@ -66,7 +67,7 @@ function Home() {
               initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
               animate={{ opacity: 1, scale: 1, rotate: -2 }}
               transition={{ type: "spring", bounce: 0.4, duration: 1, delay: 0.2 }}
-              className="relative z-10 rounded-3xl border-4 border-black overflow-hidden shadow-[12px_12px_0_0_rgba(0,0,0,1)] bg-white aspect-square md:aspect-[4/5]"
+              className="relative z-10 rounded-3xl border-4 border-black overflow-hidden shadow-[12px_12px_0_0_rgba(0,0,0,1)] bg-white aspect-square"
             >
               <img
                 src="https://images.unsplash.com/photo-1713357796381-591aadda442b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxraWRzJTIwZmFuY3klMjBkcmVzcyUyMHBhcnR5JTIwZnVuJTIwYnJpZ2h0fGVufDF8fHx8MTc3NzYxODIwMHww&ixlib=rb-4.1.0&q=80&w=1080"
@@ -88,6 +89,9 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* Categories Section */}
+      <Categories />
 
       {/* Why Choose Us Section */}
       <section className="px-6 py-16 max-w-6xl mx-auto">
