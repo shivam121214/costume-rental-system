@@ -52,7 +52,9 @@ export function Categories() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-5xl md:text-6xl font-chewy text-black drop-shadow-[2px_2px_0_rgba(255,255,255,1)] mt-2"
+              className="text-5xl md:text-6xl text-black drop-shadow-[2px_2px_0_rgba(255,255,255,1)] mt-2" style={{
+                fontFamily: "'Chewy', cursive",
+              }}
             >
               Pick Your Adventure!
             </motion.h2>
@@ -86,7 +88,7 @@ export function Categories() {
                   />
                 </div>
                 <div className="p-6 text-center bg-white flex-1 flex flex-col justify-center">
-                  <h3 className="text-2xl font-chewy mb-2 text-black">{category.name}</h3>
+                  <h3 className="text-2xl mb-2 text-black" style={{ fontFamily: "'Chewy', cursive" }}>{category.name}</h3>
                   <p className="font-bold rounded-full px-3 py-1 inline-block text-sm border-2 border-black self-center" style={{ backgroundColor: category.color, color: 'white' }}>
                     {category.count}
                   </p>

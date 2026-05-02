@@ -56,7 +56,9 @@ export function Testimonials() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-6xl font-chewy text-black drop-shadow-[2px_2px_0_rgba(255,255,255,1)]"
+            className="text-5xl md:text-6xl text-black drop-shadow-[2px_2px_0_rgba(255,255,255,1)]" style={{
+              fontFamily: "'Chewy', cursive",
+            }}
           >
             Happy Party People!
           </motion.h2>
@@ -97,7 +99,7 @@ export function Testimonials() {
                     className="w-16 h-16 rounded-full object-cover border-4 border-black"
                   />
                   <div>
-                    <div className="text-black font-chewy text-xl">{testimonial.name}</div>
+                    <div className="text-black text-xl" style={{ fontFamily: "'Chewy', cursive" }}>{testimonial.name}</div>
                     <div className="text-sm font-bold text-neutral-600 rounded-full px-2 py-0.5 bg-gray-100 border border-black inline-block mt-1">{testimonial.role}</div>
                   </div>
                 </div>

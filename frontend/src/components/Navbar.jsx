@@ -62,7 +62,9 @@ function Navbar() {
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center gap-12">
             <Link to="/" className="flex items-center group transform hover:scale-105 transition-transform">
-              <span className="text-3xl font-chewy font-bold text-[#ff5c8d] drop-shadow-[2px_2px_0_rgba(0,0,0,1)] tracking-wide">
+              <span className="text-3xl font-bold text-[#ff5c8d] drop-shadow-[2px_2px_0_rgba(0,0,0,1)] tracking-wide" style={{
+                fontFamily: "'Chewy', cursive",
+              }}>
                 Party Palooza!
               </span>
             </Link>

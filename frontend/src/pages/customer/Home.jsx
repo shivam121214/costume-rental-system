@@ -37,7 +37,7 @@ function Home() {
             >
               <span className="font-fredoka font-black text-black">Unleash Your</span> <br/>
               <span className="text-6xl md:text-7xl lg:text-8xl text-[#ef476f]" style={{
-                fontFamily: "'Finger Paint', cursive",
+                fontFamily: "'Chewy', cursive",
                 textShadow: '3px 3px 0px rgba(0,0,0,0.5)',
               }}>Imagination!</span>
             </motion.h1>

@@ -91,7 +91,9 @@ export function FeaturedProducts() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-6xl font-chewy text-black drop-shadow-[2px_2px_0_rgba(255,255,255,1)]"
+            className="text-5xl md:text-6xl text-black drop-shadow-[2px_2px_0_rgba(255,255,255,1)]" style={{
+              fontFamily: "'Chewy', cursive",
+            }}
           >
             Top Rated Costumes!
           </motion.h2>
@@ -132,7 +134,7 @@ export function FeaturedProducts() {
 
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-2xl font-chewy text-black">{product.name}</h3>
+                    <h3 className="text-2xl text-black" style={{ fontFamily: "'Chewy', cursive" }}>{product.name}</h3>
                     <span className="text-xl font-bold bg-[#ffd166] border-2 border-black px-2 py-1 rounded-lg shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
                       ${product.price}
                     </span>
@@ -157,7 +159,7 @@ export function FeaturedProducts() {
         </div>
         
         <div className="mt-16 flex justify-center">
-          <button className="bg-white text-black px-8 py-4 rounded-xl border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 font-bold transition-all text-xl font-chewy">
+          <button className="bg-white text-black px-8 py-4 rounded-xl border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 font-bold transition-all text-xl" style={{ fontFamily: "'Chewy', cursive" }}>
             Load More Fun Stuff!
           </button>
         </div>
