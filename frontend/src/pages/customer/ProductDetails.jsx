@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { addToCart } from "../../utils/cart";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -98,6 +99,32 @@ function ProductDetails() {
   ];
 
   const today = new Date().toISOString().split("T")[0];
+
+  const handleAddToCart = () => {
+    if (!form.variant || !form.start_date || !form.end_date) {
+      alert("Please select size and dates");
+      return;
+    }
+
+    const item = {
+      product_id: product.id,
+      product_name: product.name,
+      image: product.image,
+      variant: form.variant,
+      quantity: Number(form.quantity),
+      start_date: form.start_date,
+      end_date: form.end_date,
+    };
+
+    const res = addToCart(item);
+
+    if (!res.success) {
+      alert(res.message);
+      return;
+    }
+
+    alert("Added to cart");
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 p-6">
@@ -210,6 +237,14 @@ function ProductDetails() {
 
               <button className="bg-slate-900 text-white py-3 rounded-lg">
                 Check
+              </button>
+
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className="bg-slate-700 text-white py-3 rounded-lg"
+              >
+                Add to Cart
               </button>
             </form>
 
