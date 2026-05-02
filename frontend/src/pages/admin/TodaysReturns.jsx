@@ -10,9 +10,22 @@ function TodaysReturns() {
 
   const fetchReturns = async () => {
     const res = await axios.get(
-      "https://costume-rental-system.onrender.com/api/bookings/todays-returns"
+      "https://costume-rental-system.onrender.com/api/bookings/todays-returns",
     );
     setBookings(res.data);
+  };
+
+  const handleReturn = async (id) => {
+    try {
+      await axios.post(
+        `https://costume-rental-system.onrender.com/api/bookings/${id}/return`,
+      );
+
+      // remove from UI instantly
+      setBookings((prev) => prev.filter((b) => b.id !== id));
+    } catch (err) {
+      alert("Failed to mark return");
+    }
   };
 
   return (
@@ -34,6 +47,7 @@ function TodaysReturns() {
                   <th className="p-4">Qty</th>
                   <th className="p-4">Return Date</th>
                   <th className="p-4">Status</th>
+                  <th className="p-4">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -46,6 +60,14 @@ function TodaysReturns() {
                     <td className="p-4">{b.quantity}</td>
                     <td className="p-4">{b.end_date}</td>
                     <td className="p-4 capitalize">{b.status}</td>
+                    <td className="p-4">
+                      <button
+                        onClick={() => handleReturn(b.id)}
+                        className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
+                      >
+                        Mark Returned
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
