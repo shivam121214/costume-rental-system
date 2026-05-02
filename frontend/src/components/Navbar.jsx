@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Search, ShoppingCart, User } from 'lucide-react';
+import { motion } from 'motion/react';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -8,8 +10,6 @@ function Navbar() {
   const [pendingCount, setPendingCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
   const API_URL = "https://costume-rental-system.onrender.com";
-
-  const link = "text-white hover:text-yellow-300 transition";
 
   const getCartCount = () => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -50,64 +50,57 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-slate-900 shadow-md px-6 py-4 flex flex-wrap gap-5 items-center">
-      <h1 className="text-xl font-bold text-yellow-400 mr-6">Costume Rental</h1>
-
-      {/* Public Links */}
-      <Link to="/" className={link}>
-        Home
-      </Link>
-      <Link to="/products" className={link}>
-        Products
-      </Link>
-
-      <Link to="/cart" className={link}>
-        Cart
-        {cartCount > 0 && (
-          <span className="ml-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-full">
-            {cartCount}
-          </span>
-        )}
-      </Link>
-
-      <div className="ml-auto flex gap-4 items-center">
-        {!admin ? (
-          <Link to="/admin/login" className={link}>
-            Admin Login
-          </Link>
-        ) : (
-          <>
-            <Link to="/admin" className={link}>
-              Dashboard
+    <motion.header 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, type: 'spring', bounce: 0.5 }}
+      className="fixed top-0 w-full z-50 bg-[#fdf8e6] border-b-[3px] border-black shadow-[0_4px_0_0_rgba(0,0,0,1)]"
+    >
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-20">
+          <div className="flex items-center gap-12">
+            <Link to="/" className="flex items-center group transform hover:scale-105 transition-transform">
+              <span className="text-3xl font-['Chewy'] font-bold text-[#ff5c8d] drop-shadow-[2px_2px_0_rgba(0,0,0,1)] tracking-wide">
+                Party Palooza!
+              </span>
             </Link>
-            <Link to="/admin/products" className={link}>
-              Add Products
+
+            <nav className="hidden md:flex gap-8">
+              {['Costumes', 'Accessories', 'Themes'].map((item) => (
+                <a 
+                  key={item} 
+                  href="#" 
+                  className="text-lg font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
+                >
+                  {item}
+                  <span className="absolute bottom-1 left-0 w-0 h-1 bg-[#ff5c8d] transition-all duration-300 group-hover:w-full rounded-full"></span>
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <Link to="/products" className="hover:scale-110 transition-transform bg-[#ffd166] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+              <Search className="w-5 h-5 text-black stroke-[3]" />
             </Link>
-            <Link to="/admin/requests" className={link}>
-              Requests
-              {pendingCount > 0 && (
-                <span className="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                  {pendingCount}
+            <Link to="/cart" className="hover:scale-110 transition-transform bg-[#06d6a0] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] relative">
+              <ShoppingCart className="w-5 h-5 text-black stroke-[3]" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#ef476f] text-white text-xs font-bold rounded-full border-2 border-black flex items-center justify-center">
+                  {cartCount}
                 </span>
               )}
             </Link>
-            <Link to="/admin/bookings" className={link}>
-              Bookings
-            </Link>
-            <Link to="/admin/direct-order" className={link}>
-              Direct Order
-            </Link>
-
-            <button
-              onClick={logout}
-              className="bg-red-500 px-4 py-2 rounded-lg text-white"
-            >
-              Logout
-            </button>
-          </>
-        )}
+            
+            {admin && (
+              <Link to="/admin" className="hover:scale-110 transition-transform bg-[#a8dadc] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                <User className="w-5 h-5 text-black stroke-[3]" />
+              </Link>
+            )}
+          </div>
+        </div>
       </div>
-    </nav>
+    </motion.header>
   );
 }
 

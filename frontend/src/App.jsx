@@ -23,7 +23,8 @@ function App() {
     <BrowserRouter>
       <Navbar />
 
-      <Routes>
+      <div className="pt-24">
+        <Routes>
         {/* Customer */}
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
@@ -107,6 +108,7 @@ function App() {
         />
         
       </Routes>
+      </div>
     </BrowserRouter>
   );
 }
