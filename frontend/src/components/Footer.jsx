@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Twitter, MapPin } from 'lucide-react';
+import { Share2, Instagram, Twitter, MapPin } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function Footer() {
@@ -37,7 +37,7 @@ export function Footer() {
                 <Twitter className="w-6 h-6" style={{ strokeWidth: 3 }} />
               </a>
               <a href="#" className="bg-[#ffd166] p-3 rounded-xl border-2 border-black shadow-[3px_3px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[1px_1px_0_0_rgba(0,0,0,1)] transition-all text-black">
-                <Facebook className="w-6 h-6" style={{ strokeWidth: 3 }} />
+                <Share2 className="w-6 h-6" style={{ strokeWidth: 3 }} />
               </a>
             </div>
           </div>
