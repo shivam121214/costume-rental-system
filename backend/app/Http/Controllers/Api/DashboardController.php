@@ -16,8 +16,9 @@ class DashboardController extends Controller
             'pending_requests' => BookingRequest::where('status', 'pending')->count(),
             'total_bookings' => Booking::count(),
             'active_rentals' => Booking::whereIn('status', ['reserved', 'picked', 'late'])->count(),
-            'late_returns' => Booking::where('status', 'late')->count(),
-
+            'late_returns' => Booking::where('status', '!=', 'returned')
+                ->whereDate('end_date', '<', now())
+                ->count(),
             'todays_returns' => Booking::whereDate('end_date', now())
                 ->whereIn('status', ['reserved', 'picked', 'late'])
                 ->count(),

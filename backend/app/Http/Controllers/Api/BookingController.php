@@ -97,7 +97,8 @@ class BookingController extends Controller
     public function lateReturns()
     {
         $bookings = Booking::with('product')
-            ->where('status', 'late')
+            ->where('status', '!=', 'returned')
+            ->whereDate('end_date', '<', now())
             ->latest()
             ->get();
 
