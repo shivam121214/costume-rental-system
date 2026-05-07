@@ -12,8 +12,14 @@ export const openWhatsAppDeepLink = (phoneNumber, message) => {
     const encodedMessage = encodeURIComponent(message);
     const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     
-    // Open in new tab
-    window.open(url, '_blank');
+    // On mobile, use direct navigation; on desktop, open in new tab
+    if (/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        // Mobile: direct navigation to trigger app
+        window.location.href = url;
+    } else {
+        // Desktop: open in new tab
+        window.open(url, '_blank');
+    }
 };
 
 /**
