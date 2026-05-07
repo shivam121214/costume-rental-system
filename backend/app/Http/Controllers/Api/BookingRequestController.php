@@ -7,6 +7,7 @@ use App\Models\BookingRequest;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Booking;
+use App\Services\WhatsApp\WhatsAppMessageService;
 
 class BookingRequestController extends Controller
 {
@@ -99,7 +100,27 @@ class BookingRequestController extends Controller
 
         $booking = BookingRequest::create($data);
 
-        return response()->json($booking, 201);
+        // Generate WhatsApp message and deep-link
+        $adminPhoneNumber = config('services.whatsapp.admin_phone');
+        
+        $messageText = WhatsAppMessageService::generateRequestSubmissionMessage(
+            [
+                'name' => $data['customer_name'],
+                'phone' => $data['phone'],
+            ],
+            [WhatsAppMessageService::extractBookingData($booking)]
+        );
+
+        $whatsappLink = WhatsAppMessageService::generateWhatsAppLink(
+            $adminPhoneNumber,
+            $messageText
+        );
+
+        return response()->json([
+            'booking_request' => $booking,
+            'whatsapp_link' => $whatsappLink,
+            'whatsapp_message' => $messageText,
+        ], 201);
     }
 
     public function reject(Request $request, $id)

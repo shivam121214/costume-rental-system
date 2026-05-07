@@ -35,4 +35,16 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'admin_phone' => env('WHATSAPP_ADMIN_PHONE', '919876543210'),
+        'business_name' => env('WHATSAPP_BUSINESS_NAME', 'Costume Rental'),
+        'pickup_deadline' => env('WHATSAPP_PICKUP_DEADLINE', 'Within 24 hours'),
+        'google_review_link' => env('WHATSAPP_GOOGLE_REVIEW_LINK', ''),
+        
+        // Future: API credentials for WhatsApp Business API
+        // 'api_url' => env('WHATSAPP_API_URL'),
+        // 'api_token' => env('WHATSAPP_API_TOKEN'),
+        // 'business_phone_number_id' => env('WHATSAPP_BUSINESS_PHONE_ID'),
+    ],
+
 ];
