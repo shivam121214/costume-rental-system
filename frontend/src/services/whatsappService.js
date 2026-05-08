@@ -163,12 +163,56 @@ export const generateRequestRejectedMessage = (requestData, rejectReason = "Not 
     return message;
 };
 
+/**
+ * Generate WhatsApp message for pickup confirmation
+ * @param {Object} bookingData - Booking details with customer and product info
+ * @returns {string} Formatted WhatsApp message
+ */
+export const generatePickupConfirmedMessage = (bookingData) => {
+    let message = "🎉 *Your Costume is Ready for Pickup!*\n\n";
+    message += `Hi ${bookingData.customer_name},\n\n`;
+    message += "Great news! Your costume is ready to be picked up.\n\n";
+    message += "👗 *Costume Details:*\n";
+    message += `Product: ${bookingData.product_name}\n`;
+    message += `Variant: ${bookingData.variant}\n`;
+    message += `Quantity: ${bookingData.quantity}\n`;
+    message += `Rental Period: ${formatDate(bookingData.start_date)} to ${formatDate(bookingData.end_date)}\n\n`;
+    message += "📍 *Pickup Instructions:*\n";
+    message += "Please visit our store to pick up your costume at your earliest convenience.\n";
+    message += "Make sure to carry a valid ID for verification.\n\n";
+    message += "Thank you for choosing us! 😊";
+    return message;
+};
+
+/**
+ * Generate WhatsApp message for return confirmation
+ * @param {Object} bookingData - Booking details with customer and product info
+ * @returns {string} Formatted WhatsApp message
+ */
+export const generateReturnConfirmedMessage = (bookingData) => {
+    let message = "✅ *Costume Return Received*\n\n";
+    message += `Hi ${bookingData.customer_name},\n\n`;
+    message += "Thank you for returning your costume in good condition!\n\n";
+    message += "👗 *Return Details:*\n";
+    message += `Product: ${bookingData.product_name}\n`;
+    message += `Variant: ${bookingData.variant}\n`;
+    message += `Quantity: ${bookingData.quantity}\n\n`;
+    message += "💰 *Security Deposit:*\n";
+    message += "Your security deposit has been refunded to your original payment method.\n";
+    message += "It may take 3-5 business days to reflect in your account.\n\n";
+    message += "We hope you had a wonderful experience! 🌟\n";
+    message += "Feel free to rent from us again!";
+    return message;
+};
+
 export default {
     openWhatsAppDeepLink,
     generateRequestSubmissionMessage,
     generateWhatsAppRequestLink,
     generateRequestAcceptedMessage,
     generateRequestRejectedMessage,
+    generatePickupConfirmedMessage,
+    generateReturnConfirmedMessage,
     formatDate,
     formatDateTime,
     isValidPhoneNumber,

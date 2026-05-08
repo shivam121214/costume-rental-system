@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  openWhatsAppDeepLink,
+  generateReturnConfirmedMessage,
+} from "../../services/whatsappService";
 
 function ActiveRentals() {
   const [bookings, setBookings] = useState([]);
+  const [whatsappModal, setWhatsappModal] = useState(null);
 
   useEffect(() => {
     fetchRentals();
@@ -20,6 +25,24 @@ function ActiveRentals() {
       await axios.post(
         `https://costume-rental-system.onrender.com/api/bookings/${id}/return`,
       );
+
+      // Find booking and show WhatsApp modal
+      const booking = bookings.find(b => b.id === id);
+      if (booking) {
+        const message = generateReturnConfirmedMessage({
+          customer_name: booking.customer_name,
+          product_name: booking.product?.name || "Costume Item",
+          variant: booking.variant,
+          quantity: booking.quantity,
+        });
+
+        setWhatsappModal({
+          phone: booking.phone,
+          message: message,
+          customerName: booking.customer_name,
+          action: "return"
+        });
+      }
 
       // remove from UI instantly
       setBookings((prev) => prev.filter((b) => b.id !== id));
@@ -83,6 +106,57 @@ function ActiveRentals() {
           </div>
         )}
       </div>
+
+      {/* WhatsApp Message Modal */}
+      {whatsappModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-screen overflow-y-auto">
+            {/* Header */}
+            <div className="bg-green-50 border-b-2 border-green-200 p-6">
+              <h2 className="text-xl font-bold text-green-700">
+                ✅ Return Confirmation
+              </h2>
+              <p className="text-sm text-slate-600 mt-1">
+                To: {whatsappModal.customerName}
+              </p>
+            </div>
+
+            {/* Message Preview */}
+            <div className="p-6">
+              <p className="text-slate-700 font-semibold mb-3">Message to send:</p>
+              <div className="bg-slate-50 border rounded-lg p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-slate-700 max-h-64 overflow-y-auto">
+                {whatsappModal.message}
+              </div>
+
+              {/* Info Box */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
+                <p className="text-blue-900">
+                  <strong>💡 Tip:</strong> Click "Open WhatsApp" to send the confirmation to the customer.
+                </p>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setWhatsappModal(null)}
+                  className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    openWhatsAppDeepLink(whatsappModal.phone, whatsappModal.message);
+                    setWhatsappModal(null);
+                  }}
+                  className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold"
+                >
+                  📱 Open WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

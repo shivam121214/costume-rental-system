@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  openWhatsAppDeepLink,
+  generatePickupConfirmedMessage,
+  generateReturnConfirmedMessage,
+} from "../../services/whatsappService";
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
+  const [whatsappModal, setWhatsappModal] = useState(null);
 
   useEffect(() => {
     getBookings();
@@ -20,16 +26,45 @@ function Bookings() {
       const received = prompt("Enter total amount received (Rent + Deposit):");
 
       if (!received) return;
+
+      await axios.post(
+        `https://costume-rental-system.onrender.com/api/bookings/${id}/status`,
+        {
+          status,
+        },
+      );
+
+      // Find booking and show WhatsApp modal
+      const booking = bookings.find(b => b.id === id);
+      if (booking) {
+        const message = generatePickupConfirmedMessage({
+          customer_name: booking.customer_name,
+          product_name: booking.product?.name || "Costume Item",
+          variant: booking.variant,
+          quantity: booking.quantity,
+          start_date: booking.start_date,
+          end_date: booking.end_date,
+        });
+
+        setWhatsappModal({
+          phone: booking.phone,
+          message: message,
+          customerName: booking.customer_name,
+          action: "pickup"
+        });
+      }
+
+      getBookings();
+    } else {
+      await axios.post(
+        `https://costume-rental-system.onrender.com/api/bookings/${id}/status`,
+        {
+          status,
+        },
+      );
+
+      getBookings();
     }
-
-    await axios.post(
-      `https://costume-rental-system.onrender.com/api/bookings/${id}/status`,
-      {
-        status,
-      },
-    );
-
-    getBookings();
   };
 
   const markReturn = async (id) => {
@@ -42,6 +77,24 @@ function Bookings() {
     await axios.post(
       `https://costume-rental-system.onrender.com/api/bookings/${id}/return`,
     );
+
+    // Find booking and show WhatsApp modal
+    const booking = bookings.find(b => b.id === id);
+    if (booking) {
+      const message = generateReturnConfirmedMessage({
+        customer_name: booking.customer_name,
+        product_name: booking.product?.name || "Costume Item",
+        variant: booking.variant,
+        quantity: booking.quantity,
+      });
+
+      setWhatsappModal({
+        phone: booking.phone,
+        message: message,
+        customerName: booking.customer_name,
+        action: "return"
+      });
+    }
 
     getBookings();
   };
@@ -123,6 +176,61 @@ function Bookings() {
           </div>
         ))}
       </div>
+
+      {/* WhatsApp Message Modal */}
+      {whatsappModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-screen overflow-y-auto">
+            {/* Header */}
+            <div className={`p-6 ${whatsappModal.action === "pickup" ? "bg-yellow-50 border-b-2 border-yellow-200" : "bg-green-50 border-b-2 border-green-200"}`}>
+              <h2 className={`text-xl font-bold ${whatsappModal.action === "pickup" ? "text-yellow-700" : "text-green-700"}`}>
+                {whatsappModal.action === "pickup" ? "🎉 Pickup Notification" : "✅ Return Confirmation"}
+              </h2>
+              <p className="text-sm text-slate-600 mt-1">
+                To: {whatsappModal.customerName}
+              </p>
+            </div>
+
+            {/* Message Preview */}
+            <div className="p-6">
+              <p className="text-slate-700 font-semibold mb-3">Message to send:</p>
+              <div className="bg-slate-50 border rounded-lg p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-slate-700 max-h-64 overflow-y-auto">
+                {whatsappModal.message}
+              </div>
+
+              {/* Info Box */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
+                <p className="text-blue-900">
+                  <strong>💡 Tip:</strong> Click "Open WhatsApp" to send the notification to the customer.
+                </p>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setWhatsappModal(null)}
+                  className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    openWhatsAppDeepLink(whatsappModal.phone, whatsappModal.message);
+                    setWhatsappModal(null);
+                  }}
+                  className={`flex-1 px-4 py-2 text-white rounded-lg font-semibold ${
+                    whatsappModal.action === "pickup"
+                      ? "bg-yellow-600 hover:bg-yellow-700"
+                      : "bg-green-600 hover:bg-green-700"
+                  }`}
+                >
+                  📱 Open WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
