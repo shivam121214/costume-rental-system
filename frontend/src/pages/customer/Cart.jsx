@@ -16,6 +16,7 @@ function Cart() {
   const [validationErrors, setValidationErrors] = useState({});
   const [showPhoneConfirmation, setShowPhoneConfirmation] = useState(false);
   const [normalizedPhoneForConfirm, setNormalizedPhoneForConfirm] = useState("");
+  const [whatsappModal, setWhatsappModal] = useState(null); // {phone, message, customerName}
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "https://costume-rental-system.onrender.com/api";
   const ADMIN_PHONE = import.meta.env.VITE_WHATSAPP_ADMIN_PHONE || "919876543210";
@@ -101,17 +102,18 @@ function Cart() {
         cartItemsForMessage
       );
 
-      // Show success message
-      alert("✅ Request submitted successfully! WhatsApp will now open.");
+      // Show WhatsApp modal instead of direct open
+      setWhatsappModal({
+        phone: ADMIN_PHONE,
+        message: whatsappMessage,
+        customerName: customerName
+      });
 
       // Clear cart
       localStorage.removeItem("cart");
       setCart([]);
       setCustomerName("");
       setPhone("");
-
-      // Open WhatsApp with pre-filled message
-      openWhatsAppDeepLink(ADMIN_PHONE, whatsappMessage);
 
     } catch (err) {
       console.error("Error:", err);
@@ -414,6 +416,57 @@ function Cart() {
                   </>
                 )}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* WhatsApp Message Modal */}
+      {whatsappModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-screen overflow-y-auto">
+            {/* Header */}
+            <div className="p-6 bg-green-50 border-b-2 border-green-200">
+              <h2 className="text-xl font-bold text-green-700">
+                ✅ Request Submitted Successfully!
+              </h2>
+              <p className="text-sm text-slate-600 mt-1">
+                Now send to: {whatsappModal.customerName}
+              </p>
+            </div>
+
+            {/* Message Preview */}
+            <div className="p-6">
+              <p className="text-slate-700 font-semibold mb-3">Your message:</p>
+              <div className="bg-slate-50 border rounded-lg p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-slate-700 max-h-64 overflow-y-auto">
+                {whatsappModal.message}
+              </div>
+
+              {/* Info Box */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
+                <p className="text-blue-900">
+                  <strong>💡 Next Step:</strong> Click the button below to open WhatsApp and send your request!
+                </p>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setWhatsappModal(null)}
+                  className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50"
+                >
+                  Done
+                </button>
+                <button
+                  onClick={() => {
+                    openWhatsAppDeepLink(whatsappModal.phone, whatsappModal.message);
+                    setWhatsappModal(null);
+                  }}
+                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 flex items-center justify-center gap-2"
+                >
+                  📱 Open WhatsApp
+                </button>
+              </div>
             </div>
           </div>
         </div>
