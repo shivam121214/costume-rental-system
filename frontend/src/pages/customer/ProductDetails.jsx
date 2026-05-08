@@ -2,10 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { addToCart } from "../../utils/cart";
+import {
+  openWhatsAppDeepLink,
+  generateRequestSubmissionMessage,
+  normalizePhoneNumber,
+  isValidPhoneNumber,
+} from "../../services/whatsappService";
 
 function ProductDetails() {
   const { id } = useParams();
   const API_URL = "https://costume-rental-system.onrender.com";
+  const ADMIN_PHONE = import.meta.env.VITE_WHATSAPP_ADMIN_PHONE || "919876543210";
+  
   const getImageUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
@@ -15,8 +23,11 @@ function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
   const [message, setMessage] = useState("");
-
   const [availability, setAvailability] = useState(null);
+  const [showPhoneConfirmation, setShowPhoneConfirmation] = useState(false);
+  const [normalizedPhoneForConfirm, setNormalizedPhoneForConfirm] = useState("");
+  const [whatsappModal, setWhatsappModal] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     customer_name: "",
@@ -52,25 +63,71 @@ function ProductDetails() {
     setMessage("");
   };
 
-  const submitRequest = async (e) => {
-    e.preventDefault();
-
-    if (
-      availability &&
-      Number(form.quantity) > availability.available_quantity
-    ) {
-      setMessage("Selected quantity is not available");
+  const handleSendRequest = () => {
+    // Validate form
+    if (!form.customer_name.trim()) {
+      setMessage("Please enter your name");
       return;
     }
 
+    if (!form.phone.trim()) {
+      setMessage("Please enter your phone number");
+      return;
+    }
+
+    if (!isValidPhoneNumber(form.phone)) {
+      setMessage("Please enter a valid phone number (10-15 digits)");
+      return;
+    }
+
+    // Show phone confirmation
+    const normalized = normalizePhoneNumber(form.phone);
+    setNormalizedPhoneForConfirm(normalized);
+    setShowPhoneConfirmation(true);
+  };
+
+  const handleConfirmPhone = async (confirmed) => {
+    setShowPhoneConfirmation(false);
+
+    if (!confirmed) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
-      await axios.post(`${API_URL}/api/requests`, {
+      const response = await axios.post(`${API_URL}/api/requests`, {
         product_id: id,
-        ...form,
+        customer_name: form.customer_name,
+        phone: normalizedPhoneForConfirm,
+        variant: form.variant,
+        quantity: form.quantity,
+        start_date: form.start_date,
+        end_date: form.end_date,
       });
 
-      setMessage("Request sent successfully! We will contact you soon.");
+      // Generate WhatsApp message
+      const whatsappMessage = generateRequestSubmissionMessage(
+        { name: form.customer_name, phone: normalizedPhoneForConfirm },
+        [
+          {
+            product_name: product.name,
+            variant: form.variant,
+            quantity: form.quantity,
+            start_date: form.start_date,
+            end_date: form.end_date,
+          },
+        ]
+      );
 
+      // Show WhatsApp modal
+      setWhatsappModal({
+        phone: ADMIN_PHONE,
+        message: whatsappMessage,
+        customerName: form.customer_name,
+      });
+
+      // Clear form
       setForm({
         customer_name: "",
         phone: "",
@@ -79,11 +136,23 @@ function ProductDetails() {
         start_date: "",
         end_date: "",
       });
+      setAvailability(null);
     } catch (error) {
       setMessage(
-        error.response?.data?.message || "Selected quantity is not available",
+        error.response?.data?.message || "Error sending request. Please try again."
       );
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const formatDateForMessage = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   if (!product) return <div className="p-6">Loading...</div>;
@@ -299,7 +368,8 @@ function ProductDetails() {
                   )}
 
                   <button
-                    onClick={submitRequest}
+                    type="button"
+                    onClick={handleSendRequest}
                     className="bg-yellow-400 py-3 rounded-lg font-semibold"
                   >
                     Send Booking Request
@@ -309,6 +379,115 @@ function ProductDetails() {
           </div>
         </div>
       </div>
+
+      {/* Phone Confirmation Dialog */}
+      {showPhoneConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
+            <h2 className="text-xl font-bold mb-4 text-slate-900">
+              📱 Confirm Your Phone Number
+            </h2>
+
+            <p className="text-slate-600 mb-4">
+              We'll send WhatsApp updates to this number:
+            </p>
+
+            <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 mb-6 text-center">
+              <p className="text-3xl font-bold text-blue-600">
+                {normalizedPhoneForConfirm}
+              </p>
+              <p className="text-sm text-slate-600 mt-2">
+                Make sure this is correct!
+              </p>
+            </div>
+
+            <p className="text-sm text-slate-700 mb-6">
+              If this is incorrect, click "No" to edit your phone number.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => handleConfirmPhone(false)}
+                disabled={isSubmitting}
+                className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50 disabled:opacity-50"
+              >
+                ❌ No, Edit It
+              </button>
+              <button
+                onClick={() => handleConfirmPhone(true)}
+                disabled={isSubmitting}
+                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="inline-block animate-spin">⌛</span>
+                    Sending...
+                  </>
+                ) : (
+                  <>✅ Yes, Confirm</>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* WhatsApp Message Modal */}
+      {whatsappModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-screen overflow-y-auto">
+            {/* Header */}
+            <div className="p-6 bg-green-50 border-b-2 border-green-200">
+              <h2 className="text-xl font-bold text-green-700">
+                ✅ Request Submitted Successfully!
+              </h2>
+              <p className="text-sm text-slate-600 mt-1">
+                Now send to: {whatsappModal.customerName}
+              </p>
+            </div>
+
+            {/* Message Preview */}
+            <div className="p-6">
+              <p className="text-slate-700 font-semibold mb-3">
+                Your message:
+              </p>
+              <div className="bg-slate-50 border rounded-lg p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-slate-700 max-h-64 overflow-y-auto">
+                {whatsappModal.message}
+              </div>
+
+              {/* Info Box */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
+                <p className="text-blue-900">
+                  <strong>💡 Next Step:</strong> Click the button below to
+                  open WhatsApp and send your request!
+                </p>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setWhatsappModal(null)}
+                  className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50"
+                >
+                  Done
+                </button>
+                <button
+                  onClick={() => {
+                    openWhatsAppDeepLink(
+                      whatsappModal.phone,
+                      whatsappModal.message
+                    );
+                    setWhatsappModal(null);
+                  }}
+                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 flex items-center justify-center gap-2"
+                >
+                  📱 Open WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
