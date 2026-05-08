@@ -14,6 +14,8 @@ function Cart() {
   const [phone, setPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [showPhoneConfirmation, setShowPhoneConfirmation] = useState(false);
+  const [normalizedPhoneForConfirm, setNormalizedPhoneForConfirm] = useState("");
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "https://costume-rental-system.onrender.com/api";
   const ADMIN_PHONE = import.meta.env.VITE_WHATSAPP_ADMIN_PHONE || "919876543210";
@@ -40,12 +42,23 @@ function Cart() {
       return;
     }
 
+    const normalized = normalizePhoneNumber(phone);
+    setNormalizedPhoneForConfirm(normalized);
+    setShowPhoneConfirmation(true);
+  };
+
+  const handleConfirmPhone = async (confirmed) => {
+    setShowPhoneConfirmation(false);
+
+    if (!confirmed) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       // Submit all cart items to backend
       const responses = [];
-      const normalizedPhone = normalizePhoneNumber(phone);
 
       for (let item of cart) {
         try {
@@ -58,7 +71,7 @@ function Cart() {
               start_date: item.start_date,
               end_date: item.end_date,
               customer_name: customerName.trim(),
-              phone: normalizedPhone,
+              phone: normalizedPhoneForConfirm,
             }
           );
           responses.push(response.data);
@@ -84,7 +97,7 @@ function Cart() {
       });
 
       const whatsappMessage = generateRequestSubmissionMessage(
-        { name: customerName, phone: normalizedPhone },
+        { name: customerName, phone: normalizedPhoneForConfirm },
         cartItemsForMessage
       );
 
@@ -357,6 +370,54 @@ function Cart() {
           <li>Simply press Send - we receive your request!</li>
         </ol>
       </div>
+
+      {/* Phone Confirmation Dialog */}
+      {showPhoneConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
+            <h2 className="text-xl font-bold mb-4 text-slate-900">📱 Confirm Your Phone Number</h2>
+            
+            <p className="text-slate-600 mb-4">
+              We'll send WhatsApp updates to this number:
+            </p>
+            
+            <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 mb-6 text-center">
+              <p className="text-3xl font-bold text-blue-600">{normalizedPhoneForConfirm}</p>
+              <p className="text-sm text-slate-600 mt-2">Make sure this is correct!</p>
+            </div>
+
+            <p className="text-sm text-slate-700 mb-6">
+              If this is incorrect, click "No" to edit your phone number.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => handleConfirmPhone(false)}
+                disabled={isSubmitting}
+                className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50 disabled:opacity-50"
+              >
+                ❌ No, Edit It
+              </button>
+              <button
+                onClick={() => handleConfirmPhone(true)}
+                disabled={isSubmitting}
+                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="inline-block animate-spin">⌛</span>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    ✅ Yes, Confirm
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
