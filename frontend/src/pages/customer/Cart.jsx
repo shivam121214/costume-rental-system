@@ -144,7 +144,8 @@ function Cart() {
     loadCart();
   };
 
-  if (cart.length === 0) {
+  // Show empty cart message only if there's no modal (no pending request)
+  if (cart.length === 0 && !whatsappModal && !showPhoneConfirmation) {
     return (
       <div className="p-6 text-center text-slate-500">
         <p className="text-lg">Your cart is empty</p>
