@@ -122,10 +122,53 @@ export const normalizePhoneNumber = (phone) => {
     return normalized;
 };
 
+/**
+ * Generate WhatsApp message for request acceptance
+ * @param {Object} requestData - Request details with customer and product info
+ * @returns {string} Formatted WhatsApp message
+ */
+export const generateRequestAcceptedMessage = (requestData) => {
+    let message = "✅ *Your Rental Request is Accepted!*\n\n";
+    message += `Hi ${requestData.customer_name},\n\n`;
+    message += "Great news! Your costume rental request has been *approved*.\n\n";
+    message += "📋 *Booking Details:*\n";
+    message += `Product: ${requestData.product_name}\n`;
+    message += `Variant: ${requestData.variant}\n`;
+    message += `Quantity: ${requestData.quantity}\n`;
+    message += `Rental Period: ${formatDate(requestData.start_date)} to ${formatDate(requestData.end_date)}\n\n`;
+    message += `Please arrange to pick up your costume within 24 hours.\n`;
+    message += `Contact us if you have any questions.\n\n`;
+    message += "Thank you! 🎉";
+    return message;
+};
+
+/**
+ * Generate WhatsApp message for request rejection
+ * @param {Object} requestData - Request details with customer and product info
+ * @param {string} rejectReason - Reason for rejection
+ * @returns {string} Formatted WhatsApp message
+ */
+export const generateRequestRejectedMessage = (requestData, rejectReason = "Not available") => {
+    let message = "❌ *Your Rental Request Could Not Be Processed*\n\n";
+    message += `Hi ${requestData.customer_name},\n\n`;
+    message += "We regret to inform you that we could not accept your rental request.\n\n";
+    message += "📋 *Request Details:*\n";
+    message += `Product: ${requestData.product_name}\n`;
+    message += `Variant: ${requestData.variant}\n`;
+    message += `Quantity: ${requestData.quantity}\n`;
+    message += `Requested Period: ${formatDate(requestData.start_date)} to ${formatDate(requestData.end_date)}\n\n`;
+    message += `*Reason:* ${rejectReason}\n\n`;
+    message += "We apologize for the inconvenience. Feel free to browse other costumes or contact us for alternative options.\n\n";
+    message += "Thank you for your interest! 🙏";
+    return message;
+};
+
 export default {
     openWhatsAppDeepLink,
     generateRequestSubmissionMessage,
     generateWhatsAppRequestLink,
+    generateRequestAcceptedMessage,
+    generateRequestRejectedMessage,
     formatDate,
     formatDateTime,
     isValidPhoneNumber,

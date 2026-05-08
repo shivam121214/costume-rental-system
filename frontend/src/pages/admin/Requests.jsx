@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../../components/Loader";
+import {
+  openWhatsAppDeepLink,
+  generateRequestAcceptedMessage,
+  generateRequestRejectedMessage,
+} from "../../services/whatsappService";
 
 function Requests() {
   const [requests, setRequests] = useState([]);
@@ -39,12 +44,28 @@ function Requests() {
 
   const acceptRequest = async (id) => {
     try {
-      await axios.post(
+      const requestItem = requests.find((req) => req.id === id);
+      
+      const response = await axios.post(
         `https://costume-rental-system.onrender.com/api/requests/${id}/accept`,
       );
 
+      // Generate acceptance message
+      const acceptMessage = generateRequestAcceptedMessage({
+        customer_name: requestItem.customer_name,
+        product_name: requestItem.product?.name || "Costume Item",
+        variant: requestItem.variant,
+        quantity: requestItem.quantity,
+        start_date: requestItem.start_date,
+        end_date: requestItem.end_date,
+      });
+
+      // Open WhatsApp with message
+      openWhatsAppDeepLink(requestItem.phone, acceptMessage);
+
+      // Refresh requests
       getRequests();
-      alert("Request Accepted");
+      alert("✅ Request Accepted! WhatsApp opened to notify customer.");
     } catch (error) {
       alert(
         error.response?.data?.message || "Cannot accept request right now.",
@@ -54,15 +75,43 @@ function Requests() {
 
   const rejectRequest = async (id) => {
     const reason = prompt("Enter reject reason:");
+    
+    if (reason === null) return; // User cancelled
 
-    await axios.post(
-      `https://costume-rental-system.onrender.com/api/requests/${id}/reject`,
-      {
-        reject_reason: reason || "Not available",
-      },
-    );
+    try {
+      const requestItem = requests.find((req) => req.id === id);
+      
+      await axios.post(
+        `https://costume-rental-system.onrender.com/api/requests/${id}/reject`,
+        {
+          reject_reason: reason || "Not available",
+        },
+      );
 
-    getRequests();
+      // Generate rejection message
+      const rejectMessage = generateRequestRejectedMessage(
+        {
+          customer_name: requestItem.customer_name,
+          product_name: requestItem.product?.name || "Costume Item",
+          variant: requestItem.variant,
+          quantity: requestItem.quantity,
+          start_date: requestItem.start_date,
+          end_date: requestItem.end_date,
+        },
+        reason || "Not available"
+      );
+
+      // Open WhatsApp with message
+      openWhatsAppDeepLink(requestItem.phone, rejectMessage);
+
+      getRequests();
+      alert("❌ Request Rejected! WhatsApp opened to notify customer.");
+    } catch (error) {
+      console.error("Error rejecting request:", error);
+      alert(
+        error.response?.data?.message || "Error rejecting request.",
+      );
+    }
   };
 
   const badge = (status) => {
