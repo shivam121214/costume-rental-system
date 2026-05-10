@@ -85,7 +85,7 @@ function Login() {
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       >
         {/* The web line extending up to the pivot point */}
-        <div className="absolute left-1/2 bottom-[100%] w-1 h-[120vh] -translate-x-1/2 bg-white border-x border-gray-300 shadow-[2px_0px_0px_0px_rgba(0,0,0,0.5)]" />
+        <div className="absolute left-1/2 bottom-full w-1 h-[120vh] -translate-x-1/2 bg-white border-x border-gray-300 shadow-[2px_0px_0px_0px_rgba(0,0,0,0.5)]" />
         
         {/* The Spider-Man character inside a comic panel mask */}
         <div className="relative w-40 h-40 md:w-56 md:h-56 -ml-20 md:-ml-28 -mt-20 md:-mt-28 rounded-full border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden bg-red-500 flex items-center justify-center">
@@ -100,6 +100,33 @@ function Login() {
           transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2.5 }}
         >
           THWIP!
+        </motion.div>
+      </motion.div>
+
+      {/* Flying Superman Animation */}
+      <motion.div
+        className="absolute top-[20%] pointer-events-none z-0"
+        initial={{ left: "-40%" }}
+        animate={{ 
+          left: ["-40%", "140%"],
+          y: [0, -80, 50, -30, 0]
+        }}
+        transition={{ 
+          left: { duration: 12, repeat: Infinity, ease: "linear", delay: 2 },
+          y: { duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }
+        }}
+      >
+        <div className="relative w-48 h-32 md:w-72 md:h-48 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden bg-blue-500 transform -skew-x-12 rotate-6 flex items-center justify-center">
+          <div className="text-6xl md:text-8xl">🦸</div>
+        </div>
+        {/* Action text */}
+        <motion.div 
+          className="absolute -bottom-6 -left-6 bg-[#ef476f] text-white border-4 border-black px-4 py-1 font-black text-xl md:text-2xl rounded-full shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+          style={{ fontFamily: "'Chewy', cursive" }}
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 1, repeat: Infinity }}
+        >
+          WHOOSH!
         </motion.div>
       </motion.div>
 
