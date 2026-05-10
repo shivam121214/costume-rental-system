@@ -79,7 +79,7 @@ function Login() {
 
       {/* Swinging Spider-Man Animation */}
       <motion.div
-        className="absolute top-[30%] left-[15%] pointer-events-none z-0"
+        className="absolute top-[30%] left-1/2 -translate-x-1/2 pointer-events-none z-0"
         style={{ transformOrigin: "50% -120vh" }}
         animate={{ rotate: [35, -35, 35] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
