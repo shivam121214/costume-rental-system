@@ -91,12 +91,12 @@ function Login() {
         <img 
           src="/spiderman.png" 
           alt="Spider-Man" 
-          className="w-56 h-56 md:w-72 md:h-72 object-contain transform rotate-12"
+          className="w-56 h-56 md:w-72 md:h-72 object-contain transform rotate-15"
         />
         
         {/* THWIP action text */}
         <motion.div 
-          className="absolute -top-4 -right-15 bg-white text-black border-4 border-black px-3 py-1 font-black text-xl md:text-2xl rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+          className="absolute -top-4 -right-12 bg-white text-black border-4 border-black px-3 py-1 font-black text-xl md:text-2xl rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
           style={{ fontFamily: "'Chewy', cursive" }}
           animate={{ scale: [1, 1.2, 1] }}
           transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2.5 }}
