@@ -79,7 +79,7 @@ function Login() {
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       >
         <div className="w-32 h-24 bg-white border-4 border-black rounded-lg shadow-[8px_8px_0_0_rgba(0,0,0,1)] relative">
-          <div className="absolute inset-2 bg-gradient-to-br from-blue-400 to-cyan-300 rounded-sm flex items-center justify-center">
+          <div className="absolute inset-2 bg-linear-to-br from-blue-400 to-cyan-300 rounded-sm flex items-center justify-center">
             <img src="/spiderman.png" alt="frame" className="w-full h-full object-cover rounded-sm" />
           </div>
         </div>
