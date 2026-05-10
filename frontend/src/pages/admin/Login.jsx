@@ -55,6 +55,88 @@ function Login() {
           backgroundSize: "24px 24px"
         }}
       />
+
+      {/* Cosplay Themed Doodles */}
+      {/* Top Left Costume Badge */}
+      <motion.div 
+        className="absolute top-16 left-12 pointer-events-none z-0"
+        animate={{ y: [0, -10, 0], rotate: [0, -5, 5, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="w-16 h-16 bg-[#ffd166] border-3 border-black rounded-full flex items-center justify-center shadow-[3px_3px_0_rgba(0,0,0,0.8)] text-2xl font-black" style={{ fontFamily: "'Chewy', cursive" }}>
+          🎪
+        </div>
+      </motion.div>
+
+      {/* Top Right Party Icon */}
+      <motion.div 
+        className="absolute top-20 right-20 pointer-events-none z-0"
+        animate={{ scale: [1, 1.1, 1], rotate: [0, 10, -10, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="w-20 h-20 bg-[#ef476f] border-3 border-black rounded-lg shadow-[4px_4px_0_rgba(0,0,0,0.8)] flex items-center justify-center text-3xl">
+          🎉
+        </div>
+      </motion.div>
+
+      {/* Middle Left Star Burst */}
+      <motion.div 
+        className="absolute top-1/3 left-8 pointer-events-none z-0"
+        animate={{ y: [0, 10, 0], rotate: [0, 8, -8, 0] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="w-14 h-14 bg-[#06d6a0] border-3 border-black transform rotate-45 shadow-[3px_3px_0_rgba(0,0,0,0.8)]" />
+      </motion.div>
+
+      {/* Middle Right Sparkle */}
+      <motion.div 
+        className="absolute top-2/5 right-12 pointer-events-none z-0"
+        animate={{ rotate: [0, -20, 20, 0], scale: [1, 1.15, 1] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="relative w-12 h-12">
+          <div className="absolute inset-0 bg-[#ffd166] border-2 border-black rounded-full shadow-[2px_2px_0_rgba(0,0,0,0.8)]" />
+          <div className="absolute inset-2 border-2 border-black rounded-full" />
+        </div>
+      </motion.div>
+
+      {/* Bottom Left Wave */}
+      <motion.div 
+        className="absolute bottom-32 left-16 pointer-events-none z-0"
+        animate={{ y: [0, -8, 0], rotate: [0, -10, 10, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="w-16 h-6 bg-[#118ab2] border-2 border-black rounded-full shadow-[3px_3px_0_rgba(0,0,0,0.8)]" />
+      </motion.div>
+
+      {/* Bottom Right Circle Badge */}
+      <motion.div 
+        className="absolute bottom-40 right-20 pointer-events-none z-0"
+        animate={{ x: [0, 10, 0], rotate: [0, 5, -5, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="w-16 h-16 bg-[#ffd166] border-3 border-black rounded-full shadow-[3px_3px_0_rgba(0,0,0,0.8)] flex items-center justify-center font-black text-sm" style={{ fontFamily: "'Chewy', cursive" }}>
+          PARTY
+        </div>
+      </motion.div>
+
+      {/* Center Bottom Heart Shape */}
+      <motion.div 
+        className="absolute bottom-20 left-1/4 pointer-events-none z-0"
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="w-12 h-12 bg-[#ef476f] border-2 border-black rounded-full shadow-[2px_2px_0_rgba(0,0,0,0.8)]" />
+      </motion.div>
+
+      {/* Center Bottom Rainbow Arc */}
+      <motion.div 
+        className="absolute bottom-24 right-1/4 pointer-events-none z-0"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+      >
+        <div className="w-14 h-7 border-4 border-black border-b-transparent rounded-t-full shadow-[2px_2px_0_rgba(0,0,0,0.8)]" style={{ borderTopColor: '#ffd166', borderLeftColor: '#ef476f', borderRightColor: '#06d6a0' }} />
+      </motion.div>
       
       {/* Animated decorative elements */}
       <motion.div
