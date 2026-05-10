@@ -89,7 +89,11 @@ function Login() {
         
         {/* The Spider-Man character inside a comic panel mask */}
         <div className="relative w-40 h-40 md:w-56 md:h-56 -ml-20 md:-ml-28 -mt-20 md:-mt-28 rounded-full border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden bg-red-500 flex items-center justify-center">
-          <div className="text-6xl md:text-8xl">🕷️</div>
+          <img 
+            src="/spiderman.png" 
+            alt="Spider-Man" 
+            className="w-full h-full object-cover"
+          />
         </div>
         
         {/* THWIP action text */}
