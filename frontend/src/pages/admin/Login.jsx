@@ -91,7 +91,7 @@ function Login() {
         <img 
           src="/spiderman.png" 
           alt="Spider-Man" 
-          className="w-56 h-56 md:w-72 md:h-72 object-contain transform rotate-30"
+          className="w-56 h-56 md:w-72 md:h-72 object-contain transform rotate-35"
         />
         
         {/* THWIP action text */}
