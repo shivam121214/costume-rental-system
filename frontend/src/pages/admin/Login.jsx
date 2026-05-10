@@ -40,7 +40,7 @@ function Login() {
   };
 
   return (
-    <div className="relative size-full min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#8338ec] via-[#bde0fe] to-[#06d6a0] font-sans">
+    <div className="relative size-full min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-br from-[#8338ec] via-[#bde0fe] to-[#06d6a0] font-sans">
       
       {/* Animated background blobs */}
       <div className="absolute top-10 left-10 w-40 h-40 bg-[#ffd166] rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse"></div>
@@ -75,6 +75,32 @@ function Login() {
         <div className="w-12 h-12 bg-[#06d6a0] border-3 border-black rounded-lg flex items-center justify-center shadow-[3px_3px_0_rgba(0,0,0,1)]">
           <Gift className="w-6 h-6 text-black" style={{ strokeWidth: 3 }} />
         </div>
+      </motion.div>
+
+      {/* Swinging Spider-Man Animation */}
+      <motion.div
+        className="absolute top-[30%] left-[15%] pointer-events-none z-0"
+        style={{ transformOrigin: "50% -120vh" }}
+        animate={{ rotate: [35, -35, 35] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      >
+        {/* The web line extending up to the pivot point */}
+        <div className="absolute left-1/2 bottom-[100%] w-1 h-[120vh] -translate-x-1/2 bg-white border-x border-gray-300 shadow-[2px_0px_0px_0px_rgba(0,0,0,0.5)]" />
+        
+        {/* The Spider-Man character inside a comic panel mask */}
+        <div className="relative w-40 h-40 md:w-56 md:h-56 -ml-20 md:-ml-28 -mt-20 md:-mt-28 rounded-full border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden bg-red-500 flex items-center justify-center">
+          <div className="text-6xl md:text-8xl">🕷️</div>
+        </div>
+        
+        {/* THWIP action text */}
+        <motion.div 
+          className="absolute -top-4 -right-12 bg-white text-black border-4 border-black px-3 py-1 font-black text-xl md:text-2xl rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+          style={{ fontFamily: "'Chewy', cursive" }}
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2.5 }}
+        >
+          THWIP!
+        </motion.div>
       </motion.div>
 
       {/* Login Card */}
@@ -174,7 +200,7 @@ function Login() {
               <span className="relative z-10 flex items-center justify-center gap-2 tracking-wider">
                 {loading ? "Logging In..." : "Let's Party!"}
               </span>
-              {!loading && <div className="absolute inset-0 bg-white/30 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12 z-0" />}
+              {!loading && <div className="absolute inset-0 bg-white/30 -translate-x-full group-hover:translate-x-full transition-transform duration-500 skew-x-12 z-0" />}
             </motion.button>
           </form>
 
