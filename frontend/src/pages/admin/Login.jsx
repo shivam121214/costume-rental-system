@@ -120,13 +120,11 @@ function Login() {
           y: { duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }
         }}
       >
-        <div className="relative w-52 h-36 md:w-80 md:h-56 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden bg-red-600 transform skew-x-12 -rotate-6 flex items-center justify-center">
-          <img 
-            src="/ironman.png" 
-            alt="Iron Man" 
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <img 
+          src="/ironman.png" 
+          alt="Iron Man" 
+          className="w-52 h-36 md:w-80 md:h-56 object-cover"
+        />
         {/* Action text */}
         <motion.div 
           className="absolute -bottom-6 -left-6 bg-[#ef476f] text-white border-4 border-black px-4 py-1 font-black text-xl md:text-2xl rounded-full shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
