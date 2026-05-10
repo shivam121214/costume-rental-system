@@ -134,6 +134,37 @@ function Login() {
         </motion.div>
       </motion.div>
 
+      {/* Flying Iron Man Animation - Right to Left */}
+      <motion.div
+        className="absolute top-[60%] pointer-events-none z-0"
+        initial={{ right: "-40%" }}
+        animate={{ 
+          right: ["-40%", "140%"],
+          y: [0, 60, -40, 20, 0]
+        }}
+        transition={{ 
+          right: { duration: 14, repeat: Infinity, ease: "linear", delay: 6 },
+          y: { duration: 14, repeat: Infinity, ease: "easeInOut", delay: 6 }
+        }}
+      >
+        <div className="relative w-52 h-36 md:w-80 md:h-56 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden bg-red-600 transform skew-x-12 -rotate-12 flex items-center justify-center">
+          <img 
+            src="/ironman.png" 
+            alt="Iron Man" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        {/* Action text */}
+        <motion.div 
+          className="absolute -top-6 -right-8 bg-[#ffd166] text-black border-4 border-black px-4 py-1 font-black text-xl md:text-2xl rounded-lg shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+          style={{ fontFamily: "'Chewy', cursive" }}
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 3 }}
+        >
+          ZOOM!
+        </motion.div>
+      </motion.div>
+
       {/* Login Card */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0, y: 50 }}
