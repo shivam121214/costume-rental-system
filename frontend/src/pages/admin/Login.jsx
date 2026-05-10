@@ -56,86 +56,101 @@ function Login() {
         }}
       />
 
-      {/* Cosplay Themed Doodles */}
-      {/* Top Left Costume Badge */}
+      {/* Cosplay Themed Doodles - Comic Style */}
+      {/* Top Left Action Word */}
       <motion.div 
-        className="absolute top-16 left-12 pointer-events-none z-0"
-        animate={{ y: [0, -10, 0], rotate: [0, -5, 5, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-20 left-8 pointer-events-none z-0 font-black text-3xl transform -rotate-12"
+        animate={{ scale: [1, 1.15, 1] }}
+        transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 2 }}
+        style={{ fontFamily: "'Chewy', cursive", color: "#ef476f", textShadow: "2px 2px 0px #000, -2px -2px 0px rgba(0,0,0,0.2)" }}
       >
-        <div className="w-16 h-16 bg-[#ffd166] border-3 border-black rounded-full flex items-center justify-center shadow-[3px_3px_0_rgba(0,0,0,0.8)] text-2xl font-black" style={{ fontFamily: "'Chewy', cursive" }}>
-          🎪
-        </div>
+        POW!
       </motion.div>
 
-      {/* Top Right Party Icon */}
+      {/* Top Center Stars Cluster */}
       <motion.div 
-        className="absolute top-20 right-20 pointer-events-none z-0"
-        animate={{ scale: [1, 1.1, 1], rotate: [0, 10, -10, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="w-20 h-20 bg-[#ef476f] border-3 border-black rounded-lg shadow-[4px_4px_0_rgba(0,0,0,0.8)] flex items-center justify-center text-3xl">
-          🎉
-        </div>
-      </motion.div>
-
-      {/* Middle Left Star Burst */}
-      <motion.div 
-        className="absolute top-1/3 left-8 pointer-events-none z-0"
-        animate={{ y: [0, 10, 0], rotate: [0, 8, -8, 0] }}
-        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="w-14 h-14 bg-[#06d6a0] border-3 border-black transform rotate-45 shadow-[3px_3px_0_rgba(0,0,0,0.8)]" />
-      </motion.div>
-
-      {/* Middle Right Sparkle */}
-      <motion.div 
-        className="absolute top-2/5 right-12 pointer-events-none z-0"
-        animate={{ rotate: [0, -20, 20, 0], scale: [1, 1.15, 1] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="relative w-12 h-12">
-          <div className="absolute inset-0 bg-[#ffd166] border-2 border-black rounded-full shadow-[2px_2px_0_rgba(0,0,0,0.8)]" />
-          <div className="absolute inset-2 border-2 border-black rounded-full" />
-        </div>
-      </motion.div>
-
-      {/* Bottom Left Wave */}
-      <motion.div 
-        className="absolute bottom-32 left-16 pointer-events-none z-0"
-        animate={{ y: [0, -8, 0], rotate: [0, -10, 10, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="w-16 h-6 bg-[#118ab2] border-2 border-black rounded-full shadow-[3px_3px_0_rgba(0,0,0,0.8)]" />
-      </motion.div>
-
-      {/* Bottom Right Circle Badge */}
-      <motion.div 
-        className="absolute bottom-40 right-20 pointer-events-none z-0"
-        animate={{ x: [0, 10, 0], rotate: [0, 5, -5, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="w-16 h-16 bg-[#ffd166] border-3 border-black rounded-full shadow-[3px_3px_0_rgba(0,0,0,0.8)] flex items-center justify-center font-black text-sm" style={{ fontFamily: "'Chewy', cursive" }}>
-          PARTY
-        </div>
-      </motion.div>
-
-      {/* Center Bottom Heart Shape */}
-      <motion.div 
-        className="absolute bottom-20 left-1/4 pointer-events-none z-0"
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="w-12 h-12 bg-[#ef476f] border-2 border-black rounded-full shadow-[2px_2px_0_rgba(0,0,0,0.8)]" />
-      </motion.div>
-
-      {/* Center Bottom Rainbow Arc */}
-      <motion.div 
-        className="absolute bottom-24 right-1/4 pointer-events-none z-0"
+        className="absolute top-12 left-1/3 pointer-events-none z-0"
         animate={{ rotate: 360 }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
       >
-        <div className="w-14 h-7 border-4 border-black border-b-transparent rounded-t-full shadow-[2px_2px_0_rgba(0,0,0,0.8)]" style={{ borderTopColor: '#ffd166', borderLeftColor: '#ef476f', borderRightColor: '#06d6a0' }} />
+        <div className="relative w-20 h-20">
+          <div className="absolute -top-2 -left-2 text-2xl font-black" style={{ color: "#ffd166", textShadow: "1px 1px 0px #000" }}>★</div>
+          <div className="absolute top-0 left-8 text-xl font-black" style={{ color: "#06d6a0", textShadow: "1px 1px 0px #000" }}>✦</div>
+          <div className="absolute top-6 left-2 text-xl font-black" style={{ color: "#ff5c8d", textShadow: "1px 1px 0px #000" }}>★</div>
+        </div>
+      </motion.div>
+
+      {/* Top Right Action Word */}
+      <motion.div 
+        className="absolute top-24 right-12 pointer-events-none z-0 font-black text-4xl transform rotate-6"
+        animate={{ scale: [1, 1.2, 1], rotate: [6, 10, 6] }}
+        transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 1.5 }}
+        style={{ fontFamily: "'Chewy', cursive", color: "#118ab2", textShadow: "3px 3px 0px #000, -1px -1px 0px rgba(0,0,0,0.2)" }}
+      >
+        BAM!
+      </motion.div>
+
+      {/* Middle Left Small Stars */}
+      <motion.div 
+        className="absolute left-6 top-1/2 pointer-events-none z-0 space-y-4"
+        animate={{ y: [0, 15, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="text-2xl font-black" style={{ color: "#ffd166", textShadow: "1px 1px 0px #000" }}>★</div>
+        <div className="text-xl font-black ml-6" style={{ color: "#ef476f", textShadow: "1px 1px 0px #000" }}>✦</div>
+      </motion.div>
+
+      {/* Middle Center Burst */}
+      <motion.div 
+        className="absolute right-16 top-2/5 pointer-events-none z-0 font-black text-5xl"
+        animate={{ rotate: [0, -25, 25, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2 }}
+        style={{ color: "#ffd166", textShadow: "3px 3px 0px #000" }}
+      >
+        ⚡
+      </motion.div>
+
+      {/* Bottom Left Comic Word */}
+      <motion.div 
+        className="absolute bottom-24 left-12 pointer-events-none z-0 font-black text-3xl transform -rotate-6"
+        animate={{ scale: [1, 1.15, 1] }}
+        transition={{ duration: 0.7, repeat: Infinity, repeatDelay: 2.5 }}
+        style={{ fontFamily: "'Chewy', cursive", color: "#06d6a0", textShadow: "2px 2px 0px #000" }}
+      >
+        ZAP!
+      </motion.div>
+
+      {/* Bottom Right Action Word */}
+      <motion.div 
+        className="absolute bottom-20 right-10 pointer-events-none z-0 font-black text-4xl transform rotate-12"
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 3 }}
+        style={{ fontFamily: "'Chewy', cursive", color: "#ef476f", textShadow: "3px 3px 0px #000" }}
+      >
+        WHOOSH!
+      </motion.div>
+
+      {/* Bottom Center Star Burst */}
+      <motion.div 
+        className="absolute bottom-32 right-1/3 pointer-events-none z-0"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+      >
+        <div className="relative w-16 h-16">
+          <div className="absolute -top-1 left-6 text-2xl font-black" style={{ color: "#ffd166", textShadow: "1px 1px 0px #000" }}>★</div>
+          <div className="absolute top-4 -left-1 text-xl font-black" style={{ color: "#118ab2", textShadow: "1px 1px 0px #000" }}>✦</div>
+          <div className="absolute top-3 left-5 text-xl font-black" style={{ color: "#06d6a0", textShadow: "1px 1px 0px #000" }}>★</div>
+        </div>
+      </motion.div>
+
+      {/* Center Comic Impact Lines */}
+      <motion.div 
+        className="absolute top-1/4 right-1/4 pointer-events-none z-0"
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+      >
+        <div className="w-16 h-0.5 bg-black transform -rotate-45 shadow-lg" />
+        <div className="w-16 h-0.5 bg-black mt-2 transform rotate-45 shadow-lg" />
       </motion.div>
       
       {/* Animated decorative elements */}
