@@ -154,22 +154,9 @@ function Login() {
 
           {/* Header */}
           <div className="text-center mb-8 relative">
-            {/* <motion.div
-              className="absolute -top-16 left-1/2 -translate-x-1/2 w-20 h-20 bg-[#ef476f] border-4 border-black rounded-full flex items-center justify-center shadow-[6px_6px_0_0_rgba(0,0,0,1)] z-20"
-              animate={{ y: [-5, 5, -5] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Sparkles className="w-10 h-10 text-white" style={{ strokeWidth: 3 }} />
-            </motion.div> */}
-            
             <h1 className="mt-6 text-4xl font-black text-black uppercase tracking-wider" style={{ fontFamily: "'Chewy', cursive", textShadow: "3px 3px 0px rgba(0,0,0,0.3)" }}>
               Admin Login
             </h1>
-            {/* <div className="mt-3 inline-block">
-              <p className="text-black font-bold text-sm uppercase tracking-wider bg-[#ffd166] px-4 py-1 border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-                Admin Control 🎭
-              </p>
-            </div> */}
           </div>
 
           {/* Form */}
