@@ -40,208 +40,21 @@ function Login() {
   };
 
   return (
-    <div className="relative size-full min-h-screen flex items-center justify-center overflow-hidden font-sans">
+    <div className="relative size-full min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-br from-[#8338ec] via-[#bde0fe] to-[#06d6a0] font-sans">
       
-      {/* Blue Radiant Burst Background */}
-      <div className="absolute inset-0 bg-gradient-conic from-[#0891b2] via-[#06b6d4] to-[#0891b2]"></div>
-      
-      {/* Animated rotating radial lines */}
-      <motion.div 
-        className="absolute inset-0 pointer-events-none z-0"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        style={{
-          backgroundImage: `
-            repeating-conic-gradient(from 0deg, 
-              transparent 0deg, 
-              transparent 5deg,
-              rgba(15, 118, 110, 0.6) 5deg,
-              rgba(15, 118, 110, 0.6) 10deg
-            )
-          `
-        }}
-      />
-      
-      {/* Dots pattern overlay */}
+      {/* Animated background blobs */}
+      <div className="absolute top-10 left-10 w-40 h-40 bg-[#ffd166] rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse"></div>
+      <div className="absolute bottom-20 right-10 w-56 h-56 bg-[#ef476f] rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+      <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-[#ff5c8d] rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
+
+      {/* Comic Halftone Dots */}
       <div 
-        className="absolute inset-0 opacity-30 pointer-events-none z-0"
+        className="absolute inset-0 opacity-20 pointer-events-none z-0"
         style={{
-          backgroundImage: "radial-gradient(#0f766e 1.5px, transparent 1.5px)",
-          backgroundSize: "20px 20px"
+          backgroundImage: "radial-gradient(#000 2px, transparent 2px)",
+          backgroundSize: "24px 24px"
         }}
       />
-
-      {/* MCU-Style Silhouette Doodles Background */}
-      {/* Top Left - Shield Icon */}
-      <motion.div 
-        className="absolute top-12 left-8 pointer-events-none z-0 opacity-40"
-        animate={{ rotate: [0, -10, 10, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="w-12 h-12 border-3 border-black rounded-lg transform rotate-45" />
-      </motion.div>
-
-      {/* Top Center Left - Star Circle */}
-      <motion.div 
-        className="absolute top-20 left-1/4 pointer-events-none z-0 opacity-35"
-        animate={{ scale: [1, 1.1, 1] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="w-10 h-10 border-3 border-black rounded-full flex items-center justify-center">
-          <div className="text-xl font-black">★</div>
-        </div>
-      </motion.div>
-
-      {/* Top Right - Lightning Bolt */}
-      <motion.div 
-        className="absolute top-16 right-20 pointer-events-none z-0 opacity-40 font-black text-4xl"
-        animate={{ scale: [1, 1.15, 1] }}
-        transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-      >
-        ⚡
-      </motion.div>
-
-      {/* Top Right - Mask Silhouette */}
-      <motion.div 
-        className="absolute top-32 right-8 pointer-events-none z-0 opacity-35"
-        animate={{ rotateY: [0, 180, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="black" strokeWidth="2">
-          <path d="M2 8 Q2 2 8 2 Q16 2 16 8 Q16 2 24 2 Q30 2 30 8 L28 20 Q28 22 26 22 L6 22 Q4 22 4 20 Z" />
-        </svg>
-      </motion.div>
-
-      {/* Middle Left - Character Silhouette */}
-      <motion.div 
-        className="absolute left-4 top-1/3 pointer-events-none z-0 opacity-35"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg width="28" height="40" viewBox="0 0 28 40" fill="black">
-          <circle cx="14" cy="8" r="6" />
-          <rect x="8" y="16" width="16" height="12" />
-          <rect x="4" y="28" width="8" height="12" />
-          <rect x="16" y="28" width="8" height="12" />
-        </svg>
-      </motion.div>
-
-      {/* Middle Center - Spiral Symbol */}
-      <motion.div 
-        className="absolute left-1/3 top-1/2 pointer-events-none z-0 opacity-30 font-black text-3xl"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-      >
-        ◎
-      </motion.div>
-
-      {/* Middle Right - Sword/Blade */}
-      <motion.div 
-        className="absolute right-6 top-2/5 pointer-events-none z-0 opacity-35"
-        animate={{ rotate: [0, -15, 15, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg width="12" height="40" viewBox="0 0 12 40" fill="black">
-          <polygon points="6,0 10,8 6,30 2,8" />
-          <rect x="4" y="30" width="4" height="10" />
-        </svg>
-      </motion.div>
-
-      {/* Bottom Left - Gun/Blaster */}
-      <motion.div 
-        className="absolute bottom-24 left-12 pointer-events-none z-0 opacity-35"
-        animate={{ rotateY: [0, 180, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg width="36" height="20" viewBox="0 0 36 20" fill="black">
-          <rect x="2" y="8" width="20" height="4" rx="2" />
-          <circle cx="24" cy="10" r="4" />
-          <polygon points="28,6 34,8 34,12 28,14" />
-        </svg>
-      </motion.div>
-
-      {/* Bottom Center - Sphere with Rings */}
-      <motion.div 
-        className="absolute bottom-32 left-1/2 -translate-x-1/2 pointer-events-none z-0 opacity-30"
-        animate={{ rotate: [0, 360] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-      >
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="black" strokeWidth="1.5">
-          <circle cx="14" cy="14" r="6" />
-          <circle cx="14" cy="14" r="10" />
-          <circle cx="14" cy="14" r="14" />
-        </svg>
-      </motion.div>
-
-      {/* Bottom Right - Target/Crosshair */}
-      <motion.div 
-        className="absolute bottom-20 right-16 pointer-events-none z-0 opacity-35"
-        animate={{ scale: [1, 1.15, 1], rotate: [0, 45, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="black" strokeWidth="2">
-          <circle cx="16" cy="16" r="4" />
-          <circle cx="16" cy="16" r="10" />
-          <line x1="8" y1="16" x2="24" y2="16" />
-          <line x1="16" y1="8" x2="16" y2="24" />
-        </svg>
-      </motion.div>
-
-      {/* Far Right - Character Gesture */}
-      <motion.div 
-        className="absolute right-4 top-2/3 pointer-events-none z-0 opacity-30"
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg width="24" height="36" viewBox="0 0 24 36" fill="black">
-          <circle cx="12" cy="6" r="4" />
-          <polygon points="12,12 8,18 8,30 12,28 16,30 16,18" />
-          <line x1="4" y1="16" x2="2" y2="22" strokeWidth="2" stroke="black" />
-          <line x1="20" y1="16" x2="22" y2="22" strokeWidth="2" stroke="black" />
-        </svg>
-      </motion.div>
-
-      {/* Far Left Bottom - Hexagon Pattern */}
-      <motion.div 
-        className="absolute bottom-16 left-6 pointer-events-none z-0 opacity-30"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="1.5">
-          <polygon points="12,2 20,6 20,14 12,18 4,14 4,6" />
-        </svg>
-      </motion.div>
-
-      {/* Far Right Top - Tech Icon */}
-      <motion.div 
-        className="absolute top-1/4 right-2 pointer-events-none z-0 opacity-30"
-        animate={{ scale: [1, 1.1, 1] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="black">
-          <rect x="2" y="4" width="24" height="18" rx="2" />
-          <rect x="8" y="22" width="12" height="2" />
-          <line x1="14" y1="22" x2="14" y2="26" strokeWidth="2" stroke="black" />
-        </svg>
-      </motion.div>
-
-      {/* Center Top - Web/Network */}
-      <motion.div 
-        className="absolute top-1/4 right-1/3 pointer-events-none z-0 opacity-25"
-        animate={{ rotate: [0, 180, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="black" strokeWidth="1.5">
-          <circle cx="16" cy="8" r="3" fill="black" />
-          <circle cx="8" cy="20" r="3" fill="black" />
-          <circle cx="24" cy="20" r="3" fill="black" />
-          <circle cx="16" cy="28" r="3" fill="black" />
-          <line x1="16" y1="8" x2="8" y2="20" />
-          <line x1="16" y1="8" x2="24" y2="20" />
-          <line x1="8" y1="20" x2="16" y2="28" />
-          <line x1="24" y1="20" x2="16" y2="28" />
-        </svg>
-      </motion.div>
       
       {/* Animated decorative elements */}
       <motion.div
