@@ -107,20 +107,20 @@ function Login() {
         </motion.div>
       </motion.div>
 
-      {/* Flying Iron Man Animation - Left to Right */}
+      {/* Flying Iron Man Animation - Right to Left */}
       <motion.div
         className="absolute top-[20%] pointer-events-none z-0"
-        initial={{ left: "-40%" }}
+        initial={{ right: "-40%" }}
         animate={{ 
-          left: ["-40%", "140%"],
+          right: ["-40%", "140%"],
           y: [0, -80, 50, -30, 0]
         }}
         transition={{ 
-          left: { duration: 12, repeat: Infinity, ease: "linear", delay: 2 },
+          right: { duration: 12, repeat: Infinity, ease: "linear", delay: 2 },
           y: { duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }
         }}
       >
-        <div className="relative w-52 h-36 md:w-80 md:h-56 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden bg-red-600 transform -skew-x-12 rotate-6 flex items-center justify-center">
+        <div className="relative w-52 h-36 md:w-80 md:h-56 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden bg-red-600 transform skew-x-12 -rotate-6 flex items-center justify-center">
           <img 
             src="/ironman.png" 
             alt="Iron Man" 
