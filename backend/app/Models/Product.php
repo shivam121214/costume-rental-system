@@ -18,7 +18,8 @@ class Product extends Model
         'variants',
         'sizes',
         'status',
-        'is_featured'
+        'is_featured',
+        'show_on_featured_section'
     ];
 
     protected $casts = [

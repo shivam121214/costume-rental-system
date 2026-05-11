@@ -197,4 +197,16 @@ class ProductController extends Controller
             'product' => $product
         ]);
     }
+
+    public function toggleFeaturedSection(int $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->show_on_featured_section = !$product->show_on_featured_section;
+        $product->save();
+
+        return response()->json([
+            'message' => 'Product featured section status updated',
+            'product' => $product
+        ]);
+    }
 }

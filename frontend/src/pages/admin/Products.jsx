@@ -152,6 +152,17 @@ function Products() {
     }
   };
 
+  const toggleFeaturedSection = async (id, currentStatus) => {
+    try {
+      await axios.post(`${API_URL}/api/products/${id}/toggle-featured-section`);
+      getProducts();
+      alert(`Product ${currentStatus ? "removed from" : "added to"} Featured Section!`);
+    } catch (error) {
+      console.error("Error toggling featured section:", error);
+      alert("Failed to toggle featured section status");
+    }
+  };
+
   const toggleVisibility = async (item) => {
     const data = new FormData();
 
@@ -349,11 +360,18 @@ function Products() {
             <h3 className="text-xl font-semibold">{item.name}</h3>
             <p>{item.category}</p>
             <p className="font-bold mt-2">₹ {item.rent_price}</p>
-            {item.is_featured && (
-              <span className="inline-block mt-2 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
-                Featured ⭐
-              </span>
-            )}
+            <div className="flex gap-2 flex-wrap mt-2">
+              {item.is_featured && (
+                <span className="inline-block px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
+                  Featured ⭐
+                </span>
+              )}
+              {item.show_on_featured_section && (
+                <span className="inline-block px-3 py-1 bg-purple-500 text-white text-xs font-bold rounded-full">
+                  In Section 🎯
+                </span>
+              )}
+            </div>
 
             <div className="flex gap-2 flex-wrap mt-4">
               <button
@@ -370,6 +388,15 @@ function Products() {
                 }`}
               >
                 {item.is_featured ? "Unfeature" : "Feature"}
+              </button>
+
+              <button
+                onClick={() => toggleFeaturedSection(item.id, item.show_on_featured_section)}
+                className={`px-4 py-2 text-white rounded-lg text-sm ${
+                  item.show_on_featured_section ? "bg-purple-500 hover:bg-purple-600" : "bg-indigo-500 hover:bg-indigo-600"
+                }`}
+              >
+                {item.show_on_featured_section ? "Remove from Section" : "Add to Section"}
               </button>
 
               <button
