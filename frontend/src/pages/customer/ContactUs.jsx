@@ -1,6 +1,7 @@
 import { HelpCircle, MessageSquare, Send } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
+import axios from 'axios';
 
 export function ContactUs() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,9 @@ export function ContactUs() {
     subject: '',
     message: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
+  const [statusMessage, setStatusMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,10 +22,43 @@ export function ContactUs() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Form will be connected later
-    console.log('Form submitted:', formData);
+    setLoading(true);
+    setSubmitStatus(null);
+    setStatusMessage('');
+
+    try {
+      const response = await axios.post('https://formspree.io/f/xwvyagrr', {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      });
+
+      if (response.status === 200) {
+        setSubmitStatus('success');
+        setStatusMessage('🎉 Message sent successfully! We will get back to you soon.');
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+      setStatusMessage('❌ Failed to send message. Please try again later.');
+      console.error('FormSpree error:', error);
+    } finally {
+      setLoading(false);
+      // Auto-clear status message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus(null);
+        setStatusMessage('');
+      }, 5000);
+    }
   };
 
   return (
@@ -73,6 +110,21 @@ export function ContactUs() {
             Drop your query here and our team of highly trained party animals will get back to you as soon as possible!
           </p>
 
+          {submitStatus && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className={`mb-6 p-4 rounded-xl border-2 font-bold ${
+                submitStatus === 'success' 
+                  ? 'bg-green-100 border-green-500 text-green-700' 
+                  : 'bg-red-100 border-red-500 text-red-700'
+              }`}
+            >
+              {statusMessage}
+            </motion.div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
@@ -121,12 +173,13 @@ export function ContactUs() {
 
             <button 
               type="submit"
-              className="bg-[#ffd166] text-black px-8 py-4 rounded-xl border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 font-bold transition-all text-xl flex items-center gap-3 w-full justify-center md:w-auto uppercase tracking-wide" style={{
+              disabled={loading}
+              className="bg-[#ffd166] text-black px-8 py-4 rounded-xl border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 font-bold transition-all text-xl flex items-center gap-3 w-full justify-center md:w-auto uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed" style={{
                 fontFamily: "'Chewy', cursive",
               }}
             >
               <Send className="w-5 h-5" style={{ strokeWidth: 3 }} />
-              Send Message
+              {loading ? 'Sending...' : 'Send Message'}
             </button>
           </form>
         </motion.div>
