@@ -317,17 +317,6 @@ function Products() {
           />
         ))}
 
-        <label className="flex items-center gap-2 p-3 border border-slate-300 rounded-lg cursor-pointer">
-          <input
-            type="checkbox"
-            name="is_featured"
-            checked={form.is_featured}
-            onChange={(e) => setForm({ ...form, is_featured: e.target.checked })}
-            className="w-5 h-5"
-          />
-          <span className="font-semibold">Featured Product (Show in Home Categories)</span>
-        </label>
-
         <p>Total Quantity: {totalQty}</p>
 
         <select
