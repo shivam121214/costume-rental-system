@@ -13,6 +13,7 @@ function Products() {
     security_deposit: "",
     sizes: "",
     status: "available",
+    is_featured: false,
     variants: {
       "3-5 Years": "",
       "6-10 Years": "",
@@ -79,6 +80,7 @@ function Products() {
     data.append("security_deposit", form.security_deposit);
     data.append("status", form.status);
     data.append("sizes", form.sizes || "");
+    data.append("is_featured", form.is_featured ? "1" : "0");
 
     data.append("variants", JSON.stringify(form.variants));
     data.append("total_quantity", totalQty);
@@ -118,6 +120,7 @@ function Products() {
       image: null,
       gallery: [],
       existingGallery: item.gallery || [],
+      is_featured: item.is_featured || false,
       variants: item.variants || emptyForm.variants,
     });
 
@@ -136,6 +139,17 @@ function Products() {
 
     await axios.delete(`${API_URL}/api/products/${id}`);
     getProducts();
+  };
+
+  const toggleFeatured = async (id, currentStatus) => {
+    try {
+      await axios.post(`${API_URL}/api/products/${id}/toggle-featured`);
+      getProducts();
+      alert(`Product ${currentStatus ? "removed from" : "added to"} featured!`);
+    } catch (error) {
+      console.error("Error toggling featured:", error);
+      alert("Failed to toggle featured status");
+    }
   };
 
   const toggleVisibility = async (item) => {
@@ -303,6 +317,17 @@ function Products() {
           />
         ))}
 
+        <label className="flex items-center gap-2 p-3 border border-slate-300 rounded-lg cursor-pointer">
+          <input
+            type="checkbox"
+            name="is_featured"
+            checked={form.is_featured}
+            onChange={(e) => setForm({ ...form, is_featured: e.target.checked })}
+            className="w-5 h-5"
+          />
+          <span className="font-semibold">Featured Product (Show in Home Categories)</span>
+        </label>
+
         <p>Total Quantity: {totalQty}</p>
 
         <select
@@ -335,25 +360,39 @@ function Products() {
             <h3 className="text-xl font-semibold">{item.name}</h3>
             <p>{item.category}</p>
             <p className="font-bold mt-2">₹ {item.rent_price}</p>
+            {item.is_featured && (
+              <span className="inline-block mt-2 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
+                Featured ⭐
+              </span>
+            )}
 
-            <div className="flex gap-3 mt-4">
+            <div className="flex gap-2 flex-wrap mt-4">
               <button
                 onClick={() => editProduct(item)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
               >
                 Edit
               </button>
 
               <button
+                onClick={() => toggleFeatured(item.id, item.is_featured)}
+                className={`px-4 py-2 text-white rounded-lg text-sm ${
+                  item.is_featured ? "bg-orange-500 hover:bg-orange-600" : "bg-green-500 hover:bg-green-600"
+                }`}
+              >
+                {item.is_featured ? "Unfeature" : "Feature"}
+              </button>
+
+              <button
                 onClick={() => toggleVisibility(item)}
-                className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
+                className="px-4 py-2 bg-yellow-500 text-white rounded-lg text-sm"
               >
                 {item.status === "available" ? "Hide" : "Unhide"}
               </button>
 
               <button
                 onClick={() => deleteProduct(item.id)}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
               >
                 Delete
               </button>
