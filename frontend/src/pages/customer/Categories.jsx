@@ -144,7 +144,7 @@ export function Categories() {
                                 }}
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br text-white text-xs font-bold">
+                              <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: category.color }}>
                                 No Image
                               </div>
                             )}
