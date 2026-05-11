@@ -48,7 +48,8 @@ class ProductController extends Controller
             'variants' => 'nullable|array',
             'total_quantity' => 'required|integer',
             'sizes' => 'nullable',
-            'status' => 'required'
+            'status' => 'required',
+            'is_featured' => 'nullable|boolean'
         ]);
 
         $cloudinary = new Cloudinary([
@@ -106,6 +107,7 @@ class ProductController extends Controller
             'total_quantity' => 'required|integer',
             'sizes' => 'nullable',
             'status' => 'required',
+            'is_featured' => 'nullable|boolean',
         ]);
 
         $cloudinary = new Cloudinary([
@@ -181,6 +183,18 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Product deleted permanently'
+        ]);
+    }
+
+    public function toggleFeatured(int $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->is_featured = !$product->is_featured;
+        $product->save();
+
+        return response()->json([
+            'message' => 'Product featured status updated',
+            'product' => $product
         ]);
     }
 }

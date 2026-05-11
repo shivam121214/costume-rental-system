@@ -35,14 +35,20 @@ export function Categories() {
         grouped[category].push(product);
       });
 
-      // Convert to array format with colors
-      const categoriesArray = Object.entries(grouped).map(([name, products], index) => ({
-        name,
-        products,
-        image: products[0]?.image || '',
-        count: `${products.length} Items`,
-        color: COLOR_PALETTE[index % COLOR_PALETTE.length]
-      }));
+      // Convert to array format with colors and select featured/latest products
+      const categoriesArray = Object.entries(grouped).map(([name, products], index) => {
+        // Prioritize featured products, then get up to 4 products
+        const featured = products.filter(p => p.is_featured);
+        const selected = featured.length > 0 ? featured.slice(0, 4) : products.slice(0, 4);
+        
+        return {
+          name,
+          products: selected,
+          image: selected[0]?.image || '',
+          count: `${products.length} Items`,
+          color: COLOR_PALETTE[index % COLOR_PALETTE.length]
+        };
+      });
 
       setCategories(categoriesArray);
       setLoading(false);
@@ -114,21 +120,26 @@ export function Categories() {
                     style={{ backgroundColor: category.color }}
                   ></div>
                   <div className="relative rounded-3xl border-4 border-black overflow-hidden bg-white h-full flex flex-col">
-                    <div className="aspect-video relative border-b-4 border-black bg-gray-200">
-                      {category.image ? (
-                        <img
-                          src={getImageUrl(category.image)}
-                          alt={category.name}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-linear-to-br" style={{ from: category.color, to: '#ffffff' }}>
-                          <span className="text-white font-bold text-lg">No Image</span>
+                    {/* Product Grid Showcase */}
+                    <div className="grid grid-cols-2 border-b-4 border-black bg-gray-100">
+                      {category.products.map((product, idx) => (
+                        <div key={idx} className="aspect-square border-r-2 border-b-2 border-black last:border-r-0 last:border-b-0 flex items-center justify-center bg-gray-200 overflow-hidden">
+                          {product.image ? (
+                            <img
+                              src={getImageUrl(product.image)}
+                              alt={product.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br text-white text-xs font-bold">
+                              No Image
+                            </div>
+                          )}
                         </div>
-                      )}
+                      ))}
                     </div>
                     <div className="p-6 text-center bg-white flex-1 flex flex-col justify-center">
                       <h3 className="text-2xl mb-2 text-black" style={{ fontFamily: "'Chewy', cursive" }}>{category.name}</h3>

@@ -17,7 +17,8 @@ class Product extends Model
         'total_quantity',
         'variants',
         'sizes',
-        'status'
+        'status',
+        'is_featured'
     ];
 
     protected $casts = [
