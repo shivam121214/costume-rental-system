@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
+  const [searchParams] = useSearchParams();
   const API_URL = "https://costume-rental-system.onrender.com";
+  
   const getImageUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
@@ -16,7 +18,12 @@ function Products() {
 
   useEffect(() => {
     getProducts();
-  }, []);
+    // Get category from URL params if present
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) {
+      setCategory(categoryParam);
+    }
+  }, [searchParams]);
 
   const getProducts = async () => {
     const res = await axios.get(`${API_URL}/api/products`);

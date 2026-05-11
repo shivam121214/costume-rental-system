@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Cloudinary\Cloudinary;
 
 class ProductController extends Controller
@@ -26,7 +25,7 @@ class ProductController extends Controller
         );
     }
 
-    public function show($id)
+    public function show(int $id)
     {
         return response()->json(Product::findOrFail($id));
     }
@@ -85,7 +84,7 @@ class ProductController extends Controller
         return response()->json($product, 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $request->merge([
             'variants' => json_decode($request->variants, true)
@@ -146,7 +145,7 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $product = Product::findOrFail($id);
 

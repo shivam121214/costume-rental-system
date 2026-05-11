@@ -1,33 +1,56 @@
 import { motion } from 'motion/react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-const categories = [
-  {
-    name: 'Spooky Halloween',
-    image: 'https://images.unsplash.com/photo-1604138769357-19ee3cc8be99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
-    count: '3,000+ BOOs!',
-    color: '#ff9f1c'
-  },
-  {
-    name: 'Magical Fairies',
-    image: 'https://images.unsplash.com/photo-1691698088069-9a8e3eca96a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
-    count: '1,500+ Sparkles',
-    color: '#ef476f'
-  },
-  {
-    name: 'Superheroes',
-    image: 'https://images.unsplash.com/photo-1531343717540-5e36502ba7c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
-    count: '2,000+ POWs!',
-    color: '#118ab2'
-  },
-  {
-    name: 'Roaring Dinos',
-    image: 'https://images.unsplash.com/photo-1572614947388-4c994baaeb2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600',
-    count: '999+ ROARs!',
-    color: '#06d6a0'
-  }
-];
+const COLOR_PALETTE = ['#ff9f1c', '#ef476f', '#118ab2', '#06d6a0', '#ffd166', '#f78c6b'];
 
 export function Categories() {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const API_URL = "https://costume-rental-system.onrender.com";
+
+  const getImageUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    return `${API_URL}/storage/${path}`;
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/products`);
+      const products = res.data;
+
+      // Group products by category
+      const grouped = {};
+      products.forEach((product) => {
+        const category = product.category || 'Other';
+        if (!grouped[category]) {
+          grouped[category] = [];
+        }
+        grouped[category].push(product);
+      });
+
+      // Convert to array format with colors
+      const categoriesArray = Object.entries(grouped).map(([name, products], index) => ({
+        name,
+        products,
+        image: products[0]?.image || '',
+        count: `${products.length} Items`,
+        color: COLOR_PALETTE[index % COLOR_PALETTE.length]
+      }));
+
+      setCategories(categoriesArray);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      setLoading(false);
+    }
+  }
   return (
     <section className="py-24 px-4 bg-[#fdf8e6] relative overflow-hidden border-t-4 border-black">
       {/* Confetti background dots */}
@@ -59,44 +82,66 @@ export function Categories() {
               Pick Your Adventure!
             </motion.h2>
           </div>
-          <button className="bg-white text-black px-6 py-3 rounded-xl border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 font-bold transition-all text-lg">
-            See All Themes
-          </button>
+          <Link to="/products" className="block">
+            <button className="bg-white text-black px-6 py-3 rounded-xl border-2 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 font-bold transition-all text-lg">
+              See All Themes
+            </button>
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {categories.map((category, index) => (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
-              key={category.name}
-              className="group relative cursor-pointer"
-            >
-              <div 
-                className="absolute inset-0 rounded-3xl border-4 border-black translate-x-3 translate-y-3"
-                style={{ backgroundColor: category.color }}
-              ></div>
-              <div className="relative rounded-3xl border-4 border-black overflow-hidden bg-white h-full flex flex-col">
-                <div className="aspect-video relative border-b-4 border-black">
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-6 text-center bg-white flex-1 flex flex-col justify-center">
-                  <h3 className="text-2xl mb-2 text-black" style={{ fontFamily: "'Chewy', cursive" }}>{category.name}</h3>
-                  <p className="font-bold rounded-full px-3 py-1 inline-block text-sm border-2 border-black self-center" style={{ backgroundColor: category.color, color: 'white' }}>
-                    {category.count}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="text-xl text-black font-bold">Loading categories...</div>
+          </div>
+        ) : categories.length === 0 ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="text-xl text-black font-bold">No categories available yet.</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {categories.map((category, index) => (
+              <Link to={`/products?category=${encodeURIComponent(category.name)}`} key={category.name} className="no-underline">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
+                  className="group relative cursor-pointer h-full"
+                >
+                  <div 
+                    className="absolute inset-0 rounded-3xl border-4 border-black translate-x-3 translate-y-3"
+                    style={{ backgroundColor: category.color }}
+                  ></div>
+                  <div className="relative rounded-3xl border-4 border-black overflow-hidden bg-white h-full flex flex-col">
+                    <div className="aspect-video relative border-b-4 border-black bg-gray-200">
+                      {category.image ? (
+                        <img
+                          src={getImageUrl(category.image)}
+                          alt={category.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-linear-to-br" style={{ from: category.color, to: '#ffffff' }}>
+                          <span className="text-white font-bold text-lg">No Image</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-6 text-center bg-white flex-1 flex flex-col justify-center">
+                      <h3 className="text-2xl mb-2 text-black" style={{ fontFamily: "'Chewy', cursive" }}>{category.name}</h3>
+                      <p className="font-bold rounded-full px-3 py-1 inline-block text-sm border-2 border-black self-center text-white" style={{ backgroundColor: category.color }}>
+                        {category.count}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
