@@ -104,52 +104,68 @@ export function Categories() {
             <div className="text-xl text-black font-bold">No categories available yet.</div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {categories.map((category, index) => (
-              <Link to={`/products?category=${encodeURIComponent(category.name)}`} key={category.name} className="no-underline">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
-                  className="group relative cursor-pointer h-full"
-                >
-                  <div 
-                    className="absolute inset-0 rounded-3xl border-4 border-black translate-x-3 translate-y-3"
-                    style={{ backgroundColor: category.color }}
-                  ></div>
-                  <div className="relative rounded-3xl border-4 border-black overflow-hidden bg-white h-full flex flex-col">
-                    {/* Product Grid Showcase */}
-                    <div className="grid grid-cols-2 border-b-4 border-black bg-gray-100">
-                      {category.products.map((product, idx) => (
-                        <div key={idx} className="aspect-square border-r-2 border-b-2 border-black last:border-r-0 last:border-b-0 flex items-center justify-center bg-gray-200 overflow-hidden">
-                          {product.image ? (
-                            <img
-                              src={getImageUrl(product.image)}
-                              alt={product.name}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                              }}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br text-white text-xs font-bold">
-                              No Image
-                            </div>
-                          )}
+          <div className="space-y-12">
+            {categories.map((category, categoryIndex) => (
+              <div key={category.name}>
+                <div className="flex items-center justify-between mb-8">
+                  <h3 className="text-4xl text-black" style={{ fontFamily: "'Chewy', cursive" }}>
+                    {category.name}
+                  </h3>
+                  <Link to={`/products?category=${encodeURIComponent(category.name)}`}>
+                    <button className="text-black font-bold text-lg hover:underline">
+                      View All →
+                    </button>
+                  </Link>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                  {category.products.map((product, productIndex) => (
+                    <Link to={`/products/${product.id}`} key={product.id} className="no-underline">
+                      <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: productIndex * 0.1 }}
+                        whileHover={{ scale: 1.05, rotate: productIndex % 2 === 0 ? 2 : -2 }}
+                        className="group relative cursor-pointer h-full"
+                      >
+                        <div 
+                          className="absolute inset-0 rounded-3xl border-4 border-black translate-x-3 translate-y-3"
+                          style={{ backgroundColor: category.color }}
+                        ></div>
+                        <div className="relative rounded-3xl border-4 border-black overflow-hidden bg-white h-full flex flex-col">
+                          <div className="aspect-video relative border-b-4 border-black bg-gray-200">
+                            {product.image ? (
+                              <img
+                                src={getImageUrl(product.image)}
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br text-white text-xs font-bold">
+                                No Image
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-4 text-center bg-white flex-1 flex flex-col justify-center">
+                            <h4 className="text-xl mb-2 text-black font-bold" style={{ fontFamily: "'Chewy', cursive" }}>
+                              {product.name}
+                            </h4>
+                            <p className="text-sm text-slate-600 mb-3 font-semibold">
+                              ₹{product.rent_price} / Rent
+                            </p>
+                            <p className="font-bold rounded-full px-3 py-1 inline-block text-xs border-2 border-black self-center text-white" style={{ backgroundColor: category.color }}>
+                              Featured
+                            </p>
+                          </div>
                         </div>
-                      ))}
-                    </div>
-                    <div className="p-6 text-center bg-white flex-1 flex flex-col justify-center">
-                      <h3 className="text-2xl mb-2 text-black" style={{ fontFamily: "'Chewy', cursive" }}>{category.name}</h3>
-                      <p className="font-bold rounded-full px-3 py-1 inline-block text-sm border-2 border-black self-center text-white" style={{ backgroundColor: category.color }}>
-                        {category.count}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
+                      </motion.div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
