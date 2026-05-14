@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
-  Search,
-  ShoppingCart,
-  Menu,
   Clock,
   CalendarDays,
   AlertTriangle,
@@ -12,7 +9,6 @@ import {
   ClipboardList,
   Tags,
   Star,
-  LogOut,
 } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -47,9 +43,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fdf8e6] font-sans text-black selection:bg-pink-300 selection:text-black">
-      <Header navigate={navigate} />
-
+    <div className="min-h-screen bg-[#fdf8e6] font-sans text-black selection:bg-pink-300 selection:text-black pt-20">
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
         <motion.div
           className="flex items-center justify-between mb-12"
@@ -71,84 +65,6 @@ function Dashboard() {
         <DashboardContent stats={stats} navigate={navigate} />
       </main>
     </div>
-  );
-}
-
-function Header({ navigate }) {
-  const handleLogout = () => {
-    localStorage.removeItem("admin");
-    navigate("/admin/login");
-  };
-
-  return (
-    <header className="bg-[#fdf8e6] border-b-[3px] border-black sticky top-0 z-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-8 lg:gap-12">
-          {/* Logo */}
-          <div className="flex flex-col select-none">
-            <span
-              className="text-2xl md:text-3xl font-black tracking-wider text-[#ef476f]"
-              style={{
-                fontFamily: "'Chewy', cursive",
-                textShadow:
-                  "2px 2px 0px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000",
-              }}
-            >
-              Aadya Fancy Dresses
-            </span>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8 pl-4">
-            {["Costumes", "Accessories", "Themes"].map((item) => (
-              <a
-                key={item}
-                href="#"
-                className="text-base font-black text-black hover:text-[#ef476f] transition-colors"
-              >
-                {item}
-              </a>
-            ))}
-          </nav>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-3">
-          <ActionButton
-            icon={<Search size={20} strokeWidth={2.5} />}
-            bgColor="bg-[#ffd166]"
-          />
-          <ActionButton
-            icon={<ShoppingCart size={20} strokeWidth={2.5} />}
-            bgColor="bg-[#06d6a0]"
-          />
-          <ActionButton
-            icon={<Menu size={20} strokeWidth={2.5} />}
-            bgColor="bg-[#bde0fe]"
-          />
-          <motion.button
-            onClick={handleLogout}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-11 h-11 rounded-full flex items-center justify-center border-[2.5px] border-black bg-[#ef476f] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none text-white ml-2"
-          >
-            <LogOut size={20} strokeWidth={2.5} />
-          </motion.button>
-        </div>
-      </div>
-    </header>
-  );
-}
-
-function ActionButton({ icon, bgColor }) {
-  return (
-    <motion.button
-      whileHover={{ y: -2 }}
-      whileTap={{ y: 2 }}
-      className={`w-11 h-11 rounded-full flex items-center justify-center border-[2.5px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all active:shadow-none ${bgColor}`}
-    >
-      {icon}
-    </motion.button>
   );
 }
 
