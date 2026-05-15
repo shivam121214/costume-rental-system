@@ -73,6 +73,7 @@ function Navbar() {
               <Link 
                 to="/products" 
                 className="text-lg font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
+                style={{ fontFamily: "'Chewy', cursive" }}
               >
                 Costumes
                 <span className="absolute bottom-1 left-0 w-0 h-1 bg-[#ff5c8d] transition-all duration-300 group-hover:w-full rounded-full"></span>
@@ -82,6 +83,7 @@ function Navbar() {
                   key={item} 
                   href="#" 
                   className="text-lg font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
+                  style={{ fontFamily: "'Chewy', cursive" }}
                 >
                   {item}
                   <span className="absolute bottom-1 left-0 w-0 h-1 bg-[#ff5c8d] transition-all duration-300 group-hover:w-full rounded-full"></span>
