@@ -78,17 +78,22 @@ function Navbar() {
                 Costumes
                 <span className="absolute bottom-1 left-0 w-0 h-1 bg-[#ff5c8d] transition-all duration-300 group-hover:w-full rounded-full"></span>
               </Link>
-              {['Accessories', 'Themes'].map((item) => (
-                <a 
-                  key={item} 
-                  href="#" 
-                  className="text-xl font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
-                  style={{ fontFamily: "'Chewy', cursive" }}
-                >
-                  {item}
-                  <span className="absolute bottom-1 left-0 w-0 h-1 bg-[#ff5c8d] transition-all duration-300 group-hover:w-full rounded-full"></span>
-                </a>
-              ))}
+              <Link 
+                to="#" 
+                className="text-xl font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
+                style={{ fontFamily: "'Chewy', cursive" }}
+              >
+                Accessories
+                <span className="absolute bottom-1 left-0 w-0 h-1 bg-[#ff5c8d] transition-all duration-300 group-hover:w-full rounded-full"></span>
+              </Link>
+              <Link 
+                to="#" 
+                className="text-xl font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
+                style={{ fontFamily: "'Chewy', cursive" }}
+              >
+                Themes
+                <span className="absolute bottom-1 left-0 w-0 h-1 bg-[#ff5c8d] transition-all duration-300 group-hover:w-full rounded-full"></span>
+              </Link>
             </nav>
           </div>
 
@@ -197,13 +202,39 @@ function Navbar() {
                     </button>
                   </>
                 ) : (
-                  <Link 
-                    to="/admin/login" 
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors"
-                  >
-                    Admin Login
-                  </Link>
+                  <>
+                    <Link 
+                      to="/products" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                      style={{ fontFamily: "'Chewy', cursive" }}
+                    >
+                      Costumes
+                    </Link>
+                    <Link 
+                      to="/accessories" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                      style={{ fontFamily: "'Chewy', cursive" }}
+                    >
+                      Accessories
+                    </Link>
+                    <Link 
+                      to="/themes" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
+                      style={{ fontFamily: "'Chewy', cursive" }}
+                    >
+                      Themes
+                    </Link>
+                    <Link 
+                      to="/admin/login" 
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors"
+                    >
+                      Admin Login
+                    </Link>
+                  </>
                 )}
               </motion.div>
             )}
