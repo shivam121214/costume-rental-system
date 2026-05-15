@@ -267,46 +267,12 @@ function Products() {
                     <label className="block text-xs font-black uppercase tracking-wide mb-2">
                       Category
                     </label>
-                    <select
-                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                    <input
+                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
                       name="category"
+                      placeholder="Category"
                       value={form.category}
                       onChange={handleChange}
-                    >
-                      <option value="">Select Category</option>
-                      <option value="Costumes">Costumes</option>
-                      <option value="Accessories">Accessories</option>
-                      <option value="Themes">Themes</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Price & Deposit */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
-                      Price ($)
-                    </label>
-                    <input
-                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
-                      name="rent_price"
-                      placeholder="0.00"
-                      value={form.rent_price}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
-                      Stock Quantity
-                    </label>
-                    <input
-                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
-                      name="security_deposit"
-                      placeholder="0"
-                      value={form.security_deposit}
-                      onChange={handleChange}
-                      required
                     />
                   </div>
                 </div>
@@ -325,18 +291,181 @@ function Products() {
                   />
                 </div>
 
-                {/* Image URL */}
+                {/* Cover Image Upload */}
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wide mb-2">
-                    Image URL
+                    Cover Image (JPG, PNG, WEBP • Max 5MB)
+                  </label>
+                  <input
+                    type="file"
+                    name="image"
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                  />
+                </div>
+
+                {/* Gallery Images Upload */}
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                    Gallery Images (Multiple • Max 5MB each)
+                  </label>
+                  <input
+                    type="file"
+                    name="gallery"
+                    multiple
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                  />
+                </div>
+
+                {/* Existing Gallery Display */}
+                {form.existingGallery?.length > 0 && (
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                      Existing Gallery
+                    </label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {form.existingGallery.map((img, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={getImageUrl(img)}
+                            alt=""
+                            className="w-full h-24 object-cover rounded-lg border-2 border-black"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeExistingImage(index)}
+                            className="absolute top-1 right-1 bg-[#ef476f] text-white w-6 h-6 rounded-full text-sm font-black border-2 border-black"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* New Gallery Preview */}
+                {form.gallery.length > 0 && (
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                      New Gallery Preview
+                    </label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {form.gallery.map((file, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt=""
+                            className="w-full h-24 object-cover rounded-lg border-2 border-black"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeGalleryImage(index)}
+                            className="absolute top-1 right-1 bg-[#ef476f] text-white w-6 h-6 rounded-full text-sm font-black border-2 border-black"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Price & Security Deposit */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                      Rent Price
+                    </label>
+                    <input
+                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                      name="rent_price"
+                      placeholder="0.00"
+                      value={form.rent_price}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                      Security Deposit
+                    </label>
+                    <input
+                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                      name="security_deposit"
+                      placeholder="0.00"
+                      value={form.security_deposit}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Sizes */}
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                    Sizes
                   </label>
                   <input
                     className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
-                    name="image"
-                    placeholder="https://example.com/image.jpg"
-                    value={form.image}
+                    name="sizes"
+                    placeholder="e.g., S, M, L"
+                    value={form.sizes}
                     onChange={handleChange}
                   />
+                </div>
+
+                {/* Age Group Stock */}
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-wide mb-3">Age Group Stock</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.keys(form.variants).map((key) => (
+                      <div key={key}>
+                        <label className="block text-xs font-bold mb-1">{key}</label>
+                        <input
+                          className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                          type="number"
+                          placeholder={key}
+                          value={form.variants[key]}
+                          onChange={(e) => handleVariant(key, e.target.value)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-sm font-black mt-2 text-black">Total Quantity: <span className="text-[#ef476f]">{totalQty}</span></p>
+                </div>
+
+                {/* Status */}
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                    Status
+                  </label>
+                  <select
+                    className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                    name="status"
+                    value={form.status}
+                    onChange={handleChange}
+                  >
+                    <option value="available">Available</option>
+                    <option value="unavailable">Unavailable</option>
+                    <option value="damaged">Damaged</option>
+                  </select>
+                </div>
+
+                {/* Featured Checkbox */}
+                <div className="flex items-center gap-3 p-3 bg-white border-3 border-black rounded-2xl">
+                  <input
+                    type="checkbox"
+                    id="is_featured"
+                    name="is_featured"
+                    checked={form.is_featured}
+                    onChange={(e) => setForm({ ...form, is_featured: e.target.checked })}
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                  <label htmlFor="is_featured" className="text-sm font-black uppercase tracking-wide cursor-pointer">
+                    Featured Product ⭐
+                  </label>
                 </div>
 
                 {/* Submit Button */}
