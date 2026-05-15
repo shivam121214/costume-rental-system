@@ -511,6 +511,42 @@ function Products() {
         </motion.section>
         )}
 
+        {/* Search Inventory - Always Visible */}
+        <motion.div
+          className="mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="bg-[#bde0fe] rounded-3xl border-4 border-black p-6 md:p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
+            <h2
+              className="text-3xl md:text-4xl font-black text-black mb-6 flex items-center gap-2"
+              style={{ fontFamily: "'Chewy', cursive" }}
+            >
+              <Search size={28} strokeWidth={3} /> Search Inventory
+            </h2>
+
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Search size={20} strokeWidth={3} className="text-black" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Find costumes..."
+                className="w-full pl-12 pr-4 py-4 bg-white border-3 border-black rounded-2xl font-bold text-black outline-none focus:ring-2 focus:ring-[#ef476f] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] placeholder:text-gray-400"
+              />
+            </div>
+
+            <div className="mt-6">
+              <div className="inline-block bg-[#ffd166] border-3 border-black rounded-full px-4 py-2 font-black text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                {filteredProducts.length} items found
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Divider */}
         <div className="w-full h-1 bg-black rounded-full my-8 opacity-20" />
 
