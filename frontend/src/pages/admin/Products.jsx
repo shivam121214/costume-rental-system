@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Search, Trash2 } from "lucide-react";
+import { motion } from "motion/react";
 
 function Products() {
   const emptyForm = {
@@ -31,6 +33,7 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editId, setEditId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     getProducts();
@@ -108,6 +111,7 @@ function Products() {
       setForm(emptyForm);
       setEditId(null);
       getProducts();
+      alert("Product saved successfully!");
     } catch (error) {
       console.log(error.response.data);
       alert(error.response?.data?.message || "Upload failed");
@@ -204,219 +208,378 @@ function Products() {
     });
   };
 
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    p.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-slate-100 p-6">
-      <h1 className="text-3xl font-bold mb-6">Products</h1>
+    <div className="min-h-screen bg-[#fdf8e6] text-black relative overflow-hidden pt-20">
+      {/* Background Radial Blurs */}
+      <div className="fixed top-20 left-20 w-96 h-96 bg-[#ffd166]/30 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="fixed bottom-20 right-20 w-96 h-96 bg-[#ef476f]/20 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-[#bde0fe]/20 rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <form
-        onSubmit={saveProduct}
-        className="bg-white rounded-2xl shadow-md p-6 grid gap-3 max-w-xl"
-      >
-        <input
-          className="border p-3 rounded-lg"
-          name="name"
-          placeholder="Name"
-          value={form.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          className="border p-3 rounded-lg"
-          name="category"
-          placeholder="Category"
-          value={form.category}
-          onChange={handleChange}
-        />
-        <input
-          className="border p-3 rounded-lg"
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-        />
-        <p className="text-sm text-slate-500">
-          Cover Image (JPG, PNG, WEBP • Max 5MB)
-        </p>
-        <input
-          className="border p-3 rounded-lg"
-          type="file"
-          name="image"
-          onChange={handleChange}
-        />
-        <p className="text-sm text-slate-500">
-          Gallery Images (Multiple • Max 5MB each)
-        </p>
-        <input
-          className="border p-3 rounded-lg"
-          type="file"
-          name="gallery"
-          multiple
-          onChange={handleChange}
-        />
-
-        {form.existingGallery?.length > 0 && (
-          <div className="grid grid-cols-3 gap-3 mt-2">
-            {form.existingGallery.map((img, index) => (
-              <div key={index} className="relative">
-                <img
-                  src={getImageUrl(img)}
-                  alt=""
-                  className="w-full h-24 object-cover rounded-lg"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => removeExistingImage(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full text-sm"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {form.gallery.length > 0 && (
-          <div className="grid grid-cols-3 gap-3 mt-2">
-            {form.gallery.map((file, index) => (
-              <div key={index} className="relative">
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt=""
-                  className="w-full h-24 object-cover rounded-lg"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => removeGalleryImage(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full text-sm"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <input
-          className="border p-3 rounded-lg"
-          name="rent_price"
-          placeholder="Rent Price"
-          value={form.rent_price}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          className="border p-3 rounded-lg"
-          name="security_deposit"
-          placeholder="Security Deposit"
-          value={form.security_deposit}
-          onChange={handleChange}
-          required
-        />
-
-        <h3 className="font-semibold mt-2">Age Group Stock</h3>
-
-        {Object.keys(form.variants).map((key) => (
-          <input
-            key={key}
-            className="border p-3 rounded-lg"
-            placeholder={key}
-            value={form.variants[key]}
-            onChange={(e) => handleVariant(key, e.target.value)}
-          />
-        ))}
-
-        <p>Total Quantity: {totalQty}</p>
-
-        <select
-          className="border p-3 rounded-lg"
-          name="status"
-          value={form.status}
-          onChange={handleChange}
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        
+        {/* Top Section: Form and Search */}
+        <motion.section
+          className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <option value="available">Available</option>
-          <option value="unavailable">Unavailable</option>
-          <option value="damaged">Damaged</option>
-        </select>
+          {/* Add Product Form */}
+          <div className="xl:col-span-7">
+            <form
+              onSubmit={saveProduct}
+              className="bg-linear-to-br from-[#ffd166] to-[#ffea94] rounded-3xl border-4 border-black p-6 md:p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
+            >
+              <div className="flex items-center gap-2 mb-8">
+                <span className="text-3xl">✨</span>
+                <h2
+                  className="text-3xl md:text-4xl font-black text-black"
+                  style={{ fontFamily: "'Chewy', cursive" }}
+                >
+                  Add New Product!
+                </h2>
+              </div>
 
-        <button className="bg-slate-900 text-white py-3 rounded-lg">
-          {editId ? "Update Product" : "Add Product"}
-        </button>
-      </form>
+              {/* Form Grid */}
+              <div className="space-y-4">
+                {/* Product Name & Category */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                      Product Name
+                    </label>
+                    <input
+                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                      name="name"
+                      placeholder="e.g. Magical Princess"
+                      value={form.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                      Category
+                    </label>
+                    <select
+                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                      name="category"
+                      value={form.category}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Category</option>
+                      <option value="Costumes">Costumes</option>
+                      <option value="Accessories">Accessories</option>
+                      <option value="Themes">Themes</option>
+                    </select>
+                  </div>
+                </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
-        {products.map((item) => (
-          <div key={item.id} className="bg-white rounded-2xl shadow-md p-5">
-            {item.image && (
-              <img
-                src={getImageUrl(item.image)}
-                alt={item.name}
-                className="w-full h-48 object-cover rounded-xl mb-3"
-              />
-            )}
+                {/* Price & Deposit */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                      Price ($)
+                    </label>
+                    <input
+                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                      name="rent_price"
+                      placeholder="0.00"
+                      value={form.rent_price}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                      Stock Quantity
+                    </label>
+                    <input
+                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                      name="security_deposit"
+                      placeholder="0"
+                      value={form.security_deposit}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
 
-            <h3 className="text-xl font-semibold">{item.name}</h3>
-            <p>{item.category}</p>
-            <p className="font-bold mt-2">₹ {item.rent_price}</p>
-            <div className="flex gap-2 flex-wrap mt-2">
-              {item.is_featured && (
-                <span className="inline-block px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
-                  Featured ⭐
-                </span>
-              )}
-              {item.show_on_featured_section && (
-                <span className="inline-block px-3 py-1 bg-purple-500 text-white text-xs font-bold rounded-full">
-                  In Section 🎯
-                </span>
-              )}
+                {/* Description */}
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f] min-h-24 resize-none"
+                    name="description"
+                    placeholder="Tell us about this awesome item..."
+                    value={form.description}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Image URL */}
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                    Image URL
+                  </label>
+                  <input
+                    className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                    name="image"
+                    placeholder="https://example.com/image.jpg"
+                    value={form.image}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98, y: 2 }}
+                  className="w-full py-4 bg-[#06d6a0] text-black border-4 border-black rounded-2xl font-black text-lg uppercase shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all mt-6"
+                  style={{ fontFamily: "'Chewy', cursive" }}
+                >
+                  {editId ? "UPDATE PRODUCT! 📝" : "ADD PRODUCT! 🎉"}
+                </motion.button>
+              </div>
+            </form>
+          </div>
+
+          {/* Search Inventory */}
+          <div className="xl:col-span-5">
+            <motion.div
+              className="bg-[#bde0fe] rounded-3xl border-4 border-black p-6 md:p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] h-full"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <h2
+                className="text-3xl md:text-4xl font-black text-black mb-6 flex items-center gap-2"
+                style={{ fontFamily: "'Chewy', cursive" }}
+              >
+                <Search size={28} strokeWidth={3} /> Search Inventory
+              </h2>
+
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search size={20} strokeWidth={3} className="text-black" />
+                </div>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Find costumes..."
+                  className="w-full pl-12 pr-4 py-4 bg-white border-3 border-black rounded-2xl font-bold text-black outline-none focus:ring-2 focus:ring-[#ef476f] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] placeholder:text-gray-400"
+                />
+              </div>
+
+              <div className="mt-6">
+                <div className="inline-block bg-[#ffd166] border-3 border-black rounded-full px-4 py-2 font-black text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                  {filteredProducts.length} items found
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* Divider */}
+        <div className="w-full h-1 bg-black rounded-full my-8 opacity-20" />
+
+        {/* Product Grid */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="mb-10">
+            <h2
+              className="text-4xl md:text-5xl font-black text-black drop-shadow-[3px_3px_0px_rgba(0,0,0,0.2)] flex items-center gap-3"
+              style={{ fontFamily: "'Chewy', cursive" }}
+            >
+              <span>🎨</span> {searchQuery ? `Search Results!` : `Manage Products`}
+            </h2>
+          </div>
+
+          {filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  getImageUrl={getImageUrl}
+                  onEdit={editProduct}
+                  onToggleFeatured={toggleFeatured}
+                  onToggleSection={toggleFeaturedSection}
+                  onToggleVisibility={toggleVisibility}
+                  onDelete={deleteProduct}
+                />
+              ))}
             </div>
-
-            <div className="flex gap-2 flex-wrap mt-4">
-              <button
-                onClick={() => editProduct(item)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+          ) : (
+            <div className="border-4 border-black border-dashed rounded-3xl p-12 flex flex-col items-center justify-center text-center bg-white/50 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
+              <div className="bg-[#ffd166] p-6 rounded-full border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6">
+                <Search size={48} strokeWidth={3} className="text-black" />
+              </div>
+              <h3
+                className="text-3xl text-black mb-3 font-black"
+                style={{ fontFamily: "'Chewy', cursive" }}
               >
-                Edit
-              </button>
+                Oops! Nothing found.
+              </h3>
+              <p className="text-gray-600 font-bold text-lg max-w-md">
+                We couldn't find any items matching "{searchQuery}". Try searching for something else!
+              </p>
+            </div>
+          )}
+        </motion.section>
+      </main>
+    </div>
+  );
+}
 
-              <button
-                onClick={() => toggleFeatured(item.id, item.is_featured)}
-                className={`px-4 py-2 text-white rounded-lg text-sm ${
-                  item.is_featured ? "bg-orange-500 hover:bg-orange-600" : "bg-green-500 hover:bg-green-600"
-                }`}
-              >
-                {item.is_featured ? "Unfeature" : "Feature"}
-              </button>
+function ProductCard({
+  product,
+  getImageUrl,
+  onEdit,
+  onToggleFeatured,
+  onToggleSection,
+  onToggleVisibility,
+  onDelete,
+}) {
+  const badgeColors = ["bg-[#ef476f]", "bg-[#ffd166]", "bg-[#06d6a0]"];
+  const [badgeColor] = useState(
+    () => badgeColors[Math.floor(Math.random() * badgeColors.length)]
+  );
 
-              <button
-                onClick={() => toggleFeaturedSection(item.id, item.show_on_featured_section)}
-                className={`px-4 py-2 text-white rounded-lg text-sm ${
-                  item.show_on_featured_section ? "bg-purple-500 hover:bg-purple-600" : "bg-indigo-500 hover:bg-indigo-600"
-                }`}
-              >
-                {item.show_on_featured_section ? "Remove from Section" : "Add to Section"}
-              </button>
+  return (
+    <motion.div
+      className="group relative"
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+    >
+      {/* Shadow Background */}
+      <div className={`absolute inset-0 ${badgeColor} border-4 border-black rounded-3xl transform translate-x-2 translate-y-2 transition-transform group-hover:translate-x-3 group-hover:translate-y-3`}></div>
 
-              <button
-                onClick={() => toggleVisibility(item)}
-                className="px-4 py-2 bg-yellow-500 text-white rounded-lg text-sm"
-              >
-                {item.status === "available" ? "Hide" : "Unhide"}
-              </button>
-
-              <button
-                onClick={() => deleteProduct(item.id)}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
-              >
-                Delete
-              </button>
+      {/* Main Card */}
+      <div className="relative h-full bg-white border-4 border-black rounded-3xl p-4 transition-transform group-hover:-translate-y-1 group-hover:-translate-x-1 flex flex-col justify-between z-10">
+        {/* Product Image */}
+        {product.image && (
+          <div className="relative mb-4 overflow-hidden rounded-2xl border-3 border-black">
+            <img
+              src={getImageUrl(product.image)}
+              alt={product.name}
+              className="w-full h-40 object-cover"
+            />
+            {/* Status Badges */}
+            <div className="absolute top-2 left-2 flex flex-col gap-2">
+              {product.is_featured && (
+                <span className="inline-block px-2 py-1 bg-[#ffd166] text-black text-xs font-black border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  FEATURED
+                </span>
+              )}
+              {product.show_on_featured_section && (
+                <span className="inline-block px-2 py-1 bg-[#06d6a0] text-black text-xs font-black border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  IN SECTION
+                </span>
+              )}
             </div>
           </div>
-        ))}
+        )}
+
+        {/* Product Info */}
+        <div className="mb-4">
+          <h3 className="text-lg font-black text-black leading-tight">
+            {product.name}
+          </h3>
+          <p className="text-sm text-gray-600 font-bold uppercase">
+            {product.category}
+          </p>
+          <p className="text-sm text-gray-600 line-clamp-2 mt-1">
+            {product.description}
+          </p>
+        </div>
+
+        {/* Price */}
+        <div className="mb-4">
+          <div className="inline-block bg-[#ef476f] text-white border-3 border-black rounded-full px-4 py-1 font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+            ${product.rent_price}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-2">
+            <motion.button
+              whileHover={{ y: -1 }}
+              whileTap={{ y: 1 }}
+              onClick={() => onEdit(product)}
+              className="py-2 bg-white border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-1"
+            >
+              ✏️ EDIT
+            </motion.button>
+            <motion.button
+              whileHover={{ y: -1 }}
+              whileTap={{ y: 1 }}
+              onClick={() => onToggleFeatured(product.id, product.is_featured)}
+              className={`py-2 border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all ${
+                product.is_featured
+                  ? "bg-[#ffd166] text-black"
+                  : "bg-white text-black"
+              }`}
+            >
+              ⭐ {product.is_featured ? "UNFEATURE" : "FEATURE"}
+            </motion.button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <motion.button
+              whileHover={{ y: -1 }}
+              whileTap={{ y: 1 }}
+              onClick={() => onToggleSection(product.id, product.show_on_featured_section)}
+              className={`py-2 border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all ${
+                product.show_on_featured_section
+                  ? "bg-[#06d6a0] text-black"
+                  : "bg-white text-black"
+              }`}
+            >
+              {product.show_on_featured_section ? "REMOVE SECTION" : "ADD SECTION"}
+            </motion.button>
+            <motion.button
+              whileHover={{ y: -1 }}
+              whileTap={{ y: 1 }}
+              onClick={() => onToggleVisibility(product)}
+              className="py-2 bg-white border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+            >
+              👁️ {product.status === "available" ? "HIDE" : "SHOW"}
+            </motion.button>
+          </div>
+
+          <motion.button
+            whileHover={{ y: -1 }}
+            whileTap={{ y: 1 }}
+            onClick={() => onDelete(product.id)}
+            className="w-full py-3 bg-[#ef476f] text-white border-3 border-black rounded-xl font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-2"
+          >
+            <Trash2 size={16} strokeWidth={3} /> DELETE PRODUCT
+          </motion.button>
+        </div>
+
+        {/* Decorative Dots */}
+        <div className="flex gap-1 justify-center mt-3">
+          <div className="w-2 h-2 rounded-full bg-black"></div>
+          <div className="w-2 h-2 rounded-full bg-black"></div>
+          <div className="w-2 h-2 rounded-full bg-black"></div>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
