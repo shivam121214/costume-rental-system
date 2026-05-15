@@ -439,20 +439,6 @@ function Products() {
                   </div>
                 </div>
 
-                {/* Sizes */}
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-wide mb-2">
-                    Sizes
-                  </label>
-                  <input
-                    className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
-                    name="sizes"
-                    placeholder="e.g., S, M, L"
-                    value={form.sizes}
-                    onChange={handleChange}
-                  />
-                </div>
-
                 {/* Age Group Stock */}
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-wide mb-3">Age Group Stock</h3>
@@ -471,38 +457,6 @@ function Products() {
                     ))}
                   </div>
                   <p className="text-sm font-black mt-2 text-black">Total Quantity: <span className="text-[#ef476f]">{totalQty}</span></p>
-                </div>
-
-                {/* Status */}
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-wide mb-2">
-                    Status
-                  </label>
-                  <select
-                    className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
-                    name="status"
-                    value={form.status}
-                    onChange={handleChange}
-                  >
-                    <option value="available">Available</option>
-                    <option value="unavailable">Unavailable</option>
-                    <option value="damaged">Damaged</option>
-                  </select>
-                </div>
-
-                {/* Featured Checkbox */}
-                <div className="flex items-center gap-3 p-3 bg-white border-3 border-black rounded-2xl">
-                  <input
-                    type="checkbox"
-                    id="is_featured"
-                    name="is_featured"
-                    checked={form.is_featured}
-                    onChange={(e) => setForm({ ...form, is_featured: e.target.checked })}
-                    className="w-5 h-5 cursor-pointer"
-                  />
-                  <label htmlFor="is_featured" className="text-sm font-black uppercase tracking-wide cursor-pointer">
-                    Featured Product ⭐
-                  </label>
                 </div>
 
                 {/* Submit Button */}
