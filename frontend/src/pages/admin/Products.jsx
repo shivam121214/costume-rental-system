@@ -34,6 +34,7 @@ function Products() {
   const [form, setForm] = useState(emptyForm);
   const [editId, setEditId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     getProducts();
@@ -104,14 +105,15 @@ function Products() {
     try {
       if (editId) {
         await axios.post(`${API_URL}/api/products/${editId}?_method=PUT`, data);
+        alert("Product updated successfully!");
       } else {
         await axios.post(`${API_URL}/api/products`, data);
+        alert("Product added successfully!");
       }
 
       setForm(emptyForm);
       setEditId(null);
       getProducts();
-      alert("Product saved successfully!");
     } catch (error) {
       console.log(error.response.data);
       alert(error.response?.data?.message || "Upload failed");
@@ -129,6 +131,7 @@ function Products() {
     });
 
     setEditId(item.id);
+    setShowForm(true);
   };
 
   const deleteProduct = async (id) => {
@@ -208,6 +211,12 @@ function Products() {
     });
   };
 
+  const closeForm = () => {
+    setShowForm(false);
+    setForm(emptyForm);
+    setEditId(null);
+  };
+
   const filteredProducts = products.filter((p) =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     p.category.toLowerCase().includes(searchQuery.toLowerCase())
@@ -223,28 +232,56 @@ function Products() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         
-        {/* Top Section: Form and Search */}
-        <motion.section
-          className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {/* Add Product Form */}
-          <div className="xl:col-span-7">
-            <form
-              onSubmit={saveProduct}
-              className="bg-linear-to-br from-[#ffd166] to-[#ffea94] rounded-3xl border-4 border-black p-6 md:p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
+        {/* Add Product Button */}
+        {!showForm && (
+          <motion.div
+            className="mb-8"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <button
+              onClick={() => setShowForm(true)}
+              className="px-8 py-4 bg-[#ffd166] text-black border-4 border-black rounded-2xl font-black text-lg uppercase shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all"
+              style={{ fontFamily: "'Chewy', cursive" }}
             >
-              <div className="flex items-center gap-2 mb-8">
-                <span className="text-3xl">✨</span>
-                <h2
-                  className="text-3xl md:text-4xl font-black text-black"
-                  style={{ fontFamily: "'Chewy', cursive" }}
-                >
-                  Add New Product!
-                </h2>
-              </div>
+              ➕ Add New Product!
+            </button>
+          </motion.div>
+        )}
+        
+        {/* Top Section: Form and Search */}
+        {showForm && (
+          <motion.section
+            className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {/* Add Product Form */}
+            <div className="xl:col-span-7">
+              <form
+                onSubmit={saveProduct}
+                className="bg-linear-to-br from-[#ffd166] to-[#ffea94] rounded-3xl border-4 border-black p-6 md:p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
+              >
+                <div className="flex items-center justify-between gap-2 mb-8">
+                  <div className="flex items-center gap-2">
+                    <span className="text-3xl">✨</span>
+                    <h2
+                      className="text-3xl md:text-4xl font-black text-black"
+                      style={{ fontFamily: "'Chewy', cursive" }}
+                    >
+                      Add New Product!
+                    </h2>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={closeForm}
+                    className="w-10 h-10 flex items-center justify-center bg-[#ef476f] text-white border-3 border-black rounded-full font-black text-xl hover:bg-[#ff5c8d] transition-colors"
+                  >
+                    ✕
+                  </button>
+                </div>
 
               {/* Form Grid */}
               <div className="space-y-4">
@@ -518,6 +555,7 @@ function Products() {
             </motion.div>
           </div>
         </motion.section>
+        )}
 
         {/* Divider */}
         <div className="w-full h-1 bg-black rounded-full my-8 opacity-20" />
