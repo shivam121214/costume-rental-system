@@ -72,7 +72,7 @@ function Navbar() {
             <nav className="hidden md:flex gap-8">
               <Link 
                 to="/products" 
-                className="text-lg font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
+                className="text-xl font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
                 style={{ fontFamily: "'Chewy', cursive" }}
               >
                 Costumes
@@ -82,7 +82,7 @@ function Navbar() {
                 <a 
                   key={item} 
                   href="#" 
-                  className="text-lg font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
+                  className="text-xl font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
                   style={{ fontFamily: "'Chewy', cursive" }}
                 >
                   {item}
