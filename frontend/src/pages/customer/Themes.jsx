@@ -109,7 +109,7 @@ function Themes() {
                 stiffness: 100
               }}
               onClick={() => handleThemeClick(theme.name)}
-              className="group cursor-pointer"
+              className="group cursor-pointer relative"
             >
               {/* Shadow Background */}
               <div className={`absolute inset-0 ${theme.color} border-4 border-black rounded-3xl transform translate-x-2 translate-y-2 transition-transform group-hover:translate-x-3 group-hover:translate-y-3`}></div>
