@@ -15,10 +15,8 @@ export function FeaturedProducts() {
 
   const fetchFeaturedProducts = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/admin/products`);
-      const featured = res.data
-        .filter(p => p.show_on_featured_section)
-        .slice(0, 6);
+      const res = await axios.get(`${API_URL}/api/products/featured-section`);
+      const featured = res.data.slice(0, 6);
       setProducts(featured);
     } catch (error) {
       console.error('Error fetching featured products:', error);

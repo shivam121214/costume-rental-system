@@ -209,4 +209,13 @@ class ProductController extends Controller
             'product' => $product
         ]);
     }
+
+    public function featuredSection()
+    {
+        return response()->json(
+            Product::where('show_on_featured_section', true)
+                ->latest()
+                ->get()
+        );
+    }
 }

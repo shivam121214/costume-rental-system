@@ -25,14 +25,14 @@ export function Categories() {
       const res = await axios.get(`${API_URL}/api/products`);
       const products = res.data;
 
-      // Group products by category
+      // Group products by theme
       const grouped = {};
       products.forEach((product) => {
-        const category = product.category || 'Other';
-        if (!grouped[category]) {
-          grouped[category] = [];
+        const theme = product.theme || 'Other';
+        if (!grouped[theme]) {
+          grouped[theme] = [];
         }
-        grouped[category].push(product);
+        grouped[theme].push(product);
       });
 
       // Convert to array format with colors and select featured/latest products
