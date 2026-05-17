@@ -36,19 +36,20 @@ export function Categories() {
       });
 
       // Convert to array format with colors and select featured/latest products
-      const categoriesArray = Object.entries(grouped).map(([name, products], index) => {
-        // Prioritize featured products, then get up to 4 products
-        const featured = products.filter(p => p.is_featured);
-        const selected = featured.length > 0 ? featured.slice(0, 4) : products.slice(0, 4);
-        
-        return {
-          name,
-          products: selected,
-          image: selected[0]?.image || '',
-          count: `${products.length} Items`,
-          color: COLOR_PALETTE[index % COLOR_PALETTE.length]
-        };
-      });
+      const categoriesArray = Object.entries(grouped)
+        .map(([name, products], index) => {
+          // Only get featured products
+          const featured = products.filter(p => p.is_featured);
+          
+          return {
+            name,
+            products: featured,
+            image: featured[0]?.image || '',
+            count: `${products.length} Items`,
+            color: COLOR_PALETTE[index % COLOR_PALETTE.length]
+          };
+        })
+        .filter(category => category.products.length > 0); // Only show categories with featured products
 
       setCategories(categoriesArray);
       setLoading(false);
@@ -101,7 +102,11 @@ export function Categories() {
           </div>
         ) : categories.length === 0 ? (
           <div className="flex justify-center items-center py-12">
-            <div className="text-xl text-black font-bold">No categories available yet.</div>
+            <div className="text-center">
+              <div className="text-5xl mb-4">🎨</div>
+              <div className="text-2xl text-black font-bold mb-2">Coming Soon!</div>
+              <div className="text-lg text-gray-600 font-semibold">Our team is curating featured costumes for each theme. Check back soon! 🎭</div>
+            </div>
           </div>
         ) : (
           <div className="space-y-12">
