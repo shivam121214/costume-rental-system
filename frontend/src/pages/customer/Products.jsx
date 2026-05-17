@@ -5,7 +5,7 @@ import { Link, useSearchParams } from "react-router-dom";
 function Products() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
+  const [theme, setTheme] = useState("");
   const [sort, setSort] = useState("");
   const [searchParams] = useSearchParams();
   const API_URL = "https://costume-rental-system.onrender.com";
@@ -18,10 +18,10 @@ function Products() {
 
   useEffect(() => {
     getProducts();
-    // Get category from URL params if present
-    const categoryParam = searchParams.get('category');
-    if (categoryParam) {
-      setCategory(categoryParam);
+    // Get theme from URL params if present
+    const themeParam = searchParams.get('theme');
+    if (themeParam) {
+      setTheme(themeParam);
     }
   }, [searchParams]);
 
@@ -30,16 +30,25 @@ function Products() {
     setProducts(res.data);
   };
 
-  const categories = [
-    ...new Set(products.map((item) => item.category).filter(Boolean)),
+  const themes = [
+    "Christmas",
+    "Halloween",
+    "Birthday",
+    "Wedding",
+    "Superhero",
+    "Princess",
+    "Animal",
+    "Funny",
+    "Scary",
+    "Seasonal"
   ];
 
   let filtered = products.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase()),
   );
 
-  if (category) {
-    filtered = filtered.filter((item) => item.category === category);
+  if (theme) {
+    filtered = filtered.filter((item) => item.theme === theme);
   }
 
   if (sort === "low") {
@@ -74,13 +83,13 @@ function Products() {
           </div>
 
           <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
             className="px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all appearance-none"
           >
-            <option value="">All Categories</option>
-            {categories.map((cat, i) => (
-              <option key={i}>{cat}</option>
+            <option value="">All Themes</option>
+            {themes.map((t, i) => (
+              <option key={i}>{t}</option>
             ))}
           </select>
 
@@ -125,7 +134,7 @@ function Products() {
 
                 <div className="p-5 flex-1 flex flex-col">
                   <h3 className="text-lg font-black text-black leading-tight">{item.name}</h3>
-                  <p className="text-sm text-gray-600 font-bold uppercase">{item.category}</p>
+                  <p className="text-sm text-gray-600 font-bold uppercase">{item.theme}</p>
 
                   <div className="mt-4 mb-3 flex-1">
                     <div className="inline-block bg-[#ef476f] text-white border-3 border-black rounded-full px-4 py-1 font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
@@ -164,7 +173,7 @@ function Products() {
             <button 
               onClick={() => {
                 setSearch("");
-                setCategory("");
+                setTheme("");
                 setSort("");
               }}
               className="px-8 py-3 bg-[#06d6a0] text-black border-4 border-black rounded-2xl font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all"
