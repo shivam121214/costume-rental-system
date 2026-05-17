@@ -17,7 +17,7 @@ export function FeaturedProducts() {
     try {
       const res = await axios.get(`${API_URL}/api/admin/products`);
       const featured = res.data
-        .filter(p => p.show_on_featured_section === true || p.show_on_featured_section === 1)
+        .filter(p => p.show_on_featured_section)
         .slice(0, 6);
       setProducts(featured);
     } catch (error) {
