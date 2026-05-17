@@ -35,14 +35,22 @@ function Products() {
   const [editId, setEditId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getProducts();
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get(`${API_URL}/api/admin/products`);
-    setProducts(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/api/admin/products`);
+      setProducts(res.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -576,7 +584,14 @@ function Products() {
             </h2>
           </div>
 
-          {filteredProducts.length > 0 ? (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <img src="/dance.gif" alt="Loading..." className="w-32 h-32 mb-6" />
+              <h2 className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
+                Loading Products...
+              </h2>
+            </div>
+          ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard
