@@ -214,6 +214,7 @@ class ProductController extends Controller
     {
         return response()->json(
             Product::where('show_on_featured_section', true)
+                ->where('status', 'available')
                 ->latest()
                 ->get()
         );
