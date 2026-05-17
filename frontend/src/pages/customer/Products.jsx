@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [theme, setTheme] = useState("");
   const [sort, setSort] = useState("");
@@ -26,8 +27,15 @@ function Products() {
   }, [searchParams]);
 
   const getProducts = async () => {
-    const res = await axios.get(`${API_URL}/api/products`);
-    setProducts(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/api/products`);
+      setProducts(res.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const themes = [
@@ -71,6 +79,18 @@ function Products() {
           🎨 Browse Costumes
         </h1>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-20">
+            <img src="/dance.gif" alt="Loading..." className="w-32 h-32 mb-6" />
+            <h2 className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
+              Loading Amazing Costumes...
+            </h2>
+          </div>
+        )}
+
+        {!loading && (
+        <>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
           <div className="relative">
             <input
@@ -182,6 +202,8 @@ function Products() {
               Clear All Filters
             </button>
           </div>
+        )}
+        </>
         )}
       </div>
     </div>
