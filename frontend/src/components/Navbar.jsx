@@ -145,7 +145,7 @@ function Navbar() {
                       onClick={() => setMenuOpen(false)}
                       className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
                     >
-                      Add Products
+                      Product Management
                     </Link>
                     <Link 
                       to="/admin/requests" 
