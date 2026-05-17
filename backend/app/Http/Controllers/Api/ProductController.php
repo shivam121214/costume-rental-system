@@ -38,7 +38,7 @@ class ProductController extends Controller
 
         $data = $request->validate([
             'name' => 'required',
-            'category' => 'nullable',
+            'theme' => 'required|in:Christmas,Halloween,Birthday,Wedding,Superhero,Princess,Animal,Funny,Scary,Seasonal',
             'description' => 'nullable',
             'image' => 'nullable|file|image|max:5120',
             'gallery' => 'nullable|array',
@@ -95,7 +95,7 @@ class ProductController extends Controller
 
         $data = $request->validate([
             'name' => 'required',
-            'category' => 'nullable',
+            'theme' => 'required|in:Christmas,Halloween,Birthday,Wedding,Superhero,Princess,Animal,Funny,Scary,Seasonal',
             'description' => 'nullable',
             'image' => 'nullable|file|image|max:5120',
             'gallery' => 'nullable|array',

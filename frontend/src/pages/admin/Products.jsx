@@ -6,7 +6,7 @@ import { motion } from "motion/react";
 function Products() {
   const emptyForm = {
     name: "",
-    category: "",
+    theme: "Seasonal",
     description: "",
     image: null,
     gallery: [],
@@ -78,7 +78,7 @@ function Products() {
     const data = new FormData();
 
     data.append("name", form.name);
-    data.append("category", form.category || "");
+    data.append("theme", form.theme);
     data.append("description", form.description || "");
     data.append("rent_price", form.rent_price);
     data.append("security_deposit", form.security_deposit);
@@ -174,7 +174,7 @@ function Products() {
     const data = new FormData();
 
     data.append("name", item.name);
-    data.append("category", item.category || "");
+    data.append("theme", item.theme);
     data.append("description", item.description || "");
     data.append("rent_price", item.rent_price);
     data.append("security_deposit", item.security_deposit);
@@ -302,15 +302,26 @@ function Products() {
                   </div>
                   <div>
                     <label className="block text-xs font-black uppercase tracking-wide mb-2">
-                      Category
+                      Theme
                     </label>
-                    <input
-                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
-                      name="category"
-                      placeholder="Category"
-                      value={form.category}
+                    <select
+                      className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
+                      name="theme"
+                      value={form.theme}
                       onChange={handleChange}
-                    />
+                      required
+                    >
+                      <option value="Seasonal">Seasonal</option>
+                      <option value="Christmas">Christmas</option>
+                      <option value="Halloween">Halloween</option>
+                      <option value="Birthday">Birthday</option>
+                      <option value="Wedding">Wedding</option>
+                      <option value="Superhero">Superhero</option>
+                      <option value="Princess">Princess</option>
+                      <option value="Animal">Animal</option>
+                      <option value="Funny">Funny</option>
+                      <option value="Scary">Scary</option>
+                    </select>
                   </div>
                 </div>
 
@@ -657,7 +668,7 @@ function ProductCard({
             {product.name}
           </h3>
           <p className="text-sm text-gray-600 font-bold uppercase">
-            {product.category}
+            {product.theme}
           </p>
           <p className="text-sm text-gray-600 line-clamp-2 mt-1">
             {product.description}
