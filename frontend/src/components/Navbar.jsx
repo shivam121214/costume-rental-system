@@ -87,7 +87,7 @@ function Navbar() {
                 <span className="absolute bottom-1 left-0 w-0 h-1 bg-[#ff5c8d] transition-all duration-300 group-hover:w-full rounded-full"></span>
               </Link>
               <Link 
-                to="#" 
+                to="/themes" 
                 className="text-xl font-bold text-black hover:text-[#ff5c8d] transition-colors relative group py-2"
                 style={{ fontFamily: "'Chewy', cursive" }}
               >
