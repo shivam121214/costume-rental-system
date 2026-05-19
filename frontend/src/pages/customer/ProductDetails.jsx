@@ -257,7 +257,12 @@ function ProductDetails() {
           {/* Right Side - Details & Form */}
           <div className="flex flex-col">
             <div className="mb-8">
-              <div className="inline-block px-4 py-2 rounded-full bg-[#bde0fe] border-3 border-black text-black text-sm font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] mb-4">
+              {product.theme && (
+                <div className="inline-block px-4 py-2 rounded-full border-3 border-black text-black text-sm font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] mb-4" style={{ backgroundColor: '#8338ec' }}>
+                  {product.theme}
+                </div>
+              )}
+              <div className="inline-block px-4 py-2 rounded-full border-3 border-black text-black text-sm font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] mb-4" style={{ backgroundColor: '#bde0fe' }}>
                 {product.category}
               </div>
               <h1 className="text-5xl md:text-6xl font-black text-black mb-6 leading-tight" style={{ fontFamily: "'Chewy', cursive" }}>
@@ -339,7 +344,7 @@ function ProductDetails() {
                       <input
                         type="text"
                         inputMode="numeric"
-                        className="flex-1 text-center font-black text-xl text-black bg-transparent focus:outline-none"
+                        className="flex-1 text-center font-black text-xl text-black bg-transparent focus:outline-none cursor-text"
                         value={form.quantity}
                         onChange={(e) => {
                           const val = e.target.value.trim();
@@ -352,6 +357,7 @@ function ProductDetails() {
                             }
                           }
                         }}
+                        onFocus={(e) => e.target.select()}
                       />
                       <button
                         type="button"
