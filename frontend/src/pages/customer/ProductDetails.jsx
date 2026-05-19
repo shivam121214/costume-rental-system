@@ -346,12 +346,17 @@ function ProductDetails() {
                         onChange={(e) => {
                           const val = e.target.value.trim();
                           if (val === '') {
-                            setForm({ ...form, quantity: 1 });
+                            setForm({ ...form, quantity: '' });
                           } else {
                             const num = parseInt(val);
                             if (!isNaN(num) && num > 0) {
                               setForm({ ...form, quantity: num });
                             }
+                          }
+                        }}
+                        onBlur={() => {
+                          if (form.quantity === '' || form.quantity === 0) {
+                            setForm({ ...form, quantity: 1 });
                           }
                         }}
                         onFocus={(e) => e.target.select()}
