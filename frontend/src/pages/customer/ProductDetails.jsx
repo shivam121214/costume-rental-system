@@ -155,7 +155,14 @@ function ProductDetails() {
     });
   };
 
-  if (!product) return <div className="p-6">Loading...</div>;
+  if (!product) return (
+    <div className="min-h-screen bg-[#fdf8e6] flex items-center justify-center pt-20">
+      <div className="text-center">
+        <div className="text-5xl mb-4">⏳</div>
+        <p className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>Loading...</p>
+      </div>
+    </div>
+  );
 
   const ageGroups =
     product?.variants && typeof product.variants === "object"
@@ -196,200 +203,325 @@ function ProductDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6">
-      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-md overflow-hidden grid md:grid-cols-2 gap-6 p-6">
-        {/* Left Side */}
-        <div>
-          <div className="h-96 bg-slate-200 rounded-xl overflow-hidden">
-            {selectedImage ? (
-              <img
-                src={getImageUrl(selectedImage)}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="h-full flex items-center justify-center">
-                No Image
+    <div className="min-h-screen bg-[#fdf8e6] text-black pt-20 pb-20 relative overflow-hidden">
+      {/* Background Radial Blurs */}
+      <div className="fixed top-20 left-20 w-96 h-96 bg-[#ffd166]/30 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="fixed bottom-20 right-20 w-96 h-96 bg-[#ef476f]/20 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-[#bde0fe]/20 rounded-full blur-3xl pointer-events-none -z-10" />
+
+      <div className="max-w-6xl mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          
+          {/* Left Side - Images */}
+          <div className="flex flex-col gap-6">
+            <div className="aspect-4/5 rounded-3xl overflow-hidden bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative">
+              {selectedImage ? (
+                <img
+                  src={getImageUrl(selectedImage)}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="h-full flex items-center justify-center text-gray-400 text-lg">
+                  No Image
+                </div>
+              )}
+              <div className="absolute top-4 left-4 bg-[#ffd166] border-3 border-black px-4 py-2 rounded-full text-sm font-black text-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                ✨ Featured
+              </div>
+            </div>
+
+            {images.length > 1 && (
+              <div className="grid grid-cols-3 gap-4">
+                {images.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(img)}
+                    className={`aspect-square rounded-2xl overflow-hidden border-4 border-black transition-all ${
+                      selectedImage === img
+                        ? 'shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-y-1'
+                        : 'shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)] opacity-80 hover:opacity-100'
+                    }`}
+                  >
+                    <img
+                      src={getImageUrl(img)}
+                      alt={`Thumbnail ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
               </div>
             )}
           </div>
 
-          <div className="flex gap-3 mt-4 flex-wrap">
-            {images.map((img, index) => (
-              <img
-                key={index}
-                src={getImageUrl(img)}
-                alt=""
-                onClick={() => setSelectedImage(img)}
-                className="w-20 h-20 object-cover rounded-lg cursor-pointer border"
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Right Side */}
-        <div>
-          <p className="text-sm text-slate-500">{product.category}</p>
-          <h1 className="text-4xl font-bold mt-2">{product.name}</h1>
-          <p className="text-slate-600 mt-4">{product.description}</p>
-          <p className="text-3xl font-bold mt-6">₹ {product.rent_price} Rent</p>
-
-          <div className="mt-3 bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-            <p className="font-semibold text-slate-800">
-              ₹ {product.security_deposit} Refundable Security Deposit
-            </p>
-            <p className="text-sm text-slate-600 mt-1">
-              Returned after costume is returned in proper condition.
-            </p>
-          </div>
-
-          {/* Availability */}
-          <div className="mt-8 border-t pt-6">
-            <h2 className="text-xl font-semibold mb-3">
-              Check Availability & Send Request
-            </h2>
-
-            <form onSubmit={checkAvailability} className="grid gap-3">
-              <select
-                className="border p-3 rounded-lg"
-                value={form.variant}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    variant: e.target.value,
-                  })
-                }
-                required
-              >
-                <option value="">Select Age Group</option>
-                {ageGroups.map((group, i) => (
-                  <option key={i}>{group}</option>
-                ))}
-              </select>
-
-              <input
-                type="number"
-                className="border p-3 rounded-lg"
-                placeholder="Quantity"
-                value={form.quantity}
-                onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-                required
-              />
-
-              <input
-                type="date"
-                min={today}
-                className="border p-3 rounded-lg"
-                value={form.start_date}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    start_date: e.target.value,
-                  })
-                }
-                required
-              />
-
-              <input
-                type="date"
-                min={form.start_date || today}
-                className="border p-3 rounded-lg"
-                value={form.end_date}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    end_date: e.target.value,
-                  })
-                }
-                required
-              />
-
-              <button className="bg-slate-900 text-white py-3 rounded-lg">
-                Check
-              </button>
-            </form>
-
-            {availability &&
-              Number(form.quantity) > availability.available_quantity && (
-                <p className="text-red-600 mt-2 font-semibold">
-                  {availability.available_quantity === 0
-                    ? "Unavailable"
-                    : `Only ${availability.available_quantity} available`}
+          {/* Right Side - Details & Form */}
+          <div className="flex flex-col">
+            <div className="mb-8">
+              <div className="inline-block px-4 py-2 rounded-full bg-[#bde0fe] border-3 border-black text-black text-sm font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] mb-4">
+                {product.category}
+              </div>
+              <h1 className="text-5xl md:text-6xl font-black text-black mb-6 leading-tight" style={{ fontFamily: "'Chewy', cursive" }}>
+                {product.name}
+              </h1>
+              <div className="bg-white border-3 border-black p-6 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6">
+                <p className="text-black/80 font-bold leading-relaxed text-lg">
+                  {product.description}
                 </p>
-              )}
+              </div>
+            </div>
 
-            {availability &&
-              Number(form.quantity) <= availability.available_quantity && (
-                <div className="grid gap-3 mt-4">
-                  <input
-                    className="border p-3 rounded-lg"
-                    placeholder="Your Name"
-                    value={form.customer_name}
-                    onChange={(e) =>
-                      setForm({ ...form, customer_name: e.target.value })
-                    }
-                    required
-                  />
+            {/* Rent Price Box */}
+            <div className="bg-[#ef476f] border-4 border-black rounded-2xl p-5 mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] inline-block">
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
+                  ₹{product.rent_price}
+                </span>
+                <span className="text-black/80 font-black text-lg uppercase">Per Day</span>
+              </div>
+            </div>
+            <div className="bg-[#ffd166] border-4 border-black rounded-3xl p-6 mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+              <div className="flex items-start gap-4">
+                <div className="bg-white border-3 border-black p-3 rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="text-2xl">🛡️</span>
+                </div>
+                <div>
+                  <h3 className="font-black text-black text-lg mb-1">Security Deposit</h3>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
+                      ₹{product.security_deposit}
+                    </span>
+                    <span className="text-black/80 text-sm font-bold">(Refundable on return)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                  <input
-                    className="border p-3 rounded-lg"
-                    placeholder="Phone Number"
-                    value={form.phone}
-                    onChange={(e) =>
-                      setForm({ ...form, phone: e.target.value })
-                    }
-                    required
-                  />
+            {/* Main Form */}
+            <div className="grow bg-white border-4 border-black rounded-3xl p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <form onSubmit={checkAvailability} className="space-y-6">
+                {/* Base Form Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-black text-black uppercase">
+                      Age Group
+                    </label>
+                    <select
+                      className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      value={form.variant}
+                      onChange={(e) =>
+                        setForm({
+                          ...form,
+                          variant: e.target.value,
+                        })
+                      }
+                      required
+                    >
+                      <option value="">Select group</option>
+                      {ageGroups.map((group, i) => (
+                        <option key={i}>{group}</option>
+                      ))}
+                    </select>
+                  </div>
 
-                  {message && (
-                    <p className="text-sm font-medium text-red-600">
-                      {message}
-                    </p>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-black text-black uppercase">
+                      Quantity
+                    </label>
+                    <div className="flex items-center border-3 border-black rounded-2xl overflow-hidden bg-[#fdf8e6] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                      <button
+                        type="button"
+                        onClick={() => setForm({ ...form, quantity: Math.max(1, form.quantity - 1) })}
+                        className="px-4 py-3 text-black hover:bg-[#ffd166] transition-colors border-r-3 border-black font-black"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="number"
+                        className="flex-1 text-center font-black text-xl text-black bg-transparent focus:outline-none"
+                        value={form.quantity}
+                        onChange={(e) => setForm({ ...form, quantity: Math.max(1, parseInt(e.target.value) || 1) })}
+                        min="1"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setForm({ ...form, quantity: form.quantity + 1 })}
+                        className="px-4 py-3 text-black hover:bg-[#06d6a0] transition-colors border-l-3 border-black font-black"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-black text-black uppercase">
+                      Booking Start Date
+                    </label>
+                    <input
+                      type="date"
+                      min={today}
+                      className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      value={form.start_date}
+                      onChange={(e) =>
+                        setForm({
+                          ...form,
+                          start_date: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-black text-black uppercase">
+                      Booking End Date
+                    </label>
+                    <input
+                      type="date"
+                      min={form.start_date || today}
+                      className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      value={form.end_date}
+                      onChange={(e) =>
+                        setForm({
+                          ...form,
+                          end_date: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Availability Status & Check Button */}
+                <div className="pt-6 border-t-2 border-black/10">
+                  {!availability && (
+                    <button
+                      type="submit"
+                      className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg bg-[#06d6a0] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all"
+                    >
+                      🔍 Check Availability
+                    </button>
                   )}
 
-                  <button
-                    type="button"
-                    onClick={handleSendRequest}
-                    className="bg-yellow-400 py-3 rounded-lg font-semibold"
-                  >
-                    Send Booking Request
-                  </button>
+                  {availability && Number(form.quantity) > availability.available_quantity && (
+                    <div className="bg-[#ef476f] border-4 border-black rounded-2xl p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl">😢</span>
+                        <div>
+                          <p className="font-black text-black text-lg">Not Available</p>
+                          <p className="text-black/80 font-bold">
+                            {availability.available_quantity === 0
+                              ? "This costume is fully booked for these dates."
+                              : `Only ${availability.available_quantity} available for these dates.`}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
-                  <button
-                    type="button"
-                    onClick={handleAddToCart}
-                    className="bg-slate-700 text-white py-3 rounded-lg font-semibold"
-                  >
-                    Add to Cart
-                  </button>
+                  {availability && Number(form.quantity) <= availability.available_quantity && (
+                    <div className="bg-[#06d6a0] border-4 border-black rounded-2xl p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6">
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl">✅</span>
+                        <div>
+                          <p className="font-black text-black text-lg">Woohoo! It's Available! 🎉</p>
+                          <p className="text-black/80 font-bold">Good news! The costume is available for your selected dates.</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+
+                {/* Extended Form Fields - Name & Phone */}
+                {availability && Number(form.quantity) <= availability.available_quantity && (
+                  <div className="space-y-6 pt-6 border-t-2 border-black/10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-black text-black uppercase">
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Jane Doe"
+                          className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                          value={form.customer_name}
+                          onChange={(e) =>
+                            setForm({ ...form, customer_name: e.target.value })
+                          }
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-black text-black uppercase">
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          placeholder="+1 (555) 000-0000"
+                          className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                          value={form.phone}
+                          onChange={(e) =>
+                            setForm({ ...form, phone: e.target.value })
+                          }
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    {message && (
+                      <div className="bg-[#ef476f] border-3 border-black rounded-2xl p-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="font-black text-black">{message}</p>
+                      </div>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                      <button
+                        type="button"
+                        onClick={handleSendRequest}
+                        disabled={isSubmitting}
+                        className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg bg-[#ffd166] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 transition-all disabled:opacity-50"
+                      >
+                        📝 Send Request
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleAddToCart}
+                        className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg bg-[#ef476f] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 transition-all flex items-center justify-center gap-2"
+                      >
+                        🛒 Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </form>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Phone Confirmation Dialog */}
       {showPhoneConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
-            <h2 className="text-xl font-bold mb-4 text-slate-900">
-              📱 Confirm Your Phone Number
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-8 max-w-sm w-full">
+            <h2 className="text-2xl font-black text-black mb-4" style={{ fontFamily: "'Chewy', cursive" }}>
+              📱 Confirm Your Phone
             </h2>
 
-            <p className="text-slate-600 mb-4">
+            <p className="text-black/80 font-bold mb-6">
               We'll send WhatsApp updates to this number:
             </p>
 
-            <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 mb-6 text-center">
-              <p className="text-3xl font-bold text-blue-600">
+            <div className="bg-[#bde0fe] border-4 border-black rounded-2xl p-6 mb-6 text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <p className="text-4xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
                 {normalizedPhoneForConfirm}
               </p>
-              <p className="text-sm text-slate-600 mt-2">
+              <p className="text-sm text-black/80 font-bold mt-2">
                 Make sure this is correct!
               </p>
             </div>
 
-            <p className="text-sm text-slate-700 mb-6">
+            <p className="text-sm text-black/80 font-bold mb-6">
               If this is incorrect, click "No" to edit your phone number.
             </p>
 
@@ -397,14 +529,14 @@ function ProductDetails() {
               <button
                 onClick={() => handleConfirmPhone(false)}
                 disabled={isSubmitting}
-                className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50 disabled:opacity-50"
+                className="flex-1 px-4 py-3 border-3 border-black text-black rounded-2xl font-black bg-white hover:bg-[#fdf8e6] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 transition-all"
               >
-                ❌ No, Edit It
+                ❌ No
               </button>
               <button
                 onClick={() => handleConfirmPhone(true)}
                 disabled={isSubmitting}
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 bg-[#06d6a0] text-black rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>
@@ -412,7 +544,7 @@ function ProductDetails() {
                     Sending...
                   </>
                 ) : (
-                  <>✅ Yes, Confirm</>
+                  <>✅ Yes</>
                 )}
               </button>
             </div>
@@ -422,32 +554,31 @@ function ProductDetails() {
 
       {/* WhatsApp Message Modal */}
       {whatsappModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-screen overflow-y-auto">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-lg w-full max-h-[80vh] overflow-y-auto">
             {/* Header */}
-            <div className="p-6 bg-green-50 border-b-2 border-green-200">
-              <h2 className="text-xl font-bold text-green-700">
-                ✅ Request Submitted Successfully!
+            <div className="p-6 bg-[#06d6a0] border-b-4 border-black">
+              <h2 className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
+                ✅ Request Submitted!
               </h2>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-sm text-black/80 font-bold mt-2">
                 Now send to: {whatsappModal.customerName}
               </p>
             </div>
 
             {/* Message Preview */}
             <div className="p-6">
-              <p className="text-slate-700 font-semibold mb-3">
+              <p className="text-black font-black mb-3 text-lg">
                 Your message:
               </p>
-              <div className="bg-slate-50 border rounded-lg p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-slate-700 max-h-64 overflow-y-auto">
+              <div className="bg-[#fdf8e6] border-3 border-black rounded-2xl p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-black max-h-48 overflow-y-auto shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                 {whatsappModal.message}
               </div>
 
               {/* Info Box */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
-                <p className="text-blue-900">
-                  <strong>💡 Next Step:</strong> Click the button below to
-                  open WhatsApp and send your request!
+              <div className="bg-[#bde0fe] border-3 border-black rounded-2xl p-4 mb-6 text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <p className="text-black font-bold">
+                  <strong>💡 Next Step:</strong> Click the button below to open WhatsApp and send your request!
                 </p>
               </div>
 
@@ -455,7 +586,7 @@ function ProductDetails() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setWhatsappModal(null)}
-                  className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50"
+                  className="flex-1 px-4 py-3 border-3 border-black text-black rounded-2xl font-black bg-white hover:bg-[#fdf8e6] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
                 >
                   Done
                 </button>
@@ -467,7 +598,7 @@ function ProductDetails() {
                     );
                     setWhatsappModal(null);
                   }}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-[#06d6a0] text-black rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-2"
                 >
                   📱 Open WhatsApp
                 </button>
