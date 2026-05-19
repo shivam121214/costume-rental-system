@@ -203,18 +203,18 @@ function ProductDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fdf8e6] text-black pt-20 pb-20 relative overflow-hidden">
+    <div className="min-h-screen text-black pt-20 pb-20 relative overflow-hidden" style={{ backgroundColor: '#fdf8e6' }}>
       {/* Background Radial Blurs */}
-      <div className="fixed top-20 left-20 w-96 h-96 bg-[#ffd166]/30 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="fixed bottom-20 right-20 w-96 h-96 bg-[#ef476f]/20 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-[#bde0fe]/20 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="fixed top-20 left-20 w-96 h-96 rounded-full blur-3xl pointer-events-none -z-10" style={{ backgroundColor: 'rgba(255, 209, 102, 0.3)' }} />
+      <div className="fixed bottom-20 right-20 w-96 h-96 rounded-full blur-3xl pointer-events-none -z-10" style={{ backgroundColor: 'rgba(239, 71, 111, 0.2)' }} />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen rounded-full blur-3xl pointer-events-none -z-10" style={{ backgroundColor: 'rgba(189, 224, 254, 0.2)', transform: 'translate(-50%, -50%)' }} />
 
       <div className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           
           {/* Left Side - Images */}
           <div className="flex flex-col gap-6">
-            <div className="aspect-4/5 rounded-3xl overflow-hidden bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative">
+            <div className="aspect-4/5 rounded-3xl overflow-hidden border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative" style={{ backgroundColor: 'white' }}>
               {selectedImage ? (
                 <img
                   src={getImageUrl(selectedImage)}
@@ -226,7 +226,7 @@ function ProductDetails() {
                   No Image
                 </div>
               )}
-              <div className="absolute top-4 left-4 bg-[#ffd166] border-3 border-black px-4 py-2 rounded-full text-sm font-black text-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+              <div className="absolute top-4 left-4 border-3 border-black px-4 py-2 rounded-full text-sm font-black text-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#ffd166' }}>
                 ✨ Featured
               </div>
             </div>
@@ -271,7 +271,7 @@ function ProductDetails() {
             </div>
 
             {/* Rent Price Box */}
-            <div className="bg-[#ef476f] border-4 border-black rounded-2xl p-5 mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] inline-block">
+            <div className="border-4 border-black rounded-2xl p-5 mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] inline-block" style={{ backgroundColor: '#ef476f' }}>
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
                   ₹{product.rent_price}
@@ -279,9 +279,9 @@ function ProductDetails() {
                 <span className="text-black/80 font-black text-lg uppercase">Per Day</span>
               </div>
             </div>
-            <div className="bg-[#ffd166] border-4 border-black rounded-3xl p-6 mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <div className="border-4 border-black rounded-3xl p-6 mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#ffd166' }}>
               <div className="flex items-start gap-4">
-                <div className="bg-white border-3 border-black p-3 rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                <div className="border-3 border-black p-3 rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: 'white' }}>
                   <span className="text-2xl">🛡️</span>
                 </div>
                 <div>
@@ -297,7 +297,7 @@ function ProductDetails() {
             </div>
 
             {/* Main Form */}
-            <div className="grow bg-white border-4 border-black rounded-3xl p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <div className="grow border-4 border-black rounded-3xl p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: 'white' }}>
               <form onSubmit={checkAvailability} className="space-y-6">
                 {/* Base Form Fields */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -306,7 +306,8 @@ function ProductDetails() {
                       Age Group
                     </label>
                     <select
-                      className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      className="w-full px-4 py-3 border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      style={{ backgroundColor: '#fdf8e6', focusRingColor: '#ef476f' }}
                       value={form.variant}
                       onChange={(e) =>
                         setForm({
@@ -336,11 +337,21 @@ function ProductDetails() {
                         −
                       </button>
                       <input
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
                         className="flex-1 text-center font-black text-xl text-black bg-transparent focus:outline-none"
                         value={form.quantity}
-                        onChange={(e) => setForm({ ...form, quantity: Math.max(1, parseInt(e.target.value) || 1) })}
-                        min="1"
+                        onChange={(e) => {
+                          const val = e.target.value.trim();
+                          if (val === '') {
+                            setForm({ ...form, quantity: 1 });
+                          } else {
+                            const num = parseInt(val);
+                            if (!isNaN(num) && num > 0) {
+                              setForm({ ...form, quantity: num });
+                            }
+                          }
+                        }}
                       />
                       <button
                         type="button"
@@ -359,7 +370,6 @@ function ProductDetails() {
                     <input
                       type="date"
                       min={today}
-                      className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                       value={form.start_date}
                       onChange={(e) =>
                         setForm({
@@ -367,6 +377,8 @@ function ProductDetails() {
                           start_date: e.target.value,
                         })
                       }
+                      className="w-full px-4 py-3 border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      style={{ backgroundColor: '#fdf8e6' }}
                       required
                     />
                   </div>
@@ -378,7 +390,6 @@ function ProductDetails() {
                     <input
                       type="date"
                       min={form.start_date || today}
-                      className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                       value={form.end_date}
                       onChange={(e) =>
                         setForm({
@@ -386,6 +397,8 @@ function ProductDetails() {
                           end_date: e.target.value,
                         })
                       }
+                      className="w-full px-4 py-3 border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      style={{ backgroundColor: '#fdf8e6' }}
                       required
                     />
                   </div>
@@ -396,14 +409,15 @@ function ProductDetails() {
                   {!availability && (
                     <button
                       type="submit"
-                      className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg bg-[#06d6a0] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all"
+                      className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all"
+                      style={{ backgroundColor: '#06d6a0' }}
                     >
                       🔍 Check Availability
                     </button>
                   )}
 
                   {availability && Number(form.quantity) > availability.available_quantity && (
-                    <div className="bg-[#ef476f] border-4 border-black rounded-2xl p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <div className="border-4 border-black rounded-2xl p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#ef476f' }}>
                       <div className="flex items-start gap-3">
                         <span className="text-2xl">😢</span>
                         <div>
@@ -419,7 +433,7 @@ function ProductDetails() {
                   )}
 
                   {availability && Number(form.quantity) <= availability.available_quantity && (
-                    <div className="bg-[#06d6a0] border-4 border-black rounded-2xl p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6">
+                    <div className="border-4 border-black rounded-2xl p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6" style={{ backgroundColor: '#06d6a0' }}>
                       <div className="flex items-start gap-3">
                         <span className="text-2xl">✅</span>
                         <div>
@@ -442,11 +456,12 @@ function ProductDetails() {
                         <input
                           type="text"
                           placeholder="e.g. Jane Doe"
-                          className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                           value={form.customer_name}
                           onChange={(e) =>
                             setForm({ ...form, customer_name: e.target.value })
                           }
+                          className="w-full px-4 py-3 border-3 border-black rounded-2xl font-bold text-black placeholder:text-black/40 focus:outline-none focus:ring-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                          style={{ backgroundColor: '#fdf8e6' }}
                           required
                         />
                       </div>
@@ -458,18 +473,19 @@ function ProductDetails() {
                         <input
                           type="tel"
                           placeholder="+1 (555) 000-0000"
-                          className="w-full px-4 py-3 bg-[#fdf8e6] border-3 border-black rounded-2xl font-bold text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-[#ef476f] focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                           value={form.phone}
                           onChange={(e) =>
                             setForm({ ...form, phone: e.target.value })
                           }
+                          className="w-full px-4 py-3 border-3 border-black rounded-2xl font-bold text-black placeholder:text-black/40 focus:outline-none focus:ring-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                          style={{ backgroundColor: '#fdf8e6' }}
                           required
                         />
                       </div>
                     </div>
 
                     {message && (
-                      <div className="bg-[#ef476f] border-3 border-black rounded-2xl p-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                      <div className="border-3 border-black rounded-2xl p-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#ef476f' }}>
                         <p className="font-black text-black">{message}</p>
                       </div>
                     )}
@@ -480,14 +496,16 @@ function ProductDetails() {
                         type="button"
                         onClick={handleSendRequest}
                         disabled={isSubmitting}
-                        className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg bg-[#ffd166] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 transition-all disabled:opacity-50"
+                        className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 transition-all disabled:opacity-50"
+                        style={{ backgroundColor: '#ffd166' }}
                       >
                         📝 Send Request
                       </button>
                       <button
                         type="button"
                         onClick={handleAddToCart}
-                        className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg bg-[#ef476f] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 transition-all flex items-center justify-center gap-2"
+                        className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 transition-all flex items-center justify-center gap-2"
+                        style={{ backgroundColor: '#ef476f' }}
                       >
                         🛒 Add to Cart
                       </button>
@@ -512,7 +530,7 @@ function ProductDetails() {
               We'll send WhatsApp updates to this number:
             </p>
 
-            <div className="bg-[#bde0fe] border-4 border-black rounded-2xl p-6 mb-6 text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <div className="border-4 border-black rounded-2xl p-6 mb-6 text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#bde0fe' }}>
               <p className="text-4xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
                 {normalizedPhoneForConfirm}
               </p>
@@ -536,7 +554,8 @@ function ProductDetails() {
               <button
                 onClick={() => handleConfirmPhone(true)}
                 disabled={isSubmitting}
-                className="flex-1 px-4 py-3 bg-[#06d6a0] text-black rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 text-black rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                style={{ backgroundColor: '#06d6a0' }}
               >
                 {isSubmitting ? (
                   <>
@@ -557,7 +576,7 @@ function ProductDetails() {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
           <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-lg w-full max-h-[80vh] overflow-y-auto">
             {/* Header */}
-            <div className="p-6 bg-[#06d6a0] border-b-4 border-black">
+            <div className="p-6 border-b-4 border-black" style={{ backgroundColor: '#06d6a0' }}>
               <h2 className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
                 ✅ Request Submitted!
               </h2>
@@ -571,12 +590,12 @@ function ProductDetails() {
               <p className="text-black font-black mb-3 text-lg">
                 Your message:
               </p>
-              <div className="bg-[#fdf8e6] border-3 border-black rounded-2xl p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-black max-h-48 overflow-y-auto shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+              <div className="border-3 border-black rounded-2xl p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-black max-h-48 overflow-y-auto shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#fdf8e6' }}>
                 {whatsappModal.message}
               </div>
 
               {/* Info Box */}
-              <div className="bg-[#bde0fe] border-3 border-black rounded-2xl p-4 mb-6 text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+              <div className="border-3 border-black rounded-2xl p-4 mb-6 text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#bde0fe' }}>
                 <p className="text-black font-bold">
                   <strong>💡 Next Step:</strong> Click the button below to open WhatsApp and send your request!
                 </p>
@@ -598,7 +617,8 @@ function ProductDetails() {
                     );
                     setWhatsappModal(null);
                   }}
-                  className="flex-1 px-4 py-3 bg-[#06d6a0] text-black rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 text-black rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-2"
+                  style={{ backgroundColor: '#06d6a0' }}
                 >
                   📱 Open WhatsApp
                 </button>
