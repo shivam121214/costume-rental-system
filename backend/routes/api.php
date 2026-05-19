@@ -7,6 +7,10 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\AvailabilityController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HealthCheckController;
+
+// Health check endpoint for UptimeRobot monitoring
+Route::get('/health', [HealthCheckController::class, 'check']);
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/admin/products', [ProductController::class, 'all']);
