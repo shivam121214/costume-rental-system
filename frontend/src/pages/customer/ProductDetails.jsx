@@ -309,24 +309,12 @@ function ProductDetails() {
               </button>
             </form>
 
-            {availability && (
-              <p className="mt-3 font-semibold">
-                <span
-                  className={
-                    availability.available_quantity > 0
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }
-                >
-                  Available: {availability.available_quantity}
-                </span>
-              </p>
-            )}
-
             {availability &&
               Number(form.quantity) > availability.available_quantity && (
-                <p className="text-red-600 mt-2">
-                  Selected quantity is not available
+                <p className="text-red-600 mt-2 font-semibold">
+                  {availability.available_quantity === 0
+                    ? "Unavailable"
+                    : `Only ${availability.available_quantity} available`}
                 </p>
               )}
 
