@@ -258,13 +258,10 @@ function ProductDetails() {
           <div className="flex flex-col">
             <div className="mb-8">
               {product.theme && (
-                <div className="inline-block px-4 py-2 rounded-full border-3 border-black text-black text-sm font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] mb-4" style={{ backgroundColor: '#8338ec' }}>
-                  {product.theme}
+                <div className="inline-block px-4 py-2 rounded-full border-3 border-black text-black text-sm font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] mb-4" style={{ backgroundColor: '#bde0fe' }}>
+                  {product.theme} Theme
                 </div>
               )}
-              <div className="inline-block px-4 py-2 rounded-full border-3 border-black text-black text-sm font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] mb-4" style={{ backgroundColor: '#bde0fe' }}>
-                {product.category}
-              </div>
               <h1 className="text-5xl md:text-6xl font-black text-black mb-6 leading-tight" style={{ fontFamily: "'Chewy', cursive" }}>
                 {product.name}
               </h1>
