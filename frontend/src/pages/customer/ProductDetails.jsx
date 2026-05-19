@@ -307,14 +307,6 @@ function ProductDetails() {
               <button className="bg-slate-900 text-white py-3 rounded-lg">
                 Check
               </button>
-
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                className="bg-slate-700 text-white py-3 rounded-lg"
-              >
-                Add to Cart
-              </button>
             </form>
 
             {availability && (
@@ -373,6 +365,14 @@ function ProductDetails() {
                     className="bg-yellow-400 py-3 rounded-lg font-semibold"
                   >
                     Send Booking Request
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleAddToCart}
+                    className="bg-slate-700 text-white py-3 rounded-lg font-semibold"
+                  >
+                    Add to Cart
                   </button>
                 </div>
               )}
