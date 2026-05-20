@@ -7,6 +7,8 @@ import {
     normalizePhoneNumber
 } from "../../services/whatsappService";
 import axios from "axios";
+import { Loader2, AlertTriangle, CheckCircle, Search, Send } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 function Cart() {
   const [cart, setCart] = useState([]);
@@ -147,9 +149,14 @@ function Cart() {
   // Show empty cart message only if there's no modal (no pending request)
   if (cart.length === 0 && !whatsappModal && !showPhoneConfirmation) {
     return (
-      <div className="p-6 text-center text-slate-500">
-        <p className="text-lg">Your cart is empty</p>
-        <p className="text-sm mt-2">Add some costumes to get started!</p>
+      <div className="min-h-screen pt-20 pb-20 flex items-center justify-center p-4" style={{ backgroundColor: '#fdf8e6' }}>
+        <div className="text-center bg-white border-4 border-black rounded-3xl p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-md">
+          <div className="w-24 h-24 bg-[#bde0fe] rounded-full border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center mb-6 mx-auto">
+            <Search className="w-10 h-10 text-black" strokeWidth={3} />
+          </div>
+          <h3 className="text-4xl font-black text-black mb-4" style={{ fontFamily: "'Chewy', cursive" }}>Your Cart is Empty!</h3>
+          <p className="font-bold text-lg text-black">Time to find some awesome costumes!</p>
+        </div>
       </div>
     );
   }
@@ -204,218 +211,223 @@ function Cart() {
     cart.length > 0 && cart.every((item) => item.is_available === true);
 
   return (
-    <div className="p-6 space-y-6 max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold">Your Rental Cart</h1>
+    <div className="min-h-screen pt-20 pb-20" style={{ backgroundColor: '#fdf8e6' }}>
+      {/* Decorative background blurs */}
+      <div className="fixed top-20 left-20 w-96 h-96 rounded-full blur-3xl pointer-events-none -z-10" style={{ backgroundColor: 'rgba(255, 209, 102, 0.3)' }} />
+      <div className="fixed bottom-20 right-20 w-96 h-96 rounded-full blur-3xl pointer-events-none -z-10" style={{ backgroundColor: 'rgba(239, 71, 111, 0.2)' }} />
 
-      {/* Cart Items */}
-      <div className="space-y-4">
-        {cart.map((item, index) => (
-          <div 
-            key={item.id} 
-            className="border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
-          >
-            <div className="flex justify-between items-start mb-3">
-              <div>
-                <h3 className="font-semibold text-lg">
-                  {item.product_name || "Costume Item"}
-                </h3>
-                {item.message && (
-                  <p className="text-orange-600 text-sm mt-1">
-                    ⚠️ {item.message}
-                  </p>
+      <div className="max-w-4xl mx-auto px-4 relative z-10">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
+          <h2 className="text-5xl font-black text-black p-4 rounded-3xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ fontFamily: "'Chewy', cursive", backgroundColor: '#bde0fe', transform: 'rotate(1deg)' }}>
+            Your Magical Cart!
+          </h2>
+          <span className="text-3xl font-black text-black px-6 py-3 rounded-full border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#ffd166', transform: 'rotate(-2deg)', fontFamily: "'Chewy', cursive" }}>
+            {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
+          </span>
+        </div>
+
+        {/* Cart Items */}
+        <div className="space-y-6 mb-8">
+          {cart.map((item) => (
+            <div 
+              key={item.id} 
+              className="bg-white border-4 border-black rounded-3xl p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="font-black text-2xl text-black">
+                    {item.product_name || "Costume Item"}
+                  </h3>
+                  <span className="inline-block mt-2 px-3 py-1 rounded-full border-2 border-black font-black text-sm" style={{ backgroundColor: '#ffd166' }}>
+                    {item.variant}
+                  </span>
+                  {item.message && (
+                    <p className="text-black font-bold mt-2" style={{ color: '#ef476f' }}>
+                      ⚠️ {item.message}
+                    </p>
+                  )}
+                </div>
+                <button
+                  onClick={() => handleRemove(item.id)}
+                  className="w-10 h-10 bg-[#ef476f] text-white rounded-full border-2 border-black font-black flex items-center justify-center hover:scale-110 transition-transform"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#bde0fe' }}>
+                  Qty: <span className="text-lg">{item.quantity}</span>
+                </div>
+                <div className="px-3 py-2 rounded-2xl border-2 border-black font-bold text-sm">
+                  <input
+                    type="number"
+                    min="1"
+                    value={item.quantity}
+                    onChange={(e) => 
+                      handleChange(item.id, "quantity", parseInt(e.target.value) || 1)
+                    }
+                    className="w-full px-2 py-1 border-2 border-black rounded-lg font-black text-center"
+                    style={{ backgroundColor: '#fdf8e6' }}
+                  />
+                </div>
+                <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#ffd166' }}>
+                  Start: {formatDateForMessage(item.start_date)}
+                </div>
+                <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#ef476f', color: 'white' }}>
+                  End: {formatDateForMessage(item.end_date)}
+                </div>
+              </div>
+
+              <div className="flex items-center font-black text-lg">
+                {item.is_available === false ? (
+                  <span style={{ color: '#ef476f' }}>❌ Not Available</span>
+                ) : (
+                  <span style={{ color: '#06d6a0' }}>✅ Available</span>
                 )}
               </div>
-              <button
-                onClick={() => handleRemove(item.id)}
-                className="text-red-500 hover:text-red-700 font-semibold"
-              >
-                Remove
-              </button>
             </div>
+          ))}
+        </div>
 
-            <div className="grid grid-cols-2 gap-3 text-sm mb-3">
-              <div>
-                <label className="block text-slate-600 mb-1">Variant/Size</label>
-                <p className="font-medium">{item.variant}</p>
-              </div>
-              <div>
-                <label className="block text-slate-600 mb-1">Quantity</label>
-                <input
-                  type="number"
-                  min="1"
-                  value={item.quantity}
-                  onChange={(e) => 
-                    handleChange(item.id, "quantity", parseInt(e.target.value))
-                  }
-                  className="w-full px-2 py-1 border rounded"
-                />
-              </div>
-              <div>
-                <label className="block text-slate-600 mb-1">Start Date</label>
-                <p className="font-medium text-sm">
-                  {formatDateForMessage(item.start_date)}
-                </p>
-              </div>
-              <div>
-                <label className="block text-slate-600 mb-1">End Date</label>
-                <p className="font-medium text-sm">
-                  {formatDateForMessage(item.end_date)}
-                </p>
-              </div>
+        {/* Hint */}
+        <div className="text-center bg-[#bde0fe] border-2 border-black p-4 rounded-2xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] mb-8 font-black text-black max-w-md mx-auto">
+          ✨ Hint: Check availability to verify all items can be booked!
+        </div>
+
+        {/* Availability Check Button */}
+        <button
+          onClick={checkAllAvailability}
+          className="w-full px-6 py-4 rounded-3xl border-4 border-black font-black text-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:translate-x-0.5 transition-all flex items-center justify-center gap-3"
+          style={{ backgroundColor: '#06d6a0', color: 'black', fontFamily: "'Chewy', cursive" }}
+        >
+          <CheckCircle className="w-8 h-8" strokeWidth={3} />
+          Check Availability!
+        </button>
+
+        {/* Availability Status Box */}
+        {!allAvailable && cart.length > 0 && (
+          <div className="mt-8 bg-[#ff9e9e] border-4 border-black rounded-3xl p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col sm:flex-row items-center gap-6">
+            <div className="w-20 h-20 bg-white rounded-full border-4 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] shrink-0">
+              <AlertTriangle className="w-10 h-10 text-black" strokeWidth={3} />
             </div>
-
-            <div className="flex items-center text-sm">
-              {item.is_available === false ? (
-                <span className="text-red-600">❌ Not Available</span>
-              ) : (
-                <span className="text-green-600">✅ Available</span>
-              )}
+            <div className="text-center sm:text-left">
+              <h3 className="text-3xl font-black text-black mb-2" style={{ fontFamily: "'Chewy', cursive" }}>Oops! Missing Items!</h3>
+              <p className="font-bold text-black">Some items may not be available. Please adjust quantities or dates.</p>
             </div>
           </div>
-        ))}
-      </div>
-
-      {/* Availability Check */}
-      <button
-        onClick={checkAllAvailability}
-        className="w-full px-4 py-2 border border-slate-300 rounded text-slate-700 font-semibold hover:bg-slate-50"
-      >
-        Check Availability
-      </button>
-
-      {/* Customer Information */}
-      <div className="border-t pt-6 space-y-4 bg-slate-50 p-4 rounded-lg">
-        <h2 className="text-lg font-semibold">Your Information</h2>
-
-        <div>
-          <label className="block text-slate-700 font-semibold mb-2">
-            Full Name
-          </label>
-          <input
-            type="text"
-            placeholder="Enter your full name"
-            value={customerName}
-            onChange={(e) => {
-              setCustomerName(e.target.value);
-              if (validationErrors.name) {
-                setValidationErrors({ ...validationErrors, name: "" });
-              }
-            }}
-            className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 ${
-              validationErrors.name 
-                ? "border-red-500 focus:ring-red-200" 
-                : "border-slate-300 focus:ring-blue-200"
-            }`}
-          />
-          {validationErrors.name && (
-            <p className="text-red-600 text-sm mt-1">{validationErrors.name}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-slate-700 font-semibold mb-2">
-            Phone Number
-          </label>
-          <input
-            type="tel"
-            placeholder="Enter your phone number (e.g., 9876543210)"
-            value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value);
-              if (validationErrors.phone) {
-                setValidationErrors({ ...validationErrors, phone: "" });
-              }
-            }}
-            className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 ${
-              validationErrors.phone 
-                ? "border-red-500 focus:ring-red-200" 
-                : "border-slate-300 focus:ring-blue-200"
-            }`}
-          />
-          {validationErrors.phone && (
-            <p className="text-red-600 text-sm mt-1">{validationErrors.phone}</p>
-          )}
-        </div>
-      </div>
-
-      {/* Submit Button */}
-      <button
-        onClick={handleSendRequest}
-        disabled={isSubmitting || cart.length === 0 || !allAvailable}
-        className="w-full bg-green-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg transition-all"
-      >
-        {isSubmitting ? (
-          <>
-            <span className="inline-block animate-spin">⌛</span>
-            Sending...
-          </>
-        ) : (
-          <>
-            <span>📱</span>
-            Send Request via WhatsApp
-          </>
         )}
-      </button>
 
-      {!allAvailable && (
-        <div className="bg-yellow-50 border border-yellow-200 p-4 rounded text-sm text-yellow-800">
-          ⚠️ Some items are not available for your selected dates. Please adjust quantities or dates.
-        </div>
-      )}
-
-      <div className="bg-blue-50 border border-blue-200 p-4 rounded text-sm text-blue-800">
-        <p className="font-semibold mb-1">ℹ️ How it works:</p>
-        <ol className="list-decimal list-inside space-y-1">
-          <li>Review your cart and check availability</li>
-          <li>Enter your name and phone number</li>
-          <li>Click "Send Request via WhatsApp"</li>
-          <li>WhatsApp opens with a pre-filled message</li>
-          <li>Simply press Send - we receive your request!</li>
-        </ol>
-      </div>
-
-      {/* Phone Confirmation Dialog */}
-      {showPhoneConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
-            <h2 className="text-xl font-bold mb-4 text-slate-900">📱 Confirm Your Phone Number</h2>
-            
-            <p className="text-slate-600 mb-4">
-              We'll send WhatsApp updates to this number:
-            </p>
-            
-            <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 mb-6 text-center">
-              <p className="text-3xl font-bold text-blue-600">{normalizedPhoneForConfirm}</p>
-              <p className="text-sm text-slate-600 mt-2">Make sure this is correct!</p>
+        {/* Customer Information Form */}
+        {allAvailable && (
+          <div className="mt-12 space-y-8">
+            <div className="bg-[#06d6a0] border-4 border-black rounded-3xl p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col sm:flex-row items-center gap-6" style={{ transform: 'rotate(-1deg)' }}>
+              <div className="w-20 h-20 bg-white rounded-full border-4 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] shrink-0">
+                <CheckCircle className="w-10 h-10 text-black" strokeWidth={3} />
+              </div>
+              <div className="text-center sm:text-left">
+                <h3 className="text-4xl font-black text-black mb-2" style={{ fontFamily: "'Chewy', cursive" }}>Yay! Everything's Here!</h3>
+                <p className="font-bold text-black text-lg">Tell us who you are so we can prepare your magical costumes.</p>
+              </div>
             </div>
 
-            <p className="text-sm text-slate-700 mb-6">
-              If this is incorrect, click "No" to edit your phone number.
-            </p>
+            <form onSubmit={handleSendRequest} className="bg-white border-4 border-black rounded-3xl p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6" style={{ transform: 'rotate(1deg)' }}>
+              <div>
+                <label htmlFor="name" className="block font-black text-3xl text-black mb-3" style={{ fontFamily: "'Chewy', cursive" }}>Your Magical Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  required
+                  value={customerName}
+                  onChange={(e) => {
+                    setCustomerName(e.target.value);
+                    if (validationErrors.name) {
+                      setValidationErrors({ ...validationErrors, name: "" });
+                    }
+                  }}
+                  placeholder="e.g. Princess Fiona"
+                  className="w-full text-lg font-bold px-5 py-4 rounded-2xl border-3 border-black"
+                  style={{ backgroundColor: '#fdf8e6' }}
+                />
+                {validationErrors.name && (
+                  <p className="text-black font-bold mt-2" style={{ color: '#ef476f' }}>{validationErrors.name}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="phone" className="block font-black text-3xl text-black mb-3" style={{ fontFamily: "'Chewy', cursive" }}>Contact Number</label>
+                <input
+                  id="phone"
+                  type="tel"
+                  required
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    if (validationErrors.phone) {
+                      setValidationErrors({ ...validationErrors, phone: "" });
+                    }
+                  }}
+                  placeholder="e.g. +91 9876543210"
+                  className="w-full text-lg font-bold px-5 py-4 rounded-2xl border-3 border-black"
+                  style={{ backgroundColor: '#fdf8e6' }}
+                />
+                {validationErrors.phone && (
+                  <p className="text-black font-bold mt-2" style={{ color: '#ef476f' }}>{validationErrors.phone}</p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting || cart.length === 0}
+                className="w-full py-5 text-white rounded-2xl border-4 border-black font-black text-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:translate-x-0.5 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                style={{ backgroundColor: '#ff5c8d', fontFamily: "'Chewy', cursive" }}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-6 h-6 animate-spin" strokeWidth={3} />
+                    Booking...
+                  </>
+                ) : (
+                  <>
+                    Book Order via WhatsApp
+                    <Send className="w-6 h-6" strokeWidth={3} />
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
+
+      {/* Phone Confirmation Modal */}
+      {showPhoneConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-8 max-w-sm w-full">
+            <h2 className="text-2xl font-black text-black mb-6" style={{ fontFamily: "'Chewy', cursive" }}>📱 Confirm Your Phone</h2>
+            
+            <p className="font-bold text-black mb-4">We'll send WhatsApp updates to this number:</p>
+            
+            <div className="bg-[#bde0fe] border-3 border-black rounded-2xl p-4 mb-6 text-center">
+              <p className="text-3xl font-black text-black">{normalizedPhoneForConfirm}</p>
+              <p className="text-sm font-bold text-black mt-2">Make sure this is correct!</p>
+            </div>
 
             <div className="flex gap-3">
               <button
                 onClick={() => handleConfirmPhone(false)}
                 disabled={isSubmitting}
-                className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50 disabled:opacity-50"
+                className="flex-1 px-4 py-3 border-3 border-black text-black rounded-2xl font-black hover:bg-[#fdf8e6]"
               >
-                ❌ No, Edit It
+                ❌ No, Edit
               </button>
               <button
                 onClick={() => handleConfirmPhone(true)}
                 disabled={isSubmitting}
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 text-white rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                style={{ backgroundColor: '#06d6a0' }}
               >
-                {isSubmitting ? (
-                  <>
-                    <span className="inline-block animate-spin">⌛</span>
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    ✅ Yes, Confirm
-                  </>
-                )}
+                ✅ Yes, Confirm
               </button>
             </div>
           </div>
@@ -425,36 +437,30 @@ function Cart() {
       {/* WhatsApp Message Modal */}
       {whatsappModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-screen overflow-y-auto">
+          <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-lg w-full max-h-[80vh] overflow-y-auto">
             {/* Header */}
-            <div className="p-6 bg-green-50 border-b-2 border-green-200">
-              <h2 className="text-xl font-bold text-green-700">
-                ✅ Request Submitted Successfully!
-              </h2>
-              <p className="text-sm text-slate-600 mt-1">
-                Now send to: {whatsappModal.customerName}
-              </p>
+            <div className="p-6 border-b-4 border-black" style={{ backgroundColor: '#06d6a0' }}>
+              <h2 className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>✅ Ready to Send!</h2>
+              <p className="text-sm font-bold text-black mt-2">Customer: {whatsappModal.customerName}</p>
             </div>
 
             {/* Message Preview */}
             <div className="p-6">
-              <p className="text-slate-700 font-semibold mb-3">Your message:</p>
-              <div className="bg-slate-50 border rounded-lg p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-slate-700 max-h-64 overflow-y-auto">
+              <p className="font-black text-black mb-3">Your message:</p>
+              <div className="bg-[#fdf8e6] border-3 border-black rounded-2xl p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-black max-h-48 overflow-y-auto shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                 {whatsappModal.message}
               </div>
 
               {/* Info Box */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
-                <p className="text-blue-900">
-                  <strong>💡 Next Step:</strong> Click the button below to open WhatsApp and send your request!
-                </p>
+              <div className="bg-[#bde0fe] border-3 border-black rounded-2xl p-4 mb-6 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <p className="text-black font-bold text-sm">💡 Tip: Click "Open WhatsApp" to send your booking request!</p>
               </div>
 
               {/* Buttons */}
               <div className="flex gap-3">
                 <button
                   onClick={() => setWhatsappModal(null)}
-                  className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50"
+                  className="flex-1 px-4 py-3 border-3 border-black text-black rounded-2xl font-black hover:bg-[#fdf8e6]"
                 >
                   Done
                 </button>
@@ -463,7 +469,8 @@ function Cart() {
                     openWhatsAppDeepLink(whatsappModal.phone, whatsappModal.message);
                     setWhatsappModal(null);
                   }}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 text-white rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  style={{ backgroundColor: '#06d6a0' }}
                 >
                   📱 Open WhatsApp
                 </button>
