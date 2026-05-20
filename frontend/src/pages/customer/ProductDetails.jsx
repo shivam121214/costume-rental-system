@@ -425,21 +425,26 @@ function ProductDetails() {
                 {/* Availability Status & Check Button */}
                 <div className="pt-6 border-t-2 border-black/10">
                   {!availability && (
-                    <button
-                      type="submit"
-                      disabled={isCheckingAvailability}
-                      className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
-                      style={{ backgroundColor: '#06d6a0' }}
-                    >
-                      {isCheckingAvailability ? (
-                        <>
-                          <img src="/dance.gif" alt="Checking" className="w-8 h-8" />
-                          Checking...
-                        </>
-                      ) : (
-                        <>🔍 Check Availability</>
+                    <>
+                      <button
+                        type="submit"
+                        disabled={isCheckingAvailability}
+                        className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                        style={{ backgroundColor: '#06d6a0' }}
+                      >
+                        {isCheckingAvailability ? (
+                          "Checking..."
+                        ) : (
+                          <>🔍 Check Availability</>
+                        )}
+                      </button>
+
+                      {isCheckingAvailability && (
+                        <div className="flex justify-center my-4">
+                          <img src="/dance.gif" alt="Checking" className="w-24 h-24" />
+                        </div>
                       )}
-                    </button>
+                    </>
                   )}
 
                   {availability && Number(form.quantity) > availability.available_quantity && (
