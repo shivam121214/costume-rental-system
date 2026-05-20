@@ -24,20 +24,9 @@ function Navbar() {
   };
 
   useEffect(() => {
-    if (admin) {
-      getPendingRequests();
-
-      const interval = setInterval(() => {
-        getPendingRequests();
-      }, 5000);
-
-      return () => clearInterval(interval);
-    }
-
-    // Initial cart count
+    // Always set up cart counter (for all users)
     getCartCount();
 
-    // Listen for storage changes (from other tabs or same tab)
     const handleStorageChange = () => {
       getCartCount();
     };
@@ -45,13 +34,22 @@ function Navbar() {
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("cartUpdated", handleStorageChange);
 
-    // Also check every 1 second for immediate feedback
-    const interval = setInterval(() => {
+    const cartInterval = setInterval(() => {
       getCartCount();
     }, 1000);
 
+    // If admin, also set up pending requests listener
+    let requestsInterval;
+    if (admin) {
+      getPendingRequests();
+      requestsInterval = setInterval(() => {
+        getPendingRequests();
+      }, 5000);
+    }
+
     return () => {
-      clearInterval(interval);
+      clearInterval(cartInterval);
+      if (requestsInterval) clearInterval(requestsInterval);
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("cartUpdated", handleStorageChange);
     };
@@ -118,7 +116,7 @@ function Navbar() {
             <Link to="/cart" className="hover:scale-110 transition-transform bg-[#06d6a0] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] relative">
               <ShoppingCart className="w-5 h-5 text-black" strokeWidth={3} />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#ef476f] text-white text-xs font-bold rounded-full border-2 border-black flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 w-6 h-6 bg-[#ef476f] text-white text-xs font-bold rounded-full border-2 border-black flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
