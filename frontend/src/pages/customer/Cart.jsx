@@ -400,7 +400,7 @@ function Cart() {
 
       {/* Phone Confirmation Modal */}
       {showPhoneConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center p-4 z-50">
           <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-8 max-w-sm w-full">
             <h2 className="text-2xl font-black text-black mb-6" style={{ fontFamily: "'Chewy', cursive" }}>📱 Confirm Your Phone</h2>
             
@@ -434,7 +434,7 @@ function Cart() {
 
       {/* WhatsApp Message Modal */}
       {whatsappModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center p-4 z-50">
           <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-lg w-full max-h-[80vh] overflow-y-auto">
             {/* Header */}
             <div className="p-6 border-b-4 border-black" style={{ backgroundColor: '#06d6a0' }}>
