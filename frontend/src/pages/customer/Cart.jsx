@@ -317,7 +317,9 @@ function Cart() {
           </button>
         </div>
         {isCheckingAvailability && (
-          <img src="/loader.gif" alt="Loading" className="w-12 h-12" />
+          <div className="flex justify-center mb-8">
+            <img src="/loader.gif" alt="Loading" className="w-24 h-24" />
+          </div>
         )}
 
         {/* Availability Status Box */}
