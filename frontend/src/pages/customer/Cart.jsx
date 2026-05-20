@@ -51,9 +51,8 @@ function Cart() {
   };
 
   const handleConfirmPhone = async (confirmed) => {
-    setShowPhoneConfirmation(false);
-
     if (!confirmed) {
+      setShowPhoneConfirmation(false);
       return;
     }
 
@@ -104,7 +103,8 @@ function Cart() {
         cartItemsForMessage
       );
 
-      // Show WhatsApp modal instead of direct open
+      // Close phone confirmation and show WhatsApp modal
+      setShowPhoneConfirmation(false);
       setWhatsappModal({
         phone: ADMIN_PHONE,
         message: whatsappMessage,
@@ -119,6 +119,7 @@ function Cart() {
         || err.message 
         || "Error sending request. Please try again.";
       alert(`❌ ${errorMessage}`);
+      setShowPhoneConfirmation(false);
       setIsSubmitting(false);
     }
   };
