@@ -125,183 +125,206 @@ function Requests() {
 
   const badge = (status) => {
     const styles = {
-      pending: "bg-yellow-100 text-yellow-700",
-      accepted: "bg-green-100 text-green-700",
-      rejected: "bg-red-100 text-red-700",
+      pending: { bg: '#ffd166', text: 'black' },
+      accepted: { bg: '#06d6a0', text: 'black' },
+      rejected: { bg: '#ef476f', text: 'black' },
     };
-
-    return styles[status] || "bg-slate-100 text-slate-700";
+    return styles[status] || { bg: '#bde0fe', text: 'black' };
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6">
-      <h1 className="text-3xl font-bold mb-6">Requests</h1>
-      <div className="flex gap-3 mb-6">
-        {["pending", "accepted", "rejected", "all"].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setFilter(tab)}
-            className={`px-4 py-2 rounded-lg capitalize ${
-              filter === tab ? "bg-slate-900 text-white" : "bg-white border"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+    <div className="min-h-screen text-black pt-20 pb-20 relative overflow-hidden" style={{ backgroundColor: '#fdf8e6' }}>
+      {/* Background Radial Blurs */}
+      <div className="fixed top-20 left-20 w-96 h-96 rounded-full blur-3xl pointer-events-none -z-10" style={{ backgroundColor: 'rgba(255, 209, 102, 0.3)' }} />
+      <div className="fixed bottom-20 right-20 w-96 h-96 rounded-full blur-3xl pointer-events-none -z-10" style={{ backgroundColor: 'rgba(239, 71, 111, 0.2)' }} />
 
-      {loading ? (
-        // <div className="text-center mt-16 text-slate-500">
-        //   Loading requests...
-        // </div>
-        <Loader />
-      ) : requests.length === 0 ? (
-        <div className="text-center mt-16">
-          <p className="text-xl font-semibold text-slate-600">
-            No {filter === "all" ? "" : filter} requests
-          </p>
-          <p className="text-slate-400 mt-2">You're all caught up 🎉</p>
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        {/* Header */}
+        <div className="mb-8 space-y-2">
+          <h1 className="text-5xl font-black text-black uppercase tracking-tight" style={{ fontFamily: "'Chewy', cursive" }}>
+            Booking Requests
+          </h1>
+          <p className="text-black text-lg font-bold">Manage all your fancy dress bookings here! 👗✨</p>
         </div>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {requests.map((item) => {
-            const remaining = Math.max(
-              0,
-              item.available_quantity - item.quantity,
-            );
-            return (
-              <div key={item.id} className="bg-white rounded-2xl shadow-md p-5">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-xl font-semibold">
-                    {item.customer_name}
-                  </h3>
 
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm ${badge(item.status)}`}
-                  >
-                    {item.status}
-                  </span>
+        {/* Filter Tabs */}
+        <div className="flex gap-3 mb-8 flex-wrap">
+          {["pending", "accepted", "rejected", "all"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setFilter(tab)}
+              className="px-6 py-3 rounded-2xl capitalize font-black border-3 border-black transition-all hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
+              style={{
+                backgroundColor: filter === tab ? '#ffd166' : 'white',
+                boxShadow: filter === tab ? '4px_4px_0px_0px_rgba(0,0,0,1)' : '2px_2px_0px_0px_rgba(0,0,0,0.5)',
+                transform: filter === tab ? 'translateY(-2px)' : 'none'
+              }}
+            >
+              {tab}
+              {tab === "pending" && requests.filter(r => r.status === "pending").length > 0 && (
+                <span className="ml-2 inline-block px-3 py-1 rounded-full border-2 border-black font-black text-sm" style={{ backgroundColor: '#ff5c8d', color: 'white' }}>
+                  {requests.filter(r => r.status === "pending").length}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {loading ? (
+          <Loader />
+        ) : requests.length === 0 ? (
+          <div className="text-center mt-16 bg-white border-4 border-black rounded-3xl p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <p className="text-3xl font-black text-black">No {filter === "all" ? "" : filter} requests</p>
+            <p className="text-black font-bold mt-3 text-lg">You're all caught up 🎉</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {requests.map((item) => {
+              const remaining = Math.max(0, item.available_quantity - item.quantity);
+              const statusStyle = badge(item.status);
+              return (
+                <div key={item.id} className="bg-white border-4 border-black rounded-3xl p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className="text-xl font-black text-black flex-1">
+                      {item.customer_name}
+                    </h3>
+                    <span
+                      className="px-4 py-2 rounded-full text-sm font-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      style={{ backgroundColor: statusStyle.bg, color: statusStyle.text }}
+                    >
+                      {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                    </span>
+                  </div>
+
+                  <p className="text-black/80 font-bold mb-4 pb-4 border-b-2 border-black/10">
+                    📞 {item.phone}
+                  </p>
+
+                  <div className="space-y-3 mb-5 pb-5 border-b-2 border-black/10">
+                    <div className="font-black text-black uppercase text-sm">Products Booked</div>
+                    <div className="bg-white border-3 border-black rounded-2xl p-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                      <p className="font-black text-black mb-3">{item.product?.name || "Deleted Product"}</p>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="px-3 py-2 rounded-xl font-black text-sm border-2 border-black" style={{ backgroundColor: '#bde0fe' }}>
+                          Qty: <span className="text-base">{item.quantity}</span>
+                        </div>
+                        <div className="px-3 py-2 rounded-xl font-black text-sm border-2 border-black" style={{ backgroundColor: '#06d6a0' }}>
+                          Stock: <span className="text-base">{item.available_quantity}</span>
+                        </div>
+                      </div>
+                      <div className="mt-3 px-3 py-2 rounded-xl font-black text-sm border-2 border-black text-center" style={{ backgroundColor: remaining > 0 ? '#06d6a0' : '#ef476f' }}>
+                        After: {remaining}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 mb-5">
+                    <div className="px-4 py-3 rounded-2xl font-bold border-2 border-black flex justify-between" style={{ backgroundColor: '#ffd166' }}>
+                      <span>Start Date:</span>
+                      <span className="font-black">{item.start_date}</span>
+                    </div>
+                    <div className="px-4 py-3 rounded-2xl font-bold border-2 border-black flex justify-between" style={{ backgroundColor: '#ef476f' }}>
+                      <span>End Date:</span>
+                      <span className="font-black">{item.end_date}</span>
+                    </div>
+                  </div>
+
+                  {item.status === "pending" && (
+                    <div className="flex gap-3 mt-5">
+                      <button
+                        onClick={() => acceptRequest(item.id)}
+                        disabled={item.available_quantity < item.quantity}
+                        className="flex-1 px-4 py-3 rounded-2xl font-black text-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
+                        style={{ backgroundColor: '#ffd166' }}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        onClick={() => rejectRequest(item.id)}
+                        className="flex-1 px-4 py-3 rounded-2xl font-black text-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                        style={{ backgroundColor: '#ef476f' }}
+                      >
+                        Decline
+                      </button>
+                    </div>
+                  )}
+
+                  {item.reject_reason && (
+                    <p className="mt-4 px-4 py-3 rounded-2xl font-bold border-2 border-black" style={{ backgroundColor: '#ef476f', color: 'black' }}>
+                      Reason: {item.reject_reason}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {nextPageUrl && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={loadMore}
+              disabled={loadingMore}
+              className="px-8 py-4 rounded-2xl font-black text-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
+              style={{ backgroundColor: '#06d6a0' }}
+            >
+              {loadingMore ? "Loading..." : "Load More"}
+            </button>
+          </div>
+        )}
+
+        {/* WhatsApp Message Modal */}
+        {whatsappModal && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+            <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-lg w-full max-h-[80vh] overflow-y-auto">
+              {/* Header */}
+              <div className="p-6 border-b-4 border-black" style={{ backgroundColor: whatsappModal.action === "accepted" ? '#06d6a0' : '#ef476f' }}>
+                <h2 className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>
+                  {whatsappModal.action === "accepted" ? "✅ Message to Send" : "❌ Message to Send"}
+                </h2>
+                <p className="text-sm font-bold text-black mt-2">
+                  To: {whatsappModal.customerName}
+                </p>
+              </div>
+
+              {/* Message Preview */}
+              <div className="p-6">
+                <p className="text-black font-black mb-3">Your message:</p>
+                <div className="bg-[#fdf8e6] border-3 border-black rounded-2xl p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-black max-h-48 overflow-y-auto shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  {whatsappModal.message}
                 </div>
 
-                <p className="text-slate-500 mt-1">
-                  {item.product?.name || "Deleted Product"}
-                </p>
-                <p className="mt-2">Qty: {item.quantity}</p>
-                <p>Available: {item.available_quantity}</p>
-                <p>
-                  After accept:{" "}
-                  <span
-                    className={
-                      item.available_quantity < item.quantity
-                        ? "text-red-600 font-semibold"
-                        : "text-green-600 font-semibold"
-                    }
-                  >
-                    {remaining}
-                  </span>
-                </p>
-                <p>
-                  {item.start_date} → {item.end_date}
-                </p>
-
-                {item.status === "pending" && (
-                  <div className="flex gap-3 mt-4">
-                    <button
-                      onClick={() => acceptRequest(item.id)}
-                      disabled={item.available_quantity < item.quantity}
-                      className={`px-4 py-2 rounded-lg text-white ${
-                        item.available_quantity < item.quantity
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-green-600"
-                      }`}
-                    >
-                      Accept
-                    </button>
-
-                    <button
-                      onClick={() => rejectRequest(item.id)}
-                      className="px-4 py-2 bg-red-600 text-white rounded-lg"
-                    >
-                      Reject
-                    </button>
-                  </div>
-                )}
-
-                {item.reject_reason && (
-                  <p className="mt-3 text-red-500 text-sm">
-                    Reason: {item.reject_reason}
+                {/* Info Box */}
+                <div className="bg-[#bde0fe] border-3 border-black rounded-2xl p-4 mb-6 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <p className="text-black font-bold text-sm">
+                    <strong>💡 Tip:</strong> If WhatsApp doesn't open automatically, the button below will open it manually.
                   </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {nextPageUrl && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={loadMore}
-            disabled={loadingMore}
-            className="px-6 py-3 bg-slate-900 text-white rounded-lg"
-          >
-            {loadingMore ? "Loading..." : "Load More"}
-          </button>
-        </div>
-      )}
+                </div>
 
-      {/* WhatsApp Message Modal */}
-      {whatsappModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-screen overflow-y-auto">
-            {/* Header */}
-            <div className={`p-6 ${whatsappModal.action === "accepted" ? "bg-green-50 border-b-2 border-green-200" : "bg-red-50 border-b-2 border-red-200"}`}>
-              <h2 className={`text-xl font-bold ${whatsappModal.action === "accepted" ? "text-green-700" : "text-red-700"}`}>
-                {whatsappModal.action === "accepted" ? "✅ Message to Send (Accepted)" : "❌ Message to Send (Rejected)"}
-              </h2>
-              <p className="text-sm text-slate-600 mt-1">
-                To: {whatsappModal.customerName}
-              </p>
-            </div>
-
-            {/* Message Preview */}
-            <div className="p-6">
-              <div className="bg-slate-50 border rounded-lg p-4 mb-6 text-sm whitespace-pre-wrap font-mono text-slate-700 max-h-64 overflow-y-auto">
-                {whatsappModal.message}
-              </div>
-
-              {/* Info Box */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
-                <p className="text-blue-900">
-                  <strong>💡 Tip:</strong> If WhatsApp doesn't open automatically, the "Open WhatsApp" button below will open it manually.
-                </p>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setWhatsappModal(null)}
-                  className="flex-1 px-4 py-2 border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    openWhatsAppDeepLink(whatsappModal.phone, whatsappModal.message);
-                    setWhatsappModal(null);
-                  }}
-                  className={`flex-1 px-4 py-2 text-white rounded-lg font-semibold ${
-                    whatsappModal.action === "accepted"
-                      ? "bg-green-600 hover:bg-green-700"
-                      : "bg-red-600 hover:bg-red-700"
-                  }`}
-                >
-                  📱 Open WhatsApp
-                </button>
+                {/* Buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setWhatsappModal(null)}
+                    className="flex-1 px-4 py-3 border-3 border-black text-black rounded-2xl font-black bg-white hover:bg-[#fdf8e6] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      openWhatsAppDeepLink(whatsappModal.phone, whatsappModal.message);
+                      setWhatsappModal(null);
+                    }}
+                    className="flex-1 px-4 py-3 text-black rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                    style={{ backgroundColor: '#06d6a0' }}
+                  >
+                    📱 Open WhatsApp
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
