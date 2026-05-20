@@ -263,20 +263,24 @@ function Cart() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#bde0fe' }}>
-                  Qty: <span className="text-lg">{item.quantity}</span>
-                </div>
-                <div className="px-3 py-2 rounded-2xl border-2 border-black font-bold text-sm">
-                  <input
-                    type="number"
-                    min="1"
-                    value={item.quantity}
-                    onChange={(e) => 
-                      handleChange(item.id, "quantity", parseInt(e.target.value) || 1)
-                    }
-                    className="w-full px-2 py-1 border-2 border-black rounded-lg font-black text-center"
-                    style={{ backgroundColor: '#fdf8e6' }}
-                  />
+                <div className="flex items-center border-3 border-black rounded-2xl overflow-hidden bg-[#fdf8e6] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <button
+                    type="button"
+                    onClick={() => handleChange(item.id, "quantity", Math.max(1, item.quantity - 1))}
+                    className="px-3 py-2 text-black hover:bg-[#ffd166] transition-colors border-r-3 border-black font-black text-lg"
+                  >
+                    −
+                  </button>
+                  <div className="flex-1 text-center font-black text-lg text-black px-3 py-2">
+                    {item.quantity}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleChange(item.id, "quantity", item.quantity + 1)}
+                    className="px-3 py-2 text-black hover:bg-[#06d6a0] transition-colors border-l-3 border-black font-black text-lg"
+                  >
+                    +
+                  </button>
                 </div>
                 <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#ffd166' }}>
                   Start: {formatDateForMessage(item.start_date)}
