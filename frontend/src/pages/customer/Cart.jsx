@@ -220,9 +220,11 @@ function Cart() {
           <h2 className="text-5xl font-black text-black p-4 rounded-3xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ fontFamily: "'Chewy', cursive", backgroundColor: '#bde0fe', transform: 'rotate(1deg)' }}>
             Your Magical Cart!
           </h2>
-          <span className="text-3xl font-black text-black px-6 py-3 rounded-full border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#ffd166', transform: 'rotate(-2deg)', fontFamily: "'Chewy', cursive" }}>
-            {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
-          </span>
+          {cart.length > 0 && (
+            <span className="text-4xl font-black text-white px-8 py-4 rounded-full border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2" style={{ backgroundColor: '#ef476f', fontFamily: "'Chewy', cursive" }}>
+              🛍️ {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
+            </span>
+          )}
         </div>
 
         {/* Cart Items */}
