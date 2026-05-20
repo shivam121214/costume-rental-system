@@ -323,7 +323,7 @@ function Cart() {
             style={{ backgroundColor: '#06d6a0', color: 'black', fontFamily: "'Chewy', cursive" }}
           >
             <CheckCircle className="w-8 h-8" strokeWidth={3} />
-            Check Availability!
+            {isCheckingAvailability ? "Checking..." : "Check Availability!"}
           </button>
         </div>
 
