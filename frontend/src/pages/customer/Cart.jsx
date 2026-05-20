@@ -311,17 +311,8 @@ function Cart() {
           className="w-full px-6 py-4 rounded-3xl border-4 border-black font-black text-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:translate-x-0.5 transition-all flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed"
           style={{ backgroundColor: '#06d6a0', color: 'black', fontFamily: "'Chewy', cursive" }}
         >
-          {isCheckingAvailability ? (
-            <>
-              <img src="/loader.gif" alt="Loading" className="w-8 h-8" />
-              Checking...
-            </>
-          ) : (
-            <>
-              <CheckCircle className="w-8 h-8" strokeWidth={3} />
-              Check Availability!
-            </>
-          )}
+          <CheckCircle className="w-8 h-8" strokeWidth={3} />
+          Check Availability!
         </button>
 
         {/* Availability Status Box */}
@@ -506,6 +497,17 @@ function Cart() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Loading Overlay */}
+      {isCheckingAvailability && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-12 max-w-md w-full text-center">
+            <img src="/loader.gif" alt="Loading" className="w-20 h-20 mx-auto mb-6" />
+            <h2 className="text-3xl font-black text-black mb-2" style={{ fontFamily: "'Chewy', cursive" }}>Checking Availability...</h2>
+            <p className="font-bold text-black">Please wait while we verify your items!</p>
           </div>
         </div>
       )}
