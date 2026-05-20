@@ -28,6 +28,7 @@ function ProductDetails() {
   const [normalizedPhoneForConfirm, setNormalizedPhoneForConfirm] = useState("");
   const [whatsappModal, setWhatsappModal] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
 
   const [form, setForm] = useState({
     customer_name: "",
@@ -54,13 +55,20 @@ function ProductDetails() {
   const checkAvailability = async (e) => {
     e.preventDefault();
 
-    const res = await axios.post(`${API_URL}/api/check-availability`, {
-      product_id: id,
-      ...form,
-    });
+    setIsCheckingAvailability(true);
+    try {
+      const res = await axios.post(`${API_URL}/api/check-availability`, {
+        product_id: id,
+        ...form,
+      });
 
-    setAvailability(res.data);
-    setMessage("");
+      setAvailability(res.data);
+      setMessage("");
+    } catch (err) {
+      setMessage("Error checking availability");
+    } finally {
+      setIsCheckingAvailability(false);
+    }
   };
 
   const handleSendRequest = () => {
