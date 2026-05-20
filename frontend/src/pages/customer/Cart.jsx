@@ -37,7 +37,7 @@ function Cart() {
   // Calculate item total (rent_price * days)
   const calculateItemTotal = (item) => {
     const days = calculateDays(item.start_date, item.end_date);
-    const rentPrice = item.rent_price || 0;
+    const rentPrice = parseFloat(item.rent_price) || 0;
     return (rentPrice * days * item.quantity).toFixed(2);
   };
 

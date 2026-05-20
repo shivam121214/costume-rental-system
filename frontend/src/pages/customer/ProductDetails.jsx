@@ -204,8 +204,8 @@ function ProductDetails() {
       end_date: form.end_date,
     };
 
-    console.log('Item being added to cart:', item); // Debug: check item object
-    console.log('Product rent_price:', product.rent_price); // Debug: check rent_price specifically
+    // console.log('Item being added to cart:', item); // Debug: check item object
+    // console.log('Product rent_price:', product.rent_price); // Debug: check rent_price specifically
 
     const res = addToCart(item);
 
