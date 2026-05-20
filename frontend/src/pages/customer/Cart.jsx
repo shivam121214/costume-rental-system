@@ -40,7 +40,9 @@ function Cart() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSendRequest = async () => {
+  const handleSendRequest = async (e) => {
+    e.preventDefault();
+    
     if (!validateForm()) {
       return;
     }
