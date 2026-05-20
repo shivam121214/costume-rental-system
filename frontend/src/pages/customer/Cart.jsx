@@ -304,6 +304,12 @@ function Cart() {
           ✨ Hint: Check availability to verify all items can be booked!
         </div>
 
+        {isCheckingAvailability && (
+          <div className="flex justify-center mb-8">
+            <img src="/loader.gif" alt="Loading" className="w-50 h-50" />
+          </div>
+        )}
+
         {/* Availability Check Button */}
         <div className="flex items-center justify-center gap-4 mb-8">
           <button
@@ -316,11 +322,6 @@ function Cart() {
             Check Availability!
           </button>
         </div>
-        {isCheckingAvailability && (
-          <div className="flex justify-center mb-8">
-            <img src="/loader.gif" alt="Loading" className="w-24 h-24" />
-          </div>
-        )}
 
         {/* Availability Status Box */}
         {!allAvailable && cart.length > 0 && (
