@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Search, ShoppingCart, User, Menu, X } from 'lucide-react';
+import { Search, ShoppingCart, User, Menu, X, ShoppingBag } from 'lucide-react';
 import { motion } from 'motion/react';
 
 function Navbar() {
@@ -109,6 +109,11 @@ function Navbar() {
                 </span>
               )}
             </Link>
+            {admin && (
+              <Link to="/admin/direct-order" className="hover:scale-110 transition-transform bg-[#bde0fe] p-2 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                <ShoppingBag className="w-5 h-5 text-black" strokeWidth={3} />
+              </Link>
+            )}
             
             <button 
               onClick={() => setMenuOpen(!menuOpen)}
@@ -165,13 +170,6 @@ function Navbar() {
                       className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
                     >
                       Bookings
-                    </Link>
-                    <Link 
-                      to="/admin/direct-order" 
-                      onClick={() => setMenuOpen(false)}
-                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
-                    >
-                      Direct Order
                     </Link>
                     <Link 
                       to="/admin/todays-returns" 
