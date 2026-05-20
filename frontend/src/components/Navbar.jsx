@@ -34,18 +34,26 @@ function Navbar() {
       return () => clearInterval(interval);
     }
 
+    // Initial cart count
     getCartCount();
 
-    // Listen for cart updates
-    window.addEventListener("cartUpdated", getCartCount);
+    // Listen for storage changes (from other tabs or same tab)
+    const handleStorageChange = () => {
+      getCartCount();
+    };
 
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("cartUpdated", handleStorageChange);
+
+    // Also check every 1 second for immediate feedback
     const interval = setInterval(() => {
       getCartCount();
-    }, 5000);
+    }, 1000);
 
     return () => {
       clearInterval(interval);
-      window.removeEventListener("cartUpdated", getCartCount);
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("cartUpdated", handleStorageChange);
     };
   }, [admin]);
 
