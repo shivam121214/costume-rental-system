@@ -5,6 +5,8 @@ export const getCart = () => {
 
 export const saveCart = (cart) => {
   localStorage.setItem("cart", JSON.stringify(cart));
+  // Emit custom event to notify cart update
+  window.dispatchEvent(new Event("cartUpdated"));
 };
 
 export const addToCart = (item) => {

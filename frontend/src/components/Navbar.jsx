@@ -36,11 +36,17 @@ function Navbar() {
 
     getCartCount();
 
+    // Listen for cart updates
+    window.addEventListener("cartUpdated", getCartCount);
+
     const interval = setInterval(() => {
       getCartCount();
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("cartUpdated", getCartCount);
+    };
   }, [admin]);
 
   const getPendingRequests = async () => {

@@ -158,7 +158,7 @@ function ProductDetails() {
   if (!product) return (
     <div className="min-h-screen bg-[#fdf8e6] flex items-center justify-center pt-20">
       <div className="text-center">
-        <div className="text-5xl mb-4">⏳</div>
+        <img src="/dance.gif" alt="Loading" className="w-32 h-32 mb-4 mx-auto" />
         <p className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>Loading...</p>
       </div>
     </div>
