@@ -15,6 +15,7 @@ function Cart() {
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const [showPhoneConfirmation, setShowPhoneConfirmation] = useState(false);
   const [normalizedPhoneForConfirm, setNormalizedPhoneForConfirm] = useState("");
@@ -169,40 +170,45 @@ function Cart() {
   };
 
   const checkAllAvailability = async () => {
-    const updatedCart = await Promise.all(
-      cart.map(async (item) => {
-        try {
-          const res = await axios.post(
-            "https://costume-rental-system.onrender.com/api/check-availability",
-            {
-              product_id: item.product_id,
-              variant: item.variant,
-              quantity: item.quantity,
-              start_date: item.start_date,
-              end_date: item.end_date,
-            },
-          );
+    setIsCheckingAvailability(true);
+    try {
+      const updatedCart = await Promise.all(
+        cart.map(async (item) => {
+          try {
+            const res = await axios.post(
+              "https://costume-rental-system.onrender.com/api/check-availability",
+              {
+                product_id: item.product_id,
+                variant: item.variant,
+                quantity: item.quantity,
+                start_date: item.start_date,
+                end_date: item.end_date,
+              },
+            );
 
-          return {
-            ...item,
-            is_available: res.data.available_quantity >= item.quantity,
-            message:
-              res.data.available_quantity >= item.quantity
-                ? ""
-                : `Only ${res.data.available_quantity} available`,
-          };
-        } catch (err) {
-          return {
-            ...item,
-            is_available: false,
-            message: "Error checking availability",
-          };
-        }
-      }),
-    );
+            return {
+              ...item,
+              is_available: res.data.available_quantity >= item.quantity,
+              message:
+                res.data.available_quantity >= item.quantity
+                  ? ""
+                  : `Only ${res.data.available_quantity} available`,
+            };
+          } catch (err) {
+            return {
+              ...item,
+              is_available: false,
+              message: "Error checking availability",
+            };
+          }
+        }),
+      );
 
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCart(updatedCart);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      setCart(updatedCart);
+    } finally {
+      setIsCheckingAvailability(false);
+    }
   };
 
   const allAvailable =
@@ -301,11 +307,21 @@ function Cart() {
         {/* Availability Check Button */}
         <button
           onClick={checkAllAvailability}
-          className="w-full px-6 py-4 rounded-3xl border-4 border-black font-black text-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:translate-x-0.5 transition-all flex items-center justify-center gap-3"
+          disabled={isCheckingAvailability}
+          className="w-full px-6 py-4 rounded-3xl border-4 border-black font-black text-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:translate-x-0.5 transition-all flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed"
           style={{ backgroundColor: '#06d6a0', color: 'black', fontFamily: "'Chewy', cursive" }}
         >
-          <CheckCircle className="w-8 h-8" strokeWidth={3} />
-          Check Availability!
+          {isCheckingAvailability ? (
+            <>
+              <img src="/loader.gif" alt="Loading" className="w-8 h-8" />
+              Checking...
+            </>
+          ) : (
+            <>
+              <CheckCircle className="w-8 h-8" strokeWidth={3} />
+              Check Availability!
+            </>
+          )}
         </button>
 
         {/* Availability Status Box */}
