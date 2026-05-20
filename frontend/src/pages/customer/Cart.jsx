@@ -271,9 +271,29 @@ function Cart() {
                   >
                     −
                   </button>
-                  <div className="flex-1 text-center font-black text-lg text-black px-3 py-2">
-                    {item.quantity}
-                  </div>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    className="flex-1 text-center font-black text-lg text-black bg-transparent focus:outline-none cursor-text px-3 py-2"
+                    value={item.quantity}
+                    onChange={(e) => {
+                      const val = e.target.value.trim();
+                      if (val === '') {
+                        handleChange(item.id, "quantity", '');
+                      } else {
+                        const num = parseInt(val);
+                        if (!isNaN(num) && num > 0) {
+                          handleChange(item.id, "quantity", num);
+                        }
+                      }
+                    }}
+                    onBlur={() => {
+                      if (item.quantity === '' || item.quantity === 0) {
+                        handleChange(item.id, "quantity", 1);
+                      }
+                    }}
+                    onFocus={(e) => e.target.select()}
+                  />
                   <button
                     type="button"
                     onClick={() => handleChange(item.id, "quantity", item.quantity + 1)}
