@@ -20,6 +20,7 @@ function Cart() {
   const [showPhoneConfirmation, setShowPhoneConfirmation] = useState(false);
   const [normalizedPhoneForConfirm, setNormalizedPhoneForConfirm] = useState("");
   const [whatsappModal, setWhatsappModal] = useState(null); // {phone, message, customerName}
+  const [removeConfirmItem, setRemoveConfirmItem] = useState(null);
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "https://costume-rental-system.onrender.com/api";
   const ADMIN_PHONE = import.meta.env.VITE_WHATSAPP_ADMIN_PHONE || "919876543210";
@@ -255,14 +256,14 @@ function Cart() {
                   )}
                 </div>
                 <button
-                  onClick={() => handleRemove(item.id)}
+                  onClick={() => setRemoveConfirmItem(item)}
                   className="w-10 h-10 bg-[#ef476f] text-white rounded-full border-2 border-black font-black flex items-center justify-center hover:scale-110 transition-transform"
                 >
                   ✕
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+              <div className="space-y-3 mb-4">
                 <div className="flex items-center border-3 border-black rounded-2xl overflow-hidden bg-[#fdf8e6] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   <button
                     type="button"
@@ -302,11 +303,13 @@ function Cart() {
                     +
                   </button>
                 </div>
-                <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#ffd166' }}>
-                  Start: {formatDateForMessage(item.start_date)}
-                </div>
-                <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#ef476f', color: 'white' }}>
-                  End: {formatDateForMessage(item.end_date)}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#ffd166' }}>
+                    Start: {formatDateForMessage(item.start_date)}
+                  </div>
+                  <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#ef476f', color: 'white' }}>
+                    End: {formatDateForMessage(item.end_date)}
+                  </div>
                 </div>
               </div>
 
@@ -528,6 +531,41 @@ function Cart() {
                   📱 Open WhatsApp
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Remove Item Confirmation Modal */}
+      {removeConfirmItem && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center p-4 z-50">
+          <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-8 max-w-sm w-full">
+            <h2 className="text-2xl font-black text-black mb-6" style={{ fontFamily: "'Chewy', cursive" }}>🗑️ Remove Item?</h2>
+            
+            <p className="font-bold text-black mb-4">Are you sure you want to remove:</p>
+            
+            <div className="bg-[#ffd166] border-3 border-black rounded-2xl p-4 mb-6 text-center">
+              <p className="text-lg font-black text-black">{removeConfirmItem.product_name}</p>
+              <p className="text-sm font-bold text-black mt-2">({removeConfirmItem.variant})</p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setRemoveConfirmItem(null)}
+                className="flex-1 px-4 py-3 border-3 border-black text-black rounded-2xl font-black hover:bg-[#fdf8e6]"
+              >
+                ❌ Cancel
+              </button>
+              <button
+                onClick={() => {
+                  handleRemove(removeConfirmItem.id);
+                  setRemoveConfirmItem(null);
+                }}
+                className="flex-1 px-4 py-3 text-white rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                style={{ backgroundColor: '#ef476f' }}
+              >
+                ✅ Remove
+              </button>
             </div>
           </div>
         </div>
