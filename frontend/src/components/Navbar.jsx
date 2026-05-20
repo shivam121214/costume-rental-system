@@ -171,27 +171,6 @@ function Navbar() {
                     >
                       Bookings
                     </Link>
-                    <Link 
-                      to="/admin/todays-returns" 
-                      onClick={() => setMenuOpen(false)}
-                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
-                    >
-                      Today's Returns
-                    </Link>
-                    <Link 
-                      to="/admin/active-rentals" 
-                      onClick={() => setMenuOpen(false)}
-                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
-                    >
-                      Active Rentals
-                    </Link>
-                    <Link 
-                      to="/admin/late-returns" 
-                      onClick={() => setMenuOpen(false)}
-                      className="block px-6 py-2 text-black font-bold hover:bg-[#ffd166] transition-colors border-b border-black"
-                    >
-                      Late Returns
-                    </Link>
                     <button
                       onClick={logout}
                       className="w-full text-left px-6 py-2 text-black font-bold hover:bg-[#ef476f] hover:text-white transition-colors"
