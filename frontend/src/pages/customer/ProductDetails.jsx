@@ -178,7 +178,9 @@ function ProductDetails() {
 
   const handleAddToCart = () => {
     if (!form.variant || !form.start_date || !form.end_date) {
-      alert("Please select size and dates");
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "⚠️ Please select size and dates", type: 'error' }
+      }));
       return;
     }
 
@@ -195,11 +197,11 @@ function ProductDetails() {
     const res = addToCart(item);
 
     if (!res.success) {
-      alert(res.message);
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: `❌ ${res.message}`, type: 'error' }
+      }));
       return;
     }
-
-    alert("Added to cart");
   };
 
   return (

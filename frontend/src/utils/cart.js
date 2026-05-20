@@ -35,6 +35,14 @@ export const addToCart = (item) => {
   cart.push(item);
   saveCart(cart);
 
+  // Show notification
+  window.dispatchEvent(new CustomEvent('showNotification', {
+    detail: {
+      message: `✨ ${item.product_name} added to cart!`,
+      type: 'success'
+    }
+  }));
+
   return { success: true };
 };
 

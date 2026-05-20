@@ -13,6 +13,7 @@ import Bookings from "./pages/admin/Bookings";
 import DirectOrder from "./pages/admin/DirectOrder";
 
 import Navbar from "./components/Navbar";
+import Notification from "./components/Notification";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TodaysReturns from "./pages/admin/TodaysReturns";
 import ActiveRentals from "./pages/admin/ActiveRentals";
@@ -23,6 +24,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
+      <Notification />
 
       <div className="pt-24">
         <Routes>
