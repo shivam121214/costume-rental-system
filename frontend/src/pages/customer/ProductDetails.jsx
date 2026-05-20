@@ -427,10 +427,18 @@ function ProductDetails() {
                   {!availability && (
                     <button
                       type="submit"
-                      className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all"
+                      disabled={isCheckingAvailability}
+                      className="w-full py-4 px-6 rounded-2xl font-black text-black text-lg border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                       style={{ backgroundColor: '#06d6a0' }}
                     >
-                      🔍 Check Availability
+                      {isCheckingAvailability ? (
+                        <>
+                          <img src="/dance.gif" alt="Checking" className="w-8 h-8" />
+                          Checking...
+                        </>
+                      ) : (
+                        <>🔍 Check Availability</>
+                      )}
                     </button>
                   )}
 
