@@ -281,7 +281,9 @@ function Cart() {
               </div>
 
               <div className="flex items-center font-black text-lg">
-                {item.is_available === false ? (
+                {item.is_available === null ? (
+                  <span style={{ color: '#a0a0a0' }}>⏳ Check availability</span>
+                ) : item.is_available === false ? (
                   <span style={{ color: '#ef476f' }}>❌ Not Available</span>
                 ) : (
                   <span style={{ color: '#06d6a0' }}>✅ Available</span>
