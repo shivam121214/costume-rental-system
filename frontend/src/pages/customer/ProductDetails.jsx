@@ -45,6 +45,7 @@ function ProductDetails() {
 
   const getProduct = async () => {
     const res = await axios.get(`${API_URL}/api/products/${id}`);
+    console.log('Product fetched:', res.data); // Debug: check what data we get
     setProduct(res.data);
 
     if (res.data.image) {
@@ -202,6 +203,9 @@ function ProductDetails() {
       start_date: form.start_date,
       end_date: form.end_date,
     };
+
+    console.log('Item being added to cart:', item); // Debug: check item object
+    console.log('Product rent_price:', product.rent_price); // Debug: check rent_price specifically
 
     const res = addToCart(item);
 
