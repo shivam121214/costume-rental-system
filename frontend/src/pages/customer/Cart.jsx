@@ -264,18 +264,18 @@ function Cart() {
               </div>
 
               <div className="space-y-3 mb-4">
-                <div className="flex items-center border-3 border-black rounded-2xl overflow-hidden bg-[#fdf8e6] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex items-center border-2 border-black rounded-xl overflow-hidden bg-[#fdf8e6] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] w-fit">
                   <button
                     type="button"
                     onClick={() => handleChange(item.id, "quantity", Math.max(1, item.quantity - 1))}
-                    className="px-3 py-2 text-black hover:bg-[#ffd166] transition-colors border-r-3 border-black font-black text-lg"
+                    className="px-2 py-1 text-black hover:bg-[#ffd166] transition-colors border-r-2 border-black font-black text-sm"
                   >
                     −
                   </button>
                   <input
                     type="text"
                     inputMode="numeric"
-                    className="flex-1 text-center font-black text-lg text-black bg-transparent focus:outline-none cursor-text px-3 py-2"
+                    className="flex-1 text-center font-black text-sm text-black bg-transparent focus:outline-none cursor-text px-4 py-1 w-12"
                     value={item.quantity}
                     onChange={(e) => {
                       const val = e.target.value.trim();
@@ -298,7 +298,7 @@ function Cart() {
                   <button
                     type="button"
                     onClick={() => handleChange(item.id, "quantity", item.quantity + 1)}
-                    className="px-3 py-2 text-black hover:bg-[#06d6a0] transition-colors border-l-3 border-black font-black text-lg"
+                    className="px-2 py-1 text-black hover:bg-[#06d6a0] transition-colors border-l-2 border-black font-black text-sm"
                   >
                     +
                   </button>
