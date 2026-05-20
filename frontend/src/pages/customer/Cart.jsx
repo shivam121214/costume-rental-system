@@ -25,6 +25,29 @@ function Cart() {
   const API_BASE_URL = import.meta.env.VITE_API_URL || "https://costume-rental-system.onrender.com/api";
   const ADMIN_PHONE = import.meta.env.VITE_WHATSAPP_ADMIN_PHONE || "919876543210";
 
+  // Calculate number of days between two dates
+  const calculateDays = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays || 1;
+  };
+
+  // Calculate item total (rent_price * days)
+  const calculateItemTotal = (item) => {
+    const days = calculateDays(item.start_date, item.end_date);
+    const rentPrice = item.rent_price || 0;
+    return (rentPrice * days * item.quantity).toFixed(2);
+  };
+
+  // Calculate grand total
+  const calculateGrandTotal = () => {
+    return cart.reduce((total, item) => {
+      return total + parseFloat(calculateItemTotal(item));
+    }, 0).toFixed(2);
+  };
+
   const validateForm = () => {
     const errors = {};
 
@@ -311,6 +334,18 @@ function Cart() {
                     End: {formatDateForMessage(item.end_date)}
                   </div>
                 </div>
+
+                {/* Price Calculation */}
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                  <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#06d6a0' }}>
+                    <p className="text-xs opacity-70">Days: {calculateDays(item.start_date, item.end_date)}</p>
+                    <p>₹{item.rent_price || 0}/day</p>
+                  </div>
+                  <div className="px-3 py-2 rounded-2xl border-2 border-black font-black text-sm text-center" style={{ backgroundColor: '#8338ec', color: 'white' }}>
+                    <p className="text-xs opacity-70">Total</p>
+                    <p className="text-xl">₹{calculateItemTotal(item)}</p>
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-center font-black text-lg">
@@ -373,6 +408,16 @@ function Cart() {
               <div className="text-center sm:text-left">
                 <h3 className="text-4xl font-black text-black mb-2" style={{ fontFamily: "'Chewy', cursive" }}>Yay! Everything's Here!</h3>
                 <p className="font-bold text-black text-lg">Tell us who you are so we can prepare your magical costumes.</p>
+              </div>
+            </div>
+
+            {/* Grand Total */}
+            <div className="bg-white border-4 border-black rounded-3xl p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]" style={{ transform: 'rotate(-1deg)' }}>
+              <div className="flex items-center justify-between">
+                <h3 className="text-4xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>Grand Total:</h3>
+                <div className="px-8 py-4 rounded-2xl border-4 border-black font-black text-3xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={{ backgroundColor: '#ffd166' }}>
+                  ₹{calculateGrandTotal()}
+                </div>
               </div>
             </div>
 

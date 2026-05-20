@@ -196,6 +196,7 @@ function ProductDetails() {
       product_id: product.id,
       product_name: product.name,
       image: product.image,
+      rent_price: product.rent_price,
       variant: form.variant,
       quantity: Number(form.quantity),
       start_date: form.start_date,
