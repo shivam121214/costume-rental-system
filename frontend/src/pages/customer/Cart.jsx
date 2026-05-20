@@ -315,10 +315,10 @@ function Cart() {
             <CheckCircle className="w-8 h-8" strokeWidth={3} />
             Check Availability!
           </button>
-          {isCheckingAvailability && (
-            <img src="/loader.gif" alt="Loading" className="w-12 h-12" />
-          )}
         </div>
+        {isCheckingAvailability && (
+          <img src="/loader.gif" alt="Loading" className="w-12 h-12" />
+        )}
 
         {/* Availability Status Box */}
         {!allAvailable && cart.length > 0 && (
