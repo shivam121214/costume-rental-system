@@ -111,11 +111,7 @@ function Cart() {
         customerName: customerName
       });
 
-      // Clear cart
-      localStorage.removeItem("cart");
-      setCart([]);
-      setCustomerName("");
-      setPhone("");
+      setIsSubmitting(false);
 
     } catch (err) {
       console.error("Error:", err);
@@ -123,7 +119,6 @@ function Cart() {
         || err.message 
         || "Error sending request. Please try again.";
       alert(`❌ ${errorMessage}`);
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -459,7 +454,14 @@ function Cart() {
               {/* Buttons */}
               <div className="flex gap-3">
                 <button
-                  onClick={() => setWhatsappModal(null)}
+                  onClick={() => {
+                    setWhatsappModal(null);
+                    // Clear cart after modal is closed
+                    localStorage.removeItem("cart");
+                    setCart([]);
+                    setCustomerName("");
+                    setPhone("");
+                  }}
                   className="flex-1 px-4 py-3 border-3 border-black text-black rounded-2xl font-black hover:bg-[#fdf8e6]"
                 >
                   Done
@@ -468,6 +470,11 @@ function Cart() {
                   onClick={() => {
                     openWhatsAppDeepLink(whatsappModal.phone, whatsappModal.message);
                     setWhatsappModal(null);
+                    // Clear cart after opening WhatsApp
+                    localStorage.removeItem("cart");
+                    setCart([]);
+                    setCustomerName("");
+                    setPhone("");
                   }}
                   className="flex-1 px-4 py-3 text-white rounded-2xl font-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                   style={{ backgroundColor: '#06d6a0' }}
