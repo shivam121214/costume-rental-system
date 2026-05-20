@@ -37,6 +37,17 @@ class BookingController extends Controller
         return response()->json(['message' => 'Returned']);
     }
 
+    public function markPickup($id)
+    {
+        $booking = Booking::findOrFail($id);
+
+        $booking->update([
+            'status' => 'picked'
+        ]);
+
+        return response()->json(['message' => 'Marked as picked']);
+    }
+
     public function directOrder(Request $request)
     {
         $data = $request->validate([
@@ -66,6 +77,17 @@ class BookingController extends Controller
         ]);
 
         return response()->json($booking, 201);
+    }
+
+    public function todaysPickups()
+    {
+        $bookings = Booking::with('product')
+            ->whereDate('start_date', now())
+            ->where('status', '!=', 'picked')
+            ->latest()
+            ->get();
+
+        return response()->json($bookings);
     }
 
     public function todaysReturns()

@@ -15,6 +15,7 @@ import DirectOrder from "./pages/admin/DirectOrder";
 import Navbar from "./components/Navbar";
 import Notification from "./components/Notification";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TodaysPickups from "./pages/admin/TodaysPickups";
 import TodaysReturns from "./pages/admin/TodaysReturns";
 import ActiveRentals from "./pages/admin/ActiveRentals";
 import LateReturns from "./pages/admin/LateReturns";
@@ -80,6 +81,15 @@ function App() {
           element={
             <ProtectedRoute>
               <DirectOrder />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/todays-pickups"
+          element={
+            <ProtectedRoute>
+              <TodaysPickups />
             </ProtectedRoute>
           }
         />

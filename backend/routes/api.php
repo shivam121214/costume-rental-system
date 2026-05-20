@@ -32,7 +32,9 @@ Route::post('/requests/{id}/accept', [BookingRequestController::class, 'accept']
 Route::get('/bookings', [BookingController::class, 'index']);
 Route::post('/bookings/{id}/status', [BookingController::class, 'updateStatus']);
 Route::post('/bookings/{id}/return', [BookingController::class, 'markReturn']);
+Route::post('/bookings/{id}/pickup', [BookingController::class, 'markPickup']);
 Route::post('/direct-order', [BookingController::class, 'directOrder']);
+Route::get('/bookings/todays-pickups', [BookingController::class, 'todaysPickups']);
 Route::get('/bookings/todays-returns', [BookingController::class, 'todaysReturns']);
 Route::get('/bookings/active-rentals', [BookingController::class, 'activeRentals']);
 Route::get('/bookings/late-returns', [BookingController::class, 'lateReturns']);

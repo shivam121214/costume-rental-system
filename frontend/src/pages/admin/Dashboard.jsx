@@ -20,11 +20,12 @@ function Dashboard() {
     total_bookings: 0,
     active_rentals: 0,
     late_returns: 0,
+    todays_pickups: 0,
+    todays_returns: 0,
     total_revenue: 0,
     paid_amount: 0,
     pending_amount: 0,
     partial_count: 0,
-    todays_returns: 0,
   });
 
   useEffect(() => {
@@ -94,6 +95,16 @@ function DashboardContent({ stats, navigate }) {
             badgeColor="bg-[#ef476f]"
             badgeTextColor="text-white"
             onClick={() => navigate("/admin/requests")}
+          />
+          <MetricCard
+            title="Today's Pickups"
+            value={stats.todays_pickups}
+            icon={
+              <CalendarDays className="w-8 h-8 text-black" strokeWidth={2.5} />
+            }
+            badgeColor="bg-[#06d6a0]"
+            badgeTextColor="text-black"
+            onClick={() => navigate("/admin/todays-pickups")}
           />
           <MetricCard
             title="Today's Returns"
