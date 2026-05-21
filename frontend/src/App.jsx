@@ -4,6 +4,7 @@ import Home from "./pages/customer/Home";
 import Products from "./pages/customer/Products";
 import ProductDetails from "./pages/customer/ProductDetails";
 import Themes from "./pages/customer/Themes";
+import TermsAndConditions from "./pages/customer/TermsAndConditions";
 
 import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
@@ -35,6 +36,7 @@ function App() {
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/themes" element={<Themes />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
         {/* Admin Login */}
         <Route path="/admin/login" element={<Login />} />

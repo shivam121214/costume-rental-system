@@ -4,19 +4,19 @@ import { motion } from 'motion/react';
 const testimonials = [
   {
     id: 1,
-    name: 'Sarah Johnson',
+    name: 'Deepali Deewakar',
     role: 'Fairy Mom',
     rating: 5,
-    text: 'Absolutely amazing! The fairy wings were so sparky, my daughter refused to take them off for 3 days straight. A magical hit!',
+    text: 'Adya fancy dress is amazing for any fancy dress , or festival clothing as it provides you a fresh, good condition, and shiny dresses. I have a wonderful experience with this shop from 2 years. I could not say about the honour of this shop, she is very polite and always ready for provide the things on time  every time. There Pricing are reasonable for everyone pocket. You can book your festival, school function, skit and many more dresses from them. Happy customer Deepali',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=facearea&facepad=2&w=256&h=256&q=80',
     color: '#ff9f1c'
   },
   {
     id: 2,
-    name: 'Michael Chen',
+    name: 'Shaily Dubey',
     role: 'Amateur Superhero',
     rating: 5,
-    text: 'Wore the Spider suit to my office party. It survived jumping over desks and countless photos. Quality is out of this world!',
+    text: 'A Delightful Experience at Aadya Fancy Dress Shop! I had a wonderful experience at Aadya Fancy Dress Shop! The collection is impressive, with a wide variety of costumes for every theme imaginable — from fairy tale characters to historical figures and creative, one-of-a-kind outfits. Everything is well-maintained, clean, and ready to wear. Whether it’s for school events, parties, or festivals, Aadya is now my go-to place for costumes. Highly recommended for anyone looking to make their special occasion even more memorable!',
     avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?crop=entropy&cs=tinysrgb&fit=facearea&facepad=2&w=256&h=256&q=80',
     color: '#118ab2'
   },
@@ -25,7 +25,7 @@ const testimonials = [
     name: 'Emma Williams',
     role: 'T-Rex Wrangler',
     rating: 5,
-    text: 'The inflatable T-Rex costume was hilarious! The battery lasted forever and I was the life of the Halloween bash. Worth every penny!',
+    text: 'Excellent rental costume shop! Wide range of costumes for kids and adults, all in neat and hygienic condition. Prices are reasonable and the service is very friendly. Had a smooth and pleasant experience. Will surely visit again.',
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=facearea&facepad=2&w=256&h=256&q=80',
     color: '#ef476f'
   }

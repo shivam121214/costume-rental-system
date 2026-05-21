@@ -1,4 +1,5 @@
 import { Heart, Phone, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 
 export function Footer() {
@@ -73,7 +74,7 @@ export function Footer() {
           <p>&copy; 2026 Party Palooza! All rules broken.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-[#ffd166] transition-colors underline decoration-2 underline-offset-4">Privacy Rules</a>
-            <a href="#" className="hover:text-[#ffd166] transition-colors underline decoration-2 underline-offset-4">Boring Terms</a>
+            <Link to="/terms-and-conditions" className="hover:text-[#ffd166] transition-colors underline decoration-2 underline-offset-4">Terms & Conditions</Link>
           </div>
         </div>
       </div>
