@@ -3,16 +3,24 @@ import axios from "axios";
 
 function TodaysPickups() {
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchPickups();
   }, []);
 
   const fetchPickups = async () => {
-    const res = await axios.get(
-      "https://costume-rental-system.onrender.com/api/bookings/todays-pickups",
-    );
-    setBookings(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        "https://costume-rental-system.onrender.com/api/bookings/todays-pickups",
+      );
+      setBookings(res.data);
+    } catch (err) {
+      console.error("Error fetching today's pickups:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePickup = async (id) => {
@@ -39,7 +47,12 @@ function TodaysPickups() {
           Today's Pickups
         </h1>
 
-        {bookings.length === 0 ? (
+        {loading ? (
+          <div className="bg-white border-4 border-black rounded-3xl p-12 text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <img src="/ghost.gif" alt="Loading" className="w-32 h-32 mb-4 mx-auto" />
+            <p className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>Loading Today's Pickups...</p>
+          </div>
+        ) : bookings.length === 0 ? (
           <div className="bg-white border-4 border-black rounded-3xl p-12 text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
             <p className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>✨ No pickups scheduled for today</p>
             <p className="text-black font-bold mt-2">Great day for you!</p>

@@ -8,16 +8,24 @@ import {
 function ActiveRentals() {
   const [bookings, setBookings] = useState([]);
   const [whatsappModal, setWhatsappModal] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchRentals();
   }, []);
 
   const fetchRentals = async () => {
-    const res = await axios.get(
-      "https://costume-rental-system.onrender.com/api/bookings/active-rentals",
-    );
-    setBookings(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        "https://costume-rental-system.onrender.com/api/bookings/active-rentals",
+      );
+      setBookings(res.data);
+    } catch (err) {
+      console.error("Error fetching active rentals:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleReturn = async (id) => {
@@ -62,7 +70,12 @@ function ActiveRentals() {
           Active Rentals
         </h1>
 
-        {bookings.length === 0 ? (
+        {loading ? (
+          <div className="bg-white border-4 border-black rounded-3xl p-12 text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <img src="/ghost.gif" alt="Loading" className="w-32 h-32 mb-4 mx-auto" />
+            <p className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>Loading Active Rentals...</p>
+          </div>
+        ) : bookings.length === 0 ? (
           <div className="bg-white border-4 border-black rounded-3xl p-12 text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
             <p className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>✨ No active rentals</p>
             <p className="text-black font-bold mt-2">All rented out! Great business!</p>

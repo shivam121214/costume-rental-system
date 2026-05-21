@@ -3,16 +3,24 @@ import axios from "axios";
 
 function LateReturns() {
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchReturns();
   }, []);
 
   const fetchReturns = async () => {
-    const res = await axios.get(
-      "https://costume-rental-system.onrender.com/api/bookings/late-returns",
-    );
-    setBookings(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        "https://costume-rental-system.onrender.com/api/bookings/late-returns",
+      );
+      setBookings(res.data);
+    } catch (err) {
+      console.error("Error fetching late returns:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleReturn = async (id) => {
@@ -39,7 +47,12 @@ function LateReturns() {
           Late Returns
         </h1>
 
-        {bookings.length === 0 ? (
+        {loading ? (
+          <div className="bg-white border-4 border-black rounded-3xl p-12 text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <img src="/ghost.gif" alt="Loading" className="w-32 h-32 mb-4 mx-auto" />
+            <p className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>Loading Late Returns...</p>
+          </div>
+        ) : bookings.length === 0 ? (
           <div className="bg-white border-4 border-black rounded-3xl p-12 text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
             <p className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>✨ No late returns</p>
             <p className="text-black font-bold mt-2">Everything's on track!</p>
