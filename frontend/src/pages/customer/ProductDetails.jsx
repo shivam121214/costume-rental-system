@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { addToCart } from "../../utils/cart";
 import {
   openWhatsAppDeepLink,
@@ -267,6 +267,27 @@ function ProductDetails() {
                 ))}
               </div>
             )}
+
+            {/* Terms and Conditions Card */}
+            <Link 
+              to="/terms-and-conditions"
+              className="group border-4 border-black rounded-2xl p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all cursor-pointer"
+              style={{ backgroundColor: '#bde0fe' }}
+            >
+              <div className="flex items-start gap-4">
+                <div className="text-4xl group-hover:scale-110 transition-transform">
+                  📋
+                </div>
+                <div>
+                  <h3 className="font-black text-black text-lg mb-1 group-hover:underline">
+                    Rental Terms & Conditions
+                  </h3>
+                  <p className="text-black/80 text-sm font-bold">
+                    Important policies about cancellations, payments, damages & returns
+                  </p>
+                </div>
+              </div>
+            </Link>
           </div>
 
           {/* Right Side - Details & Form */}
