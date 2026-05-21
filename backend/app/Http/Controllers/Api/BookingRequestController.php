@@ -11,12 +11,13 @@ use App\Services\WhatsApp\WhatsAppMessageService;
 
 class BookingRequestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = BookingRequest::with('product')->latest();
 
-        if (request()->has('status') && request('status') !== 'all') {
-            $query->where('status', request('status'));
+        $status = $request->query('status');
+        if ($status && $status !== 'all') {
+            $query->where('status', $status);
         }
 
         $requests = $query->paginate(10);
@@ -45,10 +46,10 @@ class BookingRequestController extends Controller
 
         if ($nextPage) {
             // add status param again
-            $status = request('status');
+            $statusParam = $request->query('status');
 
-            if ($status && $status !== 'all') {
-                $nextPage .= '&status=' . $status;
+            if ($statusParam && $statusParam !== 'all') {
+                $nextPage .= '&status=' . urlencode($statusParam);
             }
 
             // fix https
@@ -101,7 +102,7 @@ class BookingRequestController extends Controller
         $booking = BookingRequest::create($data);
 
         // Generate WhatsApp message and deep-link
-        $adminPhoneNumber = config('services.whatsapp.admin_phone');
+        $adminPhoneNumber = config('services.whatsapp.admin_phone') ?? '+1234567890';
         
         $messageText = WhatsAppMessageService::generateRequestSubmissionMessage(
             [
@@ -123,7 +124,7 @@ class BookingRequestController extends Controller
         ], 201);
     }
 
-    public function reject(Request $request, $id)
+    public function reject(Request $request, int $id)
     {
         $item = BookingRequest::findOrFail($id);
 
@@ -135,7 +136,7 @@ class BookingRequestController extends Controller
         return response()->json(['message' => 'Rejected']);
     }
 
-    public function accept($id)
+    public function accept(int $id)
     {
         $requestItem = BookingRequest::findOrFail($id);
 

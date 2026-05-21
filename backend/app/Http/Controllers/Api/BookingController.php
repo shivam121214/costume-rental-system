@@ -15,7 +15,7 @@ class BookingController extends Controller
         );
     }
 
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request, int $id)
     {
         $booking = Booking::findOrFail($id);
 
@@ -26,7 +26,7 @@ class BookingController extends Controller
         return response()->json($booking);
     }
 
-    public function markReturn($id)
+    public function markReturn(int $id)
     {
         $booking = Booking::findOrFail($id);
 
@@ -37,7 +37,7 @@ class BookingController extends Controller
         return response()->json(['message' => 'Returned']);
     }
 
-    public function markPickup($id)
+    public function markPickup(int $id)
     {
         $booking = Booking::findOrFail($id);
 
