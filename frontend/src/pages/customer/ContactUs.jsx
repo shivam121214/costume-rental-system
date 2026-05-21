@@ -88,6 +88,7 @@ export function ContactUs() {
             }}
           >
             Get In Touch!
+            Or Request for custom costume
           </motion.h2>
         </div>
 
