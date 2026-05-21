@@ -9,6 +9,7 @@ import {
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [whatsappModal, setWhatsappModal] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("newest");
@@ -18,10 +19,17 @@ function Bookings() {
   }, []);
 
   const getBookings = async () => {
-    const res = await axios.get(
-      "https://costume-rental-system.onrender.com/api/bookings",
-    );
-    setBookings(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        "https://costume-rental-system.onrender.com/api/bookings",
+      );
+      setBookings(res.data);
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const updateStatus = async (id, status) => {
@@ -163,9 +171,15 @@ function Bookings() {
           </div>
         </div>
 
-        {/* Bookings Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bookings
+        {loading ? (
+          <div className="bg-white border-4 border-black rounded-3xl p-12 text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+            <img src="/ghost.gif" alt="Loading" className="w-32 h-32 mb-4 mx-auto" />
+            <p className="text-2xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>Loading Bookings...</p>
+          </div>
+        ) : (
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {bookings
             .filter(b => 
               b.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
               b.product?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -243,18 +257,19 @@ function Bookings() {
                 
               </div>
             ))}
-        </div>
-
-        {/* Empty State */}
-        {bookings.filter(b => 
-          b.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          b.product?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          b.phone.includes(searchQuery)
-        ).length === 0 && (
-          <div className="col-span-full py-20 text-center bg-white border-4 border-dashed border-black rounded-3xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-            <p className="text-5xl mb-4">🔍</p>
-            <p className="text-3xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>No bookings found!</p>
-            <p className="text-black font-bold mt-2">Try searching for something else.</p>
+            {/* Empty State */}
+            {bookings.filter(b => 
+              b.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              b.product?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              b.phone.includes(searchQuery)
+            ).length === 0 && (
+              <div className="col-span-full py-20 text-center bg-white border-4 border-dashed border-black rounded-3xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                <p className="text-5xl mb-4">🔍</p>
+                <p className="text-3xl font-black text-black" style={{ fontFamily: "'Chewy', cursive" }}>No bookings found!</p>
+                <p className="text-black font-bold mt-2">Try searching for something else.</p>
+              </div>
+            )}
+            </div>
           </div>
         )}
       </main>
