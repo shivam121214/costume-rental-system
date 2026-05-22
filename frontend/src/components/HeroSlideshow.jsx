@@ -190,7 +190,6 @@ export function HeroSlideshow({ products = [] }) {
                 : 'bg-[#ffd166] text-black'
             }`}
           >
-            {isAutoPlay ? '▶ Auto' : '⏸ Manual'}
           </motion.div>
         </div>
       )}
