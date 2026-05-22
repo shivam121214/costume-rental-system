@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-export function HeroSlideshow({ products = [] }) {
+export function HeroSlideshow({ products = [], isLoading = false }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const API_URL = 'https://costume-rental-system.onrender.com';
@@ -71,7 +70,25 @@ export function HeroSlideshow({ products = [] }) {
     setCurrentIndex(index);
   };
 
-  // If no products, show fallback
+  // If still loading, show loading state
+  if (isLoading) {
+    return (
+      <div className="relative z-10 rounded-3xl border-4 border-black overflow-hidden shadow-[12px_12px_0_0_rgba(0,0,0,1)] bg-white aspect-square flex items-center justify-center">
+        <div className="text-center">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-16 h-16 border-4 border-[#ffd166] border-t-[#ff006e] rounded-full mx-auto mb-4"
+          />
+          <p className="text-lg font-bold text-black" style={{ fontFamily: "'Chewy', cursive" }}>
+            Loading Hero...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // If no products after loading, show fallback
   if (heroProducts.length === 0) {
     return (
       <div className="relative z-10 rounded-3xl border-4 border-black overflow-hidden shadow-[12px_12px_0_0_rgba(0,0,0,1)] bg-white aspect-square">

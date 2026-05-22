@@ -12,6 +12,7 @@ import { HeroSlideshow } from "../../components/HeroSlideshow";
 
 function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const API_URL = 'https://costume-rental-system.onrender.com';
 
   useEffect(() => {
@@ -20,6 +21,7 @@ function Home() {
 
   const fetchFeaturedProducts = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(`${API_URL}/api/products`);
       // Filter for is_featured products (actual featured products, not featured section)
       const featured = res.data.filter(product => product.is_featured && product.status === 'available');
@@ -27,6 +29,8 @@ function Home() {
     } catch (error) {
       console.error('Error fetching featured products:', error);
       setFeaturedProducts([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,7 +101,7 @@ function Home() {
               animate={{ opacity: 1, scale: 1, rotate: -2 }}
               transition={{ type: "spring", bounce: 0.4, duration: 1, delay: 0.2 }}
             >
-              <HeroSlideshow products={featuredProducts} />
+              <HeroSlideshow products={featuredProducts} isLoading={loading} />
             </motion.div>
             {/* Decorative dots/stars */}
             <div className="absolute -top-8 -right-8 text-[#ffd166] hidden md:block animate-bounce">
