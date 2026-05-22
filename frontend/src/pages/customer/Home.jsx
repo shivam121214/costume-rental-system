@@ -41,10 +41,8 @@ function Home() {
   const fetchFeaturedProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_URL}/api/products`);
-      // Filter for is_featured products (actual featured products, not featured section)
-      const featured = res.data.filter(product => product.is_featured && product.status === 'available');
-      setFeaturedProducts(featured);
+      const res = await axios.get(`${API_URL}/api/products/featured-section`);
+      setFeaturedProducts(res.data);
     } catch (error) {
       console.error('Error fetching featured products:', error);
       setFeaturedProducts([]);
