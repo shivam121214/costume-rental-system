@@ -6,6 +6,7 @@ import { FeaturedProducts } from "./FeaturedProducts";
 import { Testimonials } from "./Testimonials";
 import { ContactUs } from "./ContactUs";
 import { Footer } from "../../components/Footer";
+import { HeroSlideshow } from "../../components/HeroSlideshow";
 
 function Home() {
   return (
@@ -77,13 +78,8 @@ function Home() {
               initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
               animate={{ opacity: 1, scale: 1, rotate: -2 }}
               transition={{ type: "spring", bounce: 0.4, duration: 1, delay: 0.2 }}
-              className="relative z-10 rounded-3xl border-4 border-black overflow-hidden shadow-[12px_12px_0_0_rgba(0,0,0,1)] bg-white aspect-square"
             >
-              <img
-                src="https://images.unsplash.com/photo-1713357796381-591aadda442b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxraWRzJTIwZmFuY3klMjBkcmVzcyUyMHBhcnR5JTIwZnVuJTIwYnJpZ2h0fGVufDF8fHx8MTc3NzYxODIwMHww&ixlib=rb-4.1.0&q=80&w=1080"
-                alt="Kids in fun costumes"
-                className="w-full h-full object-cover"
-              />
+              <HeroSlideshow />
             </motion.div>
             {/* Decorative dots/stars */}
             <div className="absolute -top-8 -right-8 text-[#ffd166] hidden md:block animate-bounce">
