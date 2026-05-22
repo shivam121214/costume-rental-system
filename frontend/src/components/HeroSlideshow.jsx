@@ -6,9 +6,10 @@ export function HeroSlideshow({ products = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const API_URL = 'https://costume-rental-system.onrender.com';
-  const SLIDE_INTERVAL = 5000; // 5 seconds
+  const SLIDE_INTERVAL = 4000; // 4 seconds
 
   // Use first 4 featured products for hero
   const heroProducts = products.slice(0, 4);
@@ -19,10 +20,35 @@ export function HeroSlideshow({ products = [] }) {
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % heroProducts.length);
+      setProgress(0); // Reset progress when slide changes
     }, SLIDE_INTERVAL);
 
     return () => clearInterval(interval);
   }, [isAutoPlay, heroProducts.length]);
+
+  // Animate progress bar
+  useEffect(() => {
+    if (!isAutoPlay || heroProducts.length === 0) return;
+
+    let animationFrameId;
+    let startTime = Date.now();
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progressPercent = (elapsed / SLIDE_INTERVAL) * 100;
+      
+      if (progressPercent < 100) {
+        setProgress(Math.min(progressPercent, 100));
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setProgress(100);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isAutoPlay, heroProducts.length, currentIndex]);
 
   const getImageUrl = (path) => {
     if (!path) return '';
@@ -62,6 +88,18 @@ export function HeroSlideshow({ products = [] }) {
 
   return (
     <div className="relative z-10 rounded-3xl border-4 border-black overflow-hidden shadow-[12px_12px_0_0_rgba(0,0,0,1)] bg-white aspect-square group">
+      {/* Progress Bar - Shows slide change countdown */}
+      {heroProducts.length > 1 && isAutoPlay && (
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gray-300 z-30 rounded-t-2xl overflow-hidden">
+          <motion.div
+            className="h-full bg-linear-to-r from-[#ff006e] to-[#ffd166]"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: progress / 100 }}
+            transition={{ type: "linear", duration: 0.1 }}
+            style={{ transformOrigin: "left" }}
+          />
+        </div>
+      )}
       {/* Main Image with Animation */}
       <AnimatePresence mode="wait">
         <motion.div
