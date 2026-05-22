@@ -83,12 +83,9 @@ function Home() {
               className="flex flex-col sm:flex-row gap-6 items-center justify-center md:justify-start"
             >
               <Link to="/products" className="group relative bg-[#06d6a0] text-black px-8 py-4 rounded-xl text-lg font-bold border-[3px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center gap-3">
-                Shop Kids
+                Browse Your Childhood Dreams
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" strokeWidth={3} />
               </Link>
-              <button className="group relative bg-[#118ab2] text-white px-8 py-4 rounded-xl text-lg font-bold border-[3px] border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center gap-3">
-                Shop Adults
-              </button>
             </motion.div>
           </div>
 
