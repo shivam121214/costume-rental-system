@@ -1,27 +1,14 @@
 import { Star, Heart } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 
 const COLOR_PALETTE = ['#ef476f', '#ffd166', '#118ab2', '#06d6a0', '#ff9f1c', '#8338ec'];
 
-export function FeaturedProducts() {
-  const [products, setProducts] = useState([]);
+export function FeaturedProducts({ products = [] }) {
   const API_URL = 'https://costume-rental-system.onrender.com';
-
-  useEffect(() => {
-    fetchFeaturedProducts();
-  }, []);
-
-  const fetchFeaturedProducts = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/api/products/featured-section`);
-      const featured = res.data.slice(0, 6);
-      setProducts(featured);
-    } catch (error) {
-      console.error('Error fetching featured products:', error);
-    }
-  };
+  
+  // Use first 6 featured products for the section
+  const sectionProducts = products.slice(0, 6);
 
   const getImageUrl = (path) => {
     if (!path) return '';
@@ -63,10 +50,10 @@ export function FeaturedProducts() {
           </motion.h2>
         </div>
 
-        {products.length > 0 ? (
+        {sectionProducts.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-              {products.map((product, index) => (
+              {sectionProducts.map((product, index) => (
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}

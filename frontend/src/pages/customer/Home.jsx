@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { motion } from 'motion/react';
 import { Sparkles, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Categories } from "./Categories";
 import { FeaturedProducts } from "./FeaturedProducts";
 import { Testimonials } from "./Testimonials";
@@ -9,6 +11,23 @@ import { Footer } from "../../components/Footer";
 import { HeroSlideshow } from "../../components/HeroSlideshow";
 
 function Home() {
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const API_URL = 'https://costume-rental-system.onrender.com';
+
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, []);
+
+  const fetchFeaturedProducts = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/products/featured-section`);
+      setFeaturedProducts(res.data);
+    } catch (error) {
+      console.error('Error fetching featured products:', error);
+      setFeaturedProducts([]);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#fdf8e6]">
       {/* Hero Section */}
@@ -79,7 +98,7 @@ function Home() {
               animate={{ opacity: 1, scale: 1, rotate: -2 }}
               transition={{ type: "spring", bounce: 0.4, duration: 1, delay: 0.2 }}
             >
-              <HeroSlideshow />
+              <HeroSlideshow products={featuredProducts} />
             </motion.div>
             {/* Decorative dots/stars */}
             <div className="absolute -top-8 -right-8 text-[#ffd166] hidden md:block animate-bounce">
@@ -100,7 +119,7 @@ function Home() {
       <Categories />
 
       {/* Featured Products Section */}
-      <FeaturedProducts />
+      <FeaturedProducts products={featuredProducts} />
 
       {/* Testimonials Section */}
       <Testimonials />

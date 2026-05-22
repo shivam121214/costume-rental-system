@@ -1,52 +1,28 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import axios from 'axios';
 import { motion, AnimatePresence } from 'motion/react';
 
-export function HeroSlideshow() {
-  const [products, setProducts] = useState([]);
+export function HeroSlideshow({ products = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const API_URL = 'https://costume-rental-system.onrender.com';
   const SLIDE_INTERVAL = 5000; // 5 seconds
 
-  // Fetch featured products for hero section
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(`${API_URL}/api/products/featured-section`);
-      const featured = res.data.slice(0, 4); // Limit to 4 products for hero
-      if (featured.length > 0) {
-        setProducts(featured);
-        setError(null);
-      } else {
-        setError('No featured products available');
-      }
-    } catch (err) {
-      console.error('Error fetching hero products:', err);
-      setError('Failed to load hero images');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Use first 4 featured products for hero
+  const heroProducts = products.slice(0, 4);
 
   // Auto-advance slideshow
   useEffect(() => {
-    if (!isAutoPlay || products.length === 0) return;
+    if (!isAutoPlay || heroProducts.length === 0) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % products.length);
+      setCurrentIndex((prev) => (prev + 1) % heroProducts.length);
     }, SLIDE_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [isAutoPlay, products.length]);
+  }, [isAutoPlay, heroProducts.length]);
 
   const getImageUrl = (path) => {
     if (!path) return '';
@@ -56,12 +32,12 @@ export function HeroSlideshow() {
 
   const goToPrevious = () => {
     setIsAutoPlay(false);
-    setCurrentIndex((prev) => (prev - 1 + products.length) % products.length);
+    setCurrentIndex((prev) => (prev - 1 + heroProducts.length) % heroProducts.length);
   };
 
   const goToNext = () => {
     setIsAutoPlay(false);
-    setCurrentIndex((prev) => (prev + 1) % products.length);
+    setCurrentIndex((prev) => (prev + 1) % heroProducts.length);
   };
 
   const goToSlide = (index) => {
@@ -70,18 +46,7 @@ export function HeroSlideshow() {
   };
 
   // If no products, show fallback
-  if (loading) {
-    return (
-      <div className="relative z-10 rounded-3xl border-4 border-black overflow-hidden shadow-[12px_12px_0_0_rgba(0,0,0,1)] bg-white aspect-square flex items-center justify-center">
-        <div className="text-center">
-          <img src="/dance.gif" alt="Loading" className="w-16 h-16 mx-auto mb-3" />
-          <p className="text-lg font-bold text-black">Loading Hero...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || products.length === 0) {
+  if (heroProducts.length === 0) {
     return (
       <div className="relative z-10 rounded-3xl border-4 border-black overflow-hidden shadow-[12px_12px_0_0_rgba(0,0,0,1)] bg-white aspect-square">
         <img
@@ -93,7 +58,7 @@ export function HeroSlideshow() {
     );
   }
 
-  const currentProduct = products[currentIndex];
+  const currentProduct = heroProducts[currentIndex];
 
   return (
     <div className="relative z-10 rounded-3xl border-4 border-black overflow-hidden shadow-[12px_12px_0_0_rgba(0,0,0,1)] bg-white aspect-square group">
@@ -130,7 +95,7 @@ export function HeroSlideshow() {
       </motion.div>
 
       {/* Navigation Buttons */}
-      {products.length > 1 && (
+      {heroProducts.length > 1 && (
         <>
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -157,9 +122,9 @@ export function HeroSlideshow() {
       )}
 
       {/* Slide Indicators */}
-      {products.length > 1 && (
+      {heroProducts.length > 1 && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-          {products.map((_, index) => (
+          {heroProducts.map((_, index) => (
             <motion.button
               key={index}
               onClick={() => goToSlide(index)}
@@ -176,7 +141,7 @@ export function HeroSlideshow() {
       )}
 
       {/* Auto-play indicator */}
-      {products.length > 1 && (
+      {heroProducts.length > 1 && (
         <div className="absolute top-4 right-4 z-20">
           <motion.div
             animate={{ opacity: isAutoPlay ? [1, 0.5, 1] : 1 }}
