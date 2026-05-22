@@ -17,6 +17,25 @@ function Home() {
 
   useEffect(() => {
     fetchFeaturedProducts();
+
+    // Refetch when page becomes visible again
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchFeaturedProducts();
+      }
+    };
+
+    // Refetch periodically every 30 seconds to pick up admin changes
+    const intervalId = setInterval(() => {
+      fetchFeaturedProducts();
+    }, 30000);
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const fetchFeaturedProducts = async () => {
