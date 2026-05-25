@@ -301,10 +301,14 @@ function ProductDetails() {
               <h1 className="text-5xl md:text-6xl font-black text-black mb-6 leading-tight" style={{ fontFamily: "'Chewy', cursive" }}>
                 {product.name}
               </h1>
-              <div className="bg-white border-3 border-black p-6 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6">
-                <p className="text-black/80 font-bold leading-relaxed text-lg">
-                  {product.description}
-                </p>
+              <div className="space-y-4 mb-6">
+                {product.description && product.description.split('\n').filter(line => line.trim()).map((paragraph, index) => (
+                  <div key={index} className="bg-linear-to-r from-[#fdf8e6] to-[#ffeaa7] border-3 border-black p-5 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <p className="text-black font-bold leading-relaxed text-base md:text-lg whitespace-pre-wrap">
+                      {paragraph}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
 
