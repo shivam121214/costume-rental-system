@@ -36,9 +36,18 @@ function Products() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
   useEffect(() => {
-    getProducts();
+    // Load from localStorage if available, otherwise fetch from API
+    const cachedProducts = localStorage.getItem('adminProducts');
+    
+    if (cachedProducts) {
+      setProducts(JSON.parse(cachedProducts));
+      setHasLoadedOnce(true);
+    } else {
+      getProducts();
+    }
   }, []);
 
   const getProducts = async () => {
@@ -46,6 +55,9 @@ function Products() {
       setLoading(true);
       const res = await axios.get(`${API_URL}/api/admin/products`);
       setProducts(res.data);
+      // Cache products to localStorage
+      localStorage.setItem('adminProducts', JSON.stringify(res.data));
+      setHasLoadedOnce(true);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
