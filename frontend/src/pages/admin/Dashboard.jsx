@@ -189,7 +189,7 @@ function DashboardContent({ stats, navigate, noShowCount }) {
               title="No-Show Bookings"
               value={noShowCount}
               icon={
-                <AlertTriangle className="w-8 h-8 text-white" strokeWidth={2.5} />
+                 <AlertTriangle className="w-8 h-8 text-black" strokeWidth={2.5} />
               }
               badgeColor="bg-[#ff5c8d]"
               badgeTextColor="text-white"
