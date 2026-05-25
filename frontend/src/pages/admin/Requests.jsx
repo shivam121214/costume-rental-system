@@ -90,8 +90,16 @@ function Requests() {
         action: "accepted"
       });
 
-      // Refresh requests
-      getRequests();
+      // Remove request from list instead of reloading
+      setRequests((prev) => prev.filter((req) => req.id !== id));
+      
+      // Update cache
+      const cacheKey = `adminRequests_${filter}`;
+      const updatedRequests = requests.filter((req) => req.id !== id);
+      localStorage.setItem(cacheKey, JSON.stringify({
+        requests: updatedRequests,
+        nextPageUrl: nextPageUrl
+      }));
     } catch (error) {
       window.dispatchEvent(new CustomEvent('showNotification', {
         detail: { message: `❌ ${error.response?.data?.message || "Cannot accept request right now."}`, type: 'error' }
@@ -138,7 +146,16 @@ function Requests() {
         action: "rejected"
       });
 
-      getRequests();
+      // Remove request from list instead of reloading
+      setRequests((prev) => prev.filter((req) => req.id !== id));
+      
+      // Update cache
+      const cacheKey = `adminRequests_${filter}`;
+      const updatedRequests = requests.filter((req) => req.id !== id);
+      localStorage.setItem(cacheKey, JSON.stringify({
+        requests: updatedRequests,
+        nextPageUrl: nextPageUrl
+      }));
     } catch (error) {
       console.error("Error rejecting request:", error);
       window.dispatchEvent(new CustomEvent('showNotification', {
