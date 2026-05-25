@@ -194,9 +194,10 @@ function Bookings() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {bookings
             .filter(b => 
-              b.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              b.product?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              b.phone.includes(searchQuery)
+              (b.status !== "no-show") &&
+              (b.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              b.product?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              b.phone.includes(searchQuery))
             )
             .sort((a, b) => {
               const dateA = new Date(a.created_at || 0).getTime();
@@ -272,9 +273,10 @@ function Bookings() {
             ))}
             {/* Empty State */}
             {bookings.filter(b => 
-              b.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              (b.status !== "no-show") &&
+              (b.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
               b.product?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              b.phone.includes(searchQuery)
+              b.phone.includes(searchQuery))
             ).length === 0 && (
               <div className="col-span-full py-20 text-center bg-white border-4 border-dashed border-black rounded-3xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
                 <p className="text-5xl mb-4">🔍</p>

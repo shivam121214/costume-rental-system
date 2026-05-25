@@ -27,7 +27,9 @@ function Dashboard() {
     pending_amount: 0,
     partial_count: 0,
   });
+  const [noShowBookings, setNoShowBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [processingId, setProcessingId] = useState(null);
 
   useEffect(() => {
     // Load from localStorage if available
@@ -39,6 +41,9 @@ function Dashboard() {
     } else {
       getStats();
     }
+    
+    // Fetch no-show bookings
+    getNoShowBookings();
   }, []);
 
   const getStats = async () => {
@@ -57,6 +62,61 @@ function Dashboard() {
       console.error("Error fetching dashboard stats:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getNoShowBookings = async () => {
+    try {
+      const res = await axios.get(
+        "https://costume-rental-system.onrender.com/api/bookings?status=no-show"
+      );
+      setNoShowBookings(res.data);
+    } catch (error) {
+      console.error("Error fetching no-show bookings:", error);
+    }
+  };
+
+  const markAsPickedNow = async (id) => {
+    setProcessingId(id);
+    try {
+      await axios.post(
+        `https://costume-rental-system.onrender.com/api/bookings/${id}/status`,
+        { status: "picked" }
+      );
+      // Remove from no-show list
+      setNoShowBookings((prev) => prev.filter((b) => b.id !== id));
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "✅ Booking marked as picked!", type: 'success' }
+      }));
+    } catch (error) {
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: `❌ ${error.response?.data?.message || "Error marking as picked."}`, type: 'error' }
+      }));
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
+  const deleteNoShowBooking = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this no-show booking? This action cannot be undone.")) {
+      return;
+    }
+    setProcessingId(id);
+    try {
+      await axios.delete(
+        `https://costume-rental-system.onrender.com/api/bookings/${id}`
+      );
+      // Remove from no-show list
+      setNoShowBookings((prev) => prev.filter((b) => b.id !== id));
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "✅ No-show booking deleted!", type: 'success' }
+      }));
+    } catch (error) {
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: `❌ ${error.response?.data?.message || "Error deleting booking."}`, type: 'error' }
+      }));
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -87,13 +147,13 @@ function Dashboard() {
           </button>
         </motion.div>
 
-        <DashboardContent stats={stats} navigate={navigate} />
+        <DashboardContent stats={stats} navigate={navigate} noShowBookings={noShowBookings} markAsPickedNow={markAsPickedNow} deleteNoShowBooking={deleteNoShowBooking} processingId={processingId} />
       </main>
     </div>
   );
 }
 
-function DashboardContent({ stats, navigate }) {
+function DashboardContent({ stats, navigate, noShowBookings, markAsPickedNow, deleteNoShowBooking, processingId }) {
   return (
     <div className="space-y-16">
       {/* Priority Section */}
@@ -152,6 +212,62 @@ function DashboardContent({ stats, navigate }) {
           />
         </div>
       </motion.section>
+
+      {/* No-Show Bookings Section */}
+      {noShowBookings.length > 0 && (
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="bg-[#ff5c8d] border-4 border-black rounded-3xl p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <AlertTriangle className="w-8 h-8 text-white" strokeWidth={3} />
+            <h2
+              className="text-3xl font-black text-white"
+              style={{ fontFamily: "'Chewy', cursive" }}
+            >
+              ⚠️ No-Show Bookings ({noShowBookings.length})
+            </h2>
+          </div>
+          <p className="text-white font-bold mb-6">Customers who didn't pick up on their scheduled date:</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {noShowBookings.map((booking) => (
+              <div key={booking.id} className="bg-white border-3 border-black rounded-2xl p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h3 className="text-lg font-black text-black">{booking.customer_name}</h3>
+                    <p className="text-sm font-bold text-black/70">📞 {booking.phone}</p>
+                  </div>
+                </div>
+                
+                <div className="bg-[#fdf8e6] border-2 border-black rounded-xl p-3 mb-3 text-sm">
+                  <p className="font-bold text-black">📦 {booking.product?.name || "Deleted Product"}</p>
+                  <p className="text-xs text-black/70 font-bold">Qty: {booking.quantity} | Scheduled: {booking.start_date}</p>
+                </div>
+                
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => markAsPickedNow(booking.id)}
+                    disabled={processingId === booking.id}
+                    className="flex-1 px-3 py-2 bg-[#06d6a0] text-black font-black text-sm border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
+                  >
+                    {processingId === booking.id ? "..." : "✅ Picked Now"}
+                  </button>
+                  <button
+                    onClick={() => deleteNoShowBooking(booking.id)}
+                    disabled={processingId === booking.id}
+                    className="flex-1 px-3 py-2 bg-[#ef476f] text-white font-black text-sm border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
+                  >
+                    {processingId === booking.id ? "..." : "❌ Delete"}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.section>
+      )}
 
       {/* Status Section */}
       <motion.section
