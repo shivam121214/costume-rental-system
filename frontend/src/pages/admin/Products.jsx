@@ -263,7 +263,7 @@ function Products() {
       console.error("Error toggling visibility:", error);
       window.dispatchEvent(new CustomEvent('showNotification', {
         detail: { message: "❌ Failed to toggle visibility", type: 'error' }
-      });
+      }));
     } finally {
       setToggleLoading(prev => ({ ...prev, [`visibility-${item.id}`]: false }));
     }
