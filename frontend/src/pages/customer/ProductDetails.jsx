@@ -322,7 +322,7 @@ function ProductDetails() {
                         onClick={() => setExpandDescription(!expandDescription)}
                         className="mt-4 px-6 py-2 bg-[#06d6a0] text-black border-3 border-black rounded-xl font-black uppercase text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
                       >
-                        {expandDescription ? "📖 Show Less" : "📖 Read More"}
+                        {expandDescription ? " Show Less" : " Read More"}
                       </button>
                     )}
                   </div>
