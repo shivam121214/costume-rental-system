@@ -101,10 +101,6 @@ export function FeaturedProducts({ products = [] }) {
                         </div>
                         <span className="text-sm font-bold text-neutral-600">(--)</span>
                       </div>
-
-                      <button className="mt-auto w-full py-3 bg-black text-white font-bold rounded-xl border-2 border-black hover:bg-neutral-800 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                        Add to Cart!
-                      </button>
                     </div>
                   </div>
                 </motion.div>
