@@ -306,7 +306,7 @@ function ProductDetails() {
                 {product.description && (
                   <div className="space-y-3">
                     {product.description.split('\n').filter(line => line.trim()).map((point, index) => {
-                      const displayPoint = expandDescription || index < 3;
+                      const displayPoint = expandDescription || index < 2;
                       return displayPoint ? (
                         <div key={index} className="flex gap-3">
                           <span className="text-black font-black text-lg shrink-0">•</span>
