@@ -142,20 +142,6 @@ export function CurtainReveal({ children }) {
               )}
             </AnimatePresence>
           </div>
-
-          {/* Decorative corner elements */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isOpen ? 0 : 1 }}
-            transition={{ duration: 0.5 }}
-            className="absolute top-8 left-8 w-8 h-8 border-2 border-black pointer-events-none opacity-40"
-          />
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isOpen ? 0 : 1 }}
-            transition={{ duration: 0.5 }}
-            className="absolute bottom-8 right-8 w-8 h-8 border-2 border-black pointer-events-none opacity-40"
-          />
         </div>
       )}
       {children}
