@@ -8,7 +8,6 @@ const testimonials = [
     role: 'Fairy Mom',
     rating: 5,
     text: 'Adya fancy dress is amazing for any fancy dress , or festival clothing as it provides you a fresh, good condition, and shiny dresses. I have a wonderful experience with this shop from 2 years. I could not say about the honour of this shop, she is very polite and always ready for provide the things on time  every time. There Pricing are reasonable for everyone pocket. You can book your festival, school function, skit and many more dresses from them. Happy customer Deepali',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=facearea&facepad=2&w=256&h=256&q=80',
     color: '#ff9f1c'
   },
   {
@@ -17,16 +16,14 @@ const testimonials = [
     role: 'Amateur Superhero',
     rating: 5,
     text: 'A Delightful Experience at Aadya Fancy Dress Shop! I had a wonderful experience at Aadya Fancy Dress Shop! The collection is impressive, with a wide variety of costumes for every theme imaginable — from fairy tale characters to historical figures and creative, one-of-a-kind outfits. Everything is well-maintained, clean, and ready to wear. Whether it’s for school events, parties, or festivals, Aadya is now my go-to place for costumes. Highly recommended for anyone looking to make their special occasion even more memorable!',
-    avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?crop=entropy&cs=tinysrgb&fit=facearea&facepad=2&w=256&h=256&q=80',
     color: '#118ab2'
   },
   {
     id: 3,
-    name: 'Emma Williams',
+    name: 'Diksha Totre',
     role: 'T-Rex Wrangler',
     rating: 5,
     text: 'Excellent rental costume shop! Wide range of costumes for kids and adults, all in neat and hygienic condition. Prices are reasonable and the service is very friendly. Had a smooth and pleasant experience. Will surely visit again.',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=facearea&facepad=2&w=256&h=256&q=80',
     color: '#ef476f'
   }
 ];
@@ -92,21 +89,28 @@ export function Testimonials() {
                   "{testimonial.text}"
                 </p>
 
-                <div className="flex items-center gap-4 pt-6 mt-auto border-t-4 border-black border-dashed">
-                  <img
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    className="w-16 h-16 rounded-full object-cover border-4 border-black"
-                  />
-                  <div>
-                    <div className="text-black text-xl" style={{ fontFamily: "'Chewy', cursive" }}>{testimonial.name}</div>
-                    <div className="text-sm font-bold text-neutral-600 rounded-full px-2 py-0.5 bg-gray-100 border border-black inline-block mt-1">{testimonial.role}</div>
-                  </div>
+                <div className="pt-6 mt-auto border-t-4 border-black border-dashed">
+                  <div className="text-black text-xl" style={{ fontFamily: "'Chewy', cursive" }}>{testimonial.name}</div>
+                  <div className="text-sm font-bold text-neutral-600 rounded-full px-2 py-0.5 bg-gray-100 border border-black inline-block mt-1">{testimonial.role}</div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-16 flex justify-center"
+        >
+          <button
+            onClick={() => window.open('https://maps.app.goo.gl/ebZ57xhZJp7K6xV96?hl=en', '_blank')}
+            className="px-8 py-4 bg-[#06d6a0] text-black font-black text-lg rounded-2xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 transition-all"
+          >
+            ⭐ View All Reviews on Google Maps
+          </button>
+        </motion.div>
       </div>
     </section>
   );
