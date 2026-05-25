@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { CurtainReveal } from "./components/CurtainReveal";
 
 import Home from "./pages/customer/Home";
 import Products from "./pages/customer/Products";
@@ -25,11 +26,12 @@ import Cart from "./pages/customer/Cart";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Notification />
+    <CurtainReveal>
+      <BrowserRouter>
+        <Navbar />
+        <Notification />
 
-      <div className="pt-20">
+        <div className="pt-20">
         <Routes>
         {/* Customer */}
         <Route path="/" element={<Home />} />
@@ -135,7 +137,8 @@ function App() {
         
       </Routes>
       </div>
-    </BrowserRouter>
+        </BrowserRouter>
+    </CurtainReveal>
   );
 }
 
