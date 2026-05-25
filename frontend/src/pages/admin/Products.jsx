@@ -280,6 +280,13 @@ function Products() {
     });
   };
 
+  const removeCoverImage = () => {
+    setForm({
+      ...form,
+      image: null,
+    });
+  };
+
   const removeExistingImage = (index) => {
     const updated = [...form.existingGallery];
     updated.splice(index, 1);
@@ -430,6 +437,29 @@ function Products() {
                     className="w-full px-4 py-3 bg-white border-3 border-black rounded-2xl font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#ef476f]"
                   />
                 </div>
+
+                {/* Cover Image Preview */}
+                {form.image && (
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wide mb-2">
+                      Cover Image Preview
+                    </label>
+                    <div className="relative inline-block">
+                      <img
+                        src={URL.createObjectURL(form.image)}
+                        alt="Cover preview"
+                        className="w-32 h-32 object-cover rounded-lg border-3 border-black"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeCoverImage}
+                        className="absolute top-1 right-1 bg-[#ef476f] text-white w-8 h-8 rounded-full text-sm font-black border-2 border-black hover:bg-[#ff5c8d] transition-colors flex items-center justify-center"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {/* Gallery Images Upload */}
                 <div>
