@@ -29,7 +29,7 @@ function App() {
       <Navbar />
       <Notification />
 
-      <div className="pt-24">
+      <div className="pt-20">
         <Routes>
         {/* Customer */}
         <Route path="/" element={<Home />} />

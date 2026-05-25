@@ -54,7 +54,7 @@ function Home() {
   return (
     <div className="min-h-screen bg-[#fdf8e6]">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-start overflow-hidden bg-[#fdf8e6] pt-20">
+      <section className="relative min-h-screen flex items-center justify-start overflow-hidden bg-[#fdf8e6]">
         {/* Fun background decorative shapes */}
         <div className="absolute top-20 left-10 w-32 h-32 bg-[#ffd166] rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-48 h-48 bg-[#ef476f] rounded-full mix-blend-multiply filter blur-xl opacity-60"></div>
