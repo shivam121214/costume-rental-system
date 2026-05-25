@@ -16,7 +16,18 @@ function Requests() {
   const [whatsappModal, setWhatsappModal] = useState(null); // {phone, message, customerName}
 
   useEffect(() => {
-    getRequests();
+    // Load from localStorage if available for current filter
+    const cacheKey = `adminRequests_${filter}`;
+    const cachedRequests = localStorage.getItem(cacheKey);
+    
+    if (cachedRequests) {
+      const cached = JSON.parse(cachedRequests);
+      setRequests(cached.requests);
+      setNextPageUrl(cached.nextPageUrl);
+      setLoading(false);
+    } else {
+      getRequests();
+    }
   }, [filter]);
 
   const getRequests = async () => {
@@ -27,6 +38,14 @@ function Requests() {
 
     setRequests(res.data.data);
     setNextPageUrl(res.data.next_page_url);
+    
+    // Cache requests for current filter
+    const cacheKey = `adminRequests_${filter}`;
+    localStorage.setItem(cacheKey, JSON.stringify({
+      requests: res.data.data,
+      nextPageUrl: res.data.next_page_url
+    }));
+    
     setLoading(false);
   };
 
@@ -72,9 +91,9 @@ function Requests() {
       // Refresh requests
       getRequests();
     } catch (error) {
-      alert(
-        error.response?.data?.message || "Cannot accept request right now.",
-      );
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: `❌ ${error.response?.data?.message || "Cannot accept request right now."}`, type: 'error' }
+      }));
     }
   };
 
@@ -117,9 +136,9 @@ function Requests() {
       getRequests();
     } catch (error) {
       console.error("Error rejecting request:", error);
-      alert(
-        error.response?.data?.message || "Error rejecting request.",
-      );
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: `❌ ${error.response?.data?.message || "Error rejecting request."}`, type: 'error' }
+      }));
     }
   };
 

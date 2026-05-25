@@ -15,7 +15,15 @@ function Bookings() {
   const [sortBy, setSortBy] = useState("newest");
 
   useEffect(() => {
-    getBookings();
+    // Load from localStorage if available
+    const cachedBookings = localStorage.getItem('adminBookings');
+    
+    if (cachedBookings) {
+      setBookings(JSON.parse(cachedBookings));
+      setLoading(false);
+    } else {
+      getBookings();
+    }
   }, []);
 
   const getBookings = async () => {
@@ -25,6 +33,11 @@ function Bookings() {
         "https://costume-rental-system.onrender.com/api/bookings",
       );
       setBookings(res.data);
+      // Cache bookings to localStorage
+      localStorage.setItem('adminBookings', JSON.stringify(res.data));
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "✅ Bookings refreshed!", type: 'success' }
+      }));
     } catch (err) {
       console.error("Error fetching bookings:", err);
     } finally {

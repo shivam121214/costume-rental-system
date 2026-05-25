@@ -27,19 +27,36 @@ function Dashboard() {
     pending_amount: 0,
     partial_count: 0,
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getStats();
+    // Load from localStorage if available
+    const cachedStats = localStorage.getItem('dashboardStats');
+    
+    if (cachedStats) {
+      setStats(JSON.parse(cachedStats));
+      setLoading(false);
+    } else {
+      getStats();
+    }
   }, []);
 
   const getStats = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(
         "https://costume-rental-system.onrender.com/api/dashboard"
       );
       setStats(res.data);
+      // Cache stats to localStorage
+      localStorage.setItem('dashboardStats', JSON.stringify(res.data));
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "✅ Dashboard refreshed!", type: 'success' }
+      }));
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,6 +78,13 @@ function Dashboard() {
             </h1>
             <p className="font-bold mt-2 text-lg">Welcome back, Boss!</p>
           </div>
+          <button
+            onClick={getStats}
+            disabled={loading}
+            className="px-6 py-3 bg-[#06d6a0] text-black font-black rounded-xl border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? "🔄 Refreshing..." : "🔄 Refresh"}
+          </button>
         </motion.div>
 
         <DashboardContent stats={stats} navigate={navigate} />
