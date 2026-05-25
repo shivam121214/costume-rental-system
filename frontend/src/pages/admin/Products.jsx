@@ -37,6 +37,7 @@ function Products() {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
+  const [toggleLoading, setToggleLoading] = useState({});
 
   useEffect(() => {
     // Load from localStorage if available, otherwise fetch from API
@@ -125,10 +126,14 @@ function Products() {
     try {
       if (editId) {
         await axios.post(`${API_URL}/api/products/${editId}?_method=PUT`, data);
-        alert("Product updated successfully!");
+        window.dispatchEvent(new CustomEvent('showNotification', {
+          detail: { message: "✅ Product updated successfully!", type: 'success' }
+        }));
       } else {
         await axios.post(`${API_URL}/api/products`, data);
-        alert("Product added successfully!");
+        window.dispatchEvent(new CustomEvent('showNotification', {
+          detail: { message: "✅ Product added successfully!", type: 'success' }
+        }));
       }
 
       setForm(emptyForm);
@@ -136,7 +141,9 @@ function Products() {
       getProducts();
     } catch (error) {
       console.log(error.response.data);
-      alert(error.response?.data?.message || "Upload failed");
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: `❌ ${error.response?.data?.message || "Upload failed"}`, type: 'error' }
+      }));
     }
   };
 
@@ -160,33 +167,68 @@ function Products() {
     );
 
     if (input !== "CONFIRM") {
-      alert("Delete cancelled");
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "❌ Delete cancelled", type: 'error' }
+      }));
       return;
     }
 
-    await axios.delete(`${API_URL}/api/products/${id}`);
-    getProducts();
+    setToggleLoading(prev => ({ ...prev, [`delete-${id}`]: true }));
+    try {
+      await axios.delete(`${API_URL}/api/products/${id}`);
+      setProducts(prev => prev.filter(p => p.id !== id));
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "✅ Product deleted successfully!", type: 'success' }
+      }));
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "❌ Failed to delete product", type: 'error' }
+      }));
+    } finally {
+      setToggleLoading(prev => ({ ...prev, [`delete-${id}`]: false }));
+    }
   };
 
   const toggleFeatured = async (id, currentStatus) => {
+    setToggleLoading(prev => ({ ...prev, [`featured-${id}`]: true }));
     try {
       await axios.post(`${API_URL}/api/products/${id}/toggle-featured`);
-      getProducts();
-      alert(`Product ${currentStatus ? "removed from" : "added to"} featured!`);
+      setProducts(prev => prev.map(p => 
+        p.id === id ? { ...p, is_featured: !p.is_featured } : p
+      ));
+      localStorage.setItem('adminProducts', JSON.stringify(products));
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: `✅ Product ${currentStatus ? "removed from" : "added to"} featured!`, type: 'success' }
+      }));
     } catch (error) {
       console.error("Error toggling featured:", error);
-      alert("Failed to toggle featured status");
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "❌ Failed to toggle featured status", type: 'error' }
+      }));
+    } finally {
+      setToggleLoading(prev => ({ ...prev, [`featured-${id}`]: false }));
     }
   };
 
   const toggleFeaturedSection = async (id, currentStatus) => {
+    setToggleLoading(prev => ({ ...prev, [`section-${id}`]: true }));
     try {
       await axios.post(`${API_URL}/api/products/${id}/toggle-featured-section`);
-      getProducts();
-      alert(`Product ${currentStatus ? "removed from" : "added to"} Featured Section!`);
+      setProducts(prev => prev.map(p => 
+        p.id === id ? { ...p, show_on_featured_section: !p.show_on_featured_section } : p
+      ));
+      localStorage.setItem('adminProducts', JSON.stringify(products));
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: `✅ Product ${currentStatus ? "removed from" : "added to"} Featured Section!`, type: 'success' }
+      }));
     } catch (error) {
       console.error("Error toggling featured section:", error);
-      alert("Failed to toggle featured section status");
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "❌ Failed to toggle featured section status", type: 'error' }
+      }));
+    } finally {
+      setToggleLoading(prev => ({ ...prev, [`section-${id}`]: false }));
     }
   };
 
@@ -207,8 +249,24 @@ function Products() {
       item.status === "available" ? "unavailable" : "available",
     );
 
-    await axios.post(`${API_URL}/api/products/${item.id}?_method=PUT`, data);
-    getProducts();
+    setToggleLoading(prev => ({ ...prev, [`visibility-${item.id}`]: true }));
+    try {
+      await axios.post(`${API_URL}/api/products/${item.id}?_method=PUT`, data);
+      setProducts(prev => prev.map(p => 
+        p.id === item.id ? { ...p, status: item.status === "available" ? "unavailable" : "available" } : p
+      ));
+      localStorage.setItem('adminProducts', JSON.stringify(products));
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: `✅ Product ${item.status === "available" ? "hidden" : "shown"} successfully!`, type: 'success' }
+      }));
+    } catch (error) {
+      console.error("Error toggling visibility:", error);
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "❌ Failed to toggle visibility", type: 'error' }
+      });
+    } finally {
+      setToggleLoading(prev => ({ ...prev, [`visibility-${item.id}`]: false }));
+    }
   };
 
   const removeGalleryImage = (index) => {
@@ -614,6 +672,7 @@ function Products() {
                   onToggleFeatured={toggleFeatured}
                   onToggleSection={toggleFeaturedSection}
                   onToggleVisibility={toggleVisibility}
+                  toggleLoading={toggleLoading}
                   onDelete={deleteProduct}
                 />
               ))}
@@ -648,6 +707,7 @@ function ProductCard({
   onToggleSection,
   onToggleVisibility,
   onDelete,
+  toggleLoading = {},
 }) {
   const badgeColors = ["bg-[#ef476f]", "bg-[#ffd166]", "bg-[#06d6a0]"];
   const [badgeColor] = useState(
@@ -724,13 +784,14 @@ function ProductCard({
               whileHover={{ y: -1 }}
               whileTap={{ y: 1 }}
               onClick={() => onToggleFeatured(product.id, product.is_featured)}
-              className={`py-2 border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all ${
+              disabled={toggleLoading[`featured-${product.id}`]}
+              className={`py-2 border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 disabled:cursor-not-allowed ${
                 product.is_featured
                   ? "bg-[#ffd166] text-black"
                   : "bg-white text-black"
               }`}
             >
-              ⭐ {product.is_featured ? "UNFEATURE" : "FEATURE"}
+              {toggleLoading[`featured-${product.id}`] ? "⏳..." : `⭐ ${product.is_featured ? "UNFEATURE" : "FEATURE"}`}
             </motion.button>
           </div>
 
@@ -739,21 +800,23 @@ function ProductCard({
               whileHover={{ y: -1 }}
               whileTap={{ y: 1 }}
               onClick={() => onToggleSection(product.id, product.show_on_featured_section)}
-              className={`py-2 border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all ${
+              disabled={toggleLoading[`section-${product.id}`]}
+              className={`py-2 border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 disabled:cursor-not-allowed ${
                 product.show_on_featured_section
                   ? "bg-[#06d6a0] text-black"
                   : "bg-white text-black"
               }`}
             >
-              {product.show_on_featured_section ? "REMOVE SECTION" : "ADD SECTION"}
+              {toggleLoading[`section-${product.id}`] ? "⏳..." : `${product.show_on_featured_section ? "REMOVE SECTION" : "ADD SECTION"}`}
             </motion.button>
             <motion.button
               whileHover={{ y: -1 }}
               whileTap={{ y: 1 }}
               onClick={() => onToggleVisibility(product)}
-              className="py-2 bg-white border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+              disabled={toggleLoading[`visibility-${product.id}`]}
+              className="py-2 bg-white border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              👁️ {product.status === "available" ? "HIDE" : "SHOW"}
+              {toggleLoading[`visibility-${product.id}`] ? "⏳..." : `👁️ ${product.status === "available" ? "HIDE" : "SHOW"}`}
             </motion.button>
           </div>
 
@@ -761,9 +824,18 @@ function ProductCard({
             whileHover={{ y: -1 }}
             whileTap={{ y: 1 }}
             onClick={() => onDelete(product.id)}
-            className="w-full py-3 bg-[#ef476f] text-white border-3 border-black rounded-xl font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-2"
+            disabled={toggleLoading[`delete-${product.id}`]}
+            className="w-full py-3 bg-[#ef476f] text-white border-3 border-black rounded-xl font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <Trash2 size={16} strokeWidth={3} /> DELETE PRODUCT
+            {toggleLoading[`delete-${product.id}`] ? (
+              <>
+                <span className="inline-block animate-spin">⏳</span> DELETING...
+              </>
+            ) : (
+              <>
+                <Trash2 size={16} strokeWidth={3} /> DELETE PRODUCT
+              </>
+            )}
           </motion.button>
         </div>
 
