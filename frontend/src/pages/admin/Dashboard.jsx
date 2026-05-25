@@ -41,7 +41,13 @@ function Dashboard() {
       getStats();
     }
     
-    // Fetch no-show count
+    // Load no-show count from cache first, then refresh
+    const cachedNoShowCount = localStorage.getItem('noShowCount');
+    if (cachedNoShowCount) {
+      setNoShowCount(parseInt(cachedNoShowCount));
+    }
+    
+    // Fetch fresh no-show count
     getNoShowCount();
   }, []);
 
@@ -70,6 +76,8 @@ function Dashboard() {
         "https://costume-rental-system.onrender.com/api/bookings?status=no-show"
       );
       setNoShowCount(res.data.length);
+      // Cache count to localStorage
+      localStorage.setItem('noShowCount', res.data.length.toString());
     } catch (error) {
       console.error("Error fetching no-show bookings:", error);
     }
