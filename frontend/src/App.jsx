@@ -12,6 +12,7 @@ import ProductsAdmin from "./pages/admin/Products";
 import Requests from "./pages/admin/Requests";
 import Bookings from "./pages/admin/Bookings";
 import DirectOrder from "./pages/admin/DirectOrder";
+import NoShowBookings from "./pages/admin/NoShowBookings";
 
 import Navbar from "./components/Navbar";
 import Notification from "./components/Notification";
@@ -119,6 +120,15 @@ function App() {
           element={
             <ProtectedRoute>
               <LateReturns />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/no-show-bookings"
+          element={
+            <ProtectedRoute>
+              <NoShowBookings />
             </ProtectedRoute>
           }
         />
