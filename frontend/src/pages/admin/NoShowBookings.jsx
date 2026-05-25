@@ -19,9 +19,20 @@ function NoShowBookings() {
     try {
       setLoading(true);
       const res = await axios.get(
-        "https://costume-rental-system.onrender.com/api/bookings?status=no-show"
+        "https://costume-rental-system.onrender.com/api/bookings"
       );
-      setNoShowBookings(res.data);
+      
+      // Filter for only "reserved" status bookings where pickup date has passed
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const filteredBookings = res.data.filter((booking) => {
+        const pickupDate = new Date(booking.start_date);
+        pickupDate.setHours(0, 0, 0, 0);
+        return booking.status === "reserved" && pickupDate < today;
+      });
+      
+      setNoShowBookings(filteredBookings);
     } catch (error) {
       console.error("Error fetching no-show bookings:", error);
       window.dispatchEvent(new CustomEvent('showNotification', {

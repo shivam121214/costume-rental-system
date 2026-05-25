@@ -73,11 +73,22 @@ function Dashboard() {
   const getNoShowCount = async () => {
     try {
       const res = await axios.get(
-        "https://costume-rental-system.onrender.com/api/bookings?status=no-show"
+        "https://costume-rental-system.onrender.com/api/bookings"
       );
-      setNoShowCount(res.data.length);
+      
+      // Count only "reserved" status bookings where pickup date has passed
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const noShowCount = res.data.filter((booking) => {
+        const pickupDate = new Date(booking.start_date);
+        pickupDate.setHours(0, 0, 0, 0);
+        return booking.status === "reserved" && pickupDate < today;
+      }).length;
+      
+      setNoShowCount(noShowCount);
       // Cache count to localStorage
-      localStorage.setItem('noShowCount', res.data.length.toString());
+      localStorage.setItem('noShowCount', noShowCount.toString());
     } catch (error) {
       console.error("Error fetching no-show bookings:", error);
     }
