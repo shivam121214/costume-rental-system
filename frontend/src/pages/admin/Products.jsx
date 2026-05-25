@@ -38,6 +38,7 @@ function Products() {
   const [loading, setLoading] = useState(false);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const [toggleLoading, setToggleLoading] = useState({});
+  const [showStockModal, setShowStockModal] = useState(null);
 
   useEffect(() => {
     // Load from localStorage if available, otherwise fetch from API
@@ -674,6 +675,7 @@ function Products() {
                   onToggleVisibility={toggleVisibility}
                   toggleLoading={toggleLoading}
                   onDelete={deleteProduct}
+                  onCheckStock={() => setShowStockModal(product)}
                 />
               ))}
             </div>
@@ -695,6 +697,50 @@ function Products() {
           )}
         </motion.section>
       </main>
+
+      {/* Stock Modal */}
+      {showStockModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white border-4 border-black rounded-3xl p-8 max-w-md w-full shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
+          >
+            <h2 className="text-3xl font-black text-black mb-6" style={{ fontFamily: "'Chewy', cursive" }}>
+              📦 {showStockModal.name}
+            </h2>
+            
+            <div className="space-y-4 mb-8">
+              <div className="bg-[#ffd166] border-3 border-black rounded-2xl p-4">
+                <p className="text-sm font-bold text-gray-700 mb-1">Total Stock Available</p>
+                <p className="text-4xl font-black text-black">{showStockModal.total_quantity || 0}</p>
+              </div>
+              
+              {showStockModal.variants && (
+                <div className="bg-[#bde0fe] border-3 border-black rounded-2xl p-4">
+                  <p className="text-sm font-bold text-black mb-3">Stock by Size:</p>
+                  <div className="space-y-2">
+                    {Object.entries(showStockModal.variants).map(([size, qty]) => (
+                      <div key={size} className="flex justify-between items-center bg-white border-2 border-black rounded-lg p-2">
+                        <span className="font-bold text-black">{size}</span>
+                        <span className="bg-[#06d6a0] text-black px-3 py-1 rounded-full font-black border-2 border-black">{qty}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={() => setShowStockModal(null)}
+              className="w-full py-3 bg-[#ef476f] text-white font-black border-3 border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+            >
+              ✕ Close
+            </button>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
@@ -707,6 +753,7 @@ function ProductCard({
   onToggleSection,
   onToggleVisibility,
   onDelete,
+  onCheckStock,
   toggleLoading = {},
 }) {
   const badgeColors = ["bg-[#ef476f]", "bg-[#ffd166]", "bg-[#06d6a0]"];
@@ -801,7 +848,7 @@ function ProductCard({
               whileTap={{ y: 1 }}
               onClick={() => onToggleSection(product.id, product.show_on_featured_section)}
               disabled={toggleLoading[`section-${product.id}`]}
-              className={`py-2 border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 disabled:cursor-not-allowed ${
+              className={`py-2 border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 disabled:cursor-not-allowed text-center ${
                 product.show_on_featured_section
                   ? "bg-[#06d6a0] text-black"
                   : "bg-white text-black"
@@ -819,6 +866,15 @@ function ProductCard({
               {toggleLoading[`visibility-${product.id}`] ? "⏳..." : `👁️ ${product.status === "available" ? "HIDE" : "SHOW"}`}
             </motion.button>
           </div>
+
+          <motion.button
+            whileHover={{ y: -1 }}
+            whileTap={{ y: 1 }}
+            onClick={onCheckStock}
+            className="w-full py-2 bg-[#06d6a0] text-black border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+          >
+            📦 CHECK STOCK
+          </motion.button>
 
           <motion.button
             whileHover={{ y: -1 }}
