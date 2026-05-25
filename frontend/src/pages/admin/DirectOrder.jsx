@@ -4,6 +4,7 @@ import { CalendarDays, Hash, Package, Phone, User, Users, ArrowRight, ChevronDow
 
 function DirectOrder() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     customer_name: "",
     phone: "",
@@ -15,12 +16,29 @@ function DirectOrder() {
   });
 
   useEffect(() => {
-    getProducts();
+    // Load from localStorage if available, otherwise fetch from API
+    const cachedProducts = localStorage.getItem('adminProducts');
+    
+    if (cachedProducts) {
+      setProducts(JSON.parse(cachedProducts));
+      setLoading(false);
+    } else {
+      getProducts();
+    }
   }, []);
 
   const getProducts = async () => {
-    const res = await axios.get("https://costume-rental-system.onrender.com/api/products");
-    setProducts(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get("https://costume-rental-system.onrender.com/api/products");
+      setProducts(res.data);
+      // Cache products to localStorage
+      localStorage.setItem('adminProducts', JSON.stringify(res.data));
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const selectedProduct = products.find((item) => item.id == form.product_id);
@@ -42,7 +60,9 @@ function DirectOrder() {
 
     await axios.post("https://costume-rental-system.onrender.com/api/direct-order", form);
 
-    alert("Walk-in Order Created!");
+    window.dispatchEvent(new CustomEvent('showNotification', {
+      detail: { message: "✅ Walk-in Order Created!", type: 'success' }
+    }));
 
     setForm({
       customer_name: "",

@@ -17,7 +17,15 @@ export function Categories() {
   };
 
   useEffect(() => {
-    fetchCategories();
+    // Load from localStorage if available, otherwise fetch from API
+    const cachedCategories = localStorage.getItem('customerCategories');
+    
+    if (cachedCategories) {
+      setCategories(JSON.parse(cachedCategories));
+      setLoading(false);
+    } else {
+      fetchCategories();
+    }
   }, []);
 
   const fetchCategories = async () => {
@@ -52,6 +60,8 @@ export function Categories() {
         .filter(category => category.products.length > 0); // Only show categories with featured products
 
       setCategories(categoriesArray);
+      // Cache categories to localStorage
+      localStorage.setItem('customerCategories', JSON.stringify(categoriesArray));
       setLoading(false);
     } catch (error) {
       console.error('Error fetching categories:', error);
