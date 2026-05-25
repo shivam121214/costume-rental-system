@@ -18,7 +18,16 @@ function Products() {
   };
 
   useEffect(() => {
-    getProducts();
+    // Load from localStorage if available, otherwise fetch from API
+    const cachedProducts = localStorage.getItem('customerProducts');
+    
+    if (cachedProducts) {
+      setProducts(JSON.parse(cachedProducts));
+      setLoading(false);
+    } else {
+      getProducts();
+    }
+    
     // Get theme from URL params if present
     const themeParam = searchParams.get('theme');
     if (themeParam) {
@@ -31,6 +40,8 @@ function Products() {
       setLoading(true);
       const res = await axios.get(`${API_URL}/api/products`);
       setProducts(res.data);
+      // Cache products to localStorage
+      localStorage.setItem('customerProducts', JSON.stringify(res.data));
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
