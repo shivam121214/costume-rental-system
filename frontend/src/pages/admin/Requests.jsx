@@ -13,6 +13,7 @@ function Requests() {
   const [nextPageUrl, setNextPageUrl] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [processingId, setProcessingId] = useState(null);
   const [whatsappModal, setWhatsappModal] = useState(null); // {phone, message, customerName}
 
   useEffect(() => {
@@ -63,6 +64,7 @@ function Requests() {
   };
 
   const acceptRequest = async (id) => {
+    setProcessingId(id);
     try {
       const requestItem = requests.find((req) => req.id === id);
       
@@ -94,6 +96,8 @@ function Requests() {
       window.dispatchEvent(new CustomEvent('showNotification', {
         detail: { message: `❌ ${error.response?.data?.message || "Cannot accept request right now."}`, type: 'error' }
       }));
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -102,6 +106,7 @@ function Requests() {
     
     if (reason === null) return; // User cancelled
 
+    setProcessingId(id);
     try {
       const requestItem = requests.find((req) => req.id === id);
       
@@ -139,6 +144,8 @@ function Requests() {
       window.dispatchEvent(new CustomEvent('showNotification', {
         detail: { message: `❌ ${error.response?.data?.message || "Error rejecting request."}`, type: 'error' }
       }));
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -252,18 +259,19 @@ function Requests() {
                     <div className="flex gap-3 mt-5">
                       <button
                         onClick={() => acceptRequest(item.id)}
-                        disabled={item.available_quantity < item.quantity}
+                        disabled={item.available_quantity < item.quantity || processingId === item.id}
                         className="flex-1 px-4 py-3 rounded-2xl font-black text-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
                         style={{ backgroundColor: '#ffd166' }}
                       >
-                        Accept
+                        {processingId === item.id ? "Processing..." : "Accept"}
                       </button>
                       <button
                         onClick={() => rejectRequest(item.id)}
-                        className="flex-1 px-4 py-3 rounded-2xl font-black text-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                        disabled={processingId === item.id}
+                        className="flex-1 px-4 py-3 rounded-2xl font-black text-black border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
                         style={{ backgroundColor: '#ef476f' }}
                       >
-                        Decline
+                        {processingId === item.id ? "Processing..." : "Decline"}
                       </button>
                     </div>
                   )}
