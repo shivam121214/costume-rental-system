@@ -39,6 +39,7 @@ function Products() {
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const [toggleLoading, setToggleLoading] = useState({});
   const [showStockModal, setShowStockModal] = useState(null);
+  const [stockLoading, setStockLoading] = useState({});
 
   useEffect(() => {
     // Load from localStorage if available, otherwise fetch from API
@@ -301,6 +302,42 @@ function Products() {
     setShowForm(false);
     setForm(emptyForm);
     setEditId(null);
+  };
+
+  const checkLiveStock = async (product) => {
+    // Fetch live availability for each variant for today's date
+    const today = new Date().toISOString().slice(0, 10);
+    setStockLoading(prev => ({ ...prev, [product.id]: true }));
+
+    try {
+      const variants = product.variants || {};
+      const liveVariants = {};
+      let totalAvailable = 0;
+
+      for (const [size] of Object.entries(variants)) {
+        try {
+          const res = await axios.post(`${API_URL}/api/check-availability`, {
+            product_id: product.id,
+            variant: size,
+            start_date: today,
+            end_date: today,
+          });
+
+          liveVariants[size] = res.data;
+          totalAvailable += Number(res.data.available_quantity || 0);
+        } catch (err) {
+          // if an individual variant fails, fallback to stored value
+          liveVariants[size] = { available_quantity: variants[size] || 0 };
+        }
+      }
+
+      setShowStockModal({ ...product, liveVariants, total_available: totalAvailable });
+    } catch (err) {
+      console.error('Failed to fetch live availability', err);
+      setShowStockModal(product);
+    } finally {
+      setStockLoading(prev => ({ ...prev, [product.id]: false }));
+    }
   };
 
   const filteredProducts = products.filter((p) =>
@@ -705,7 +742,7 @@ function Products() {
                   onToggleVisibility={toggleVisibility}
                   toggleLoading={toggleLoading}
                   onDelete={deleteProduct}
-                  onCheckStock={() => setShowStockModal(product)}
+                  onCheckStock={() => checkLiveStock(product)}
                 />
               ))}
             </div>
@@ -743,20 +780,28 @@ function Products() {
             
             <div className="space-y-4 mb-8">
               <div className="bg-[#ffd166] border-3 border-black rounded-2xl p-4">
-                <p className="text-sm font-bold text-gray-700 mb-1">Total Stock Available</p>
+                <p className="text-sm font-bold text-gray-700 mb-1">Total Stock (stored)</p>
                 <p className="text-4xl font-black text-black">{showStockModal.total_quantity || 0}</p>
+                {showStockModal.total_available !== undefined && (
+                  <p className="text-sm font-bold text-black mt-2">Live Available: <span className="text-2xl">{showStockModal.total_available}</span></p>
+                )}
               </div>
-              
+
               {showStockModal.variants && (
                 <div className="bg-[#bde0fe] border-3 border-black rounded-2xl p-4">
                   <p className="text-sm font-bold text-black mb-3">Stock by Size:</p>
                   <div className="space-y-2">
-                    {Object.entries(showStockModal.variants).map(([size, qty]) => (
-                      <div key={size} className="flex justify-between items-center bg-white border-2 border-black rounded-lg p-2">
-                        <span className="font-bold text-black">{size}</span>
-                        <span className="bg-[#06d6a0] text-black px-3 py-1 rounded-full font-black border-2 border-black">{qty}</span>
-                      </div>
-                    ))}
+                    {Object.entries(showStockModal.variants).map(([size, qty]) => {
+                      const live = showStockModal.liveVariants && showStockModal.liveVariants[size];
+                      const displayQty = live ? live.available_quantity : qty;
+
+                      return (
+                        <div key={size} className="flex justify-between items-center bg-white border-2 border-black rounded-lg p-2">
+                          <span className="font-bold text-black">{size}</span>
+                          <span className="bg-[#06d6a0] text-black px-3 py-1 rounded-full font-black border-2 border-black">{displayQty}</span>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               )}
