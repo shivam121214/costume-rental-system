@@ -17,37 +17,88 @@ function Requests() {
   const [whatsappModal, setWhatsappModal] = useState(null); // {phone, message, customerName}
 
   useEffect(() => {
-    // Load from localStorage if available for current filter
+    // Load cached data immediately for fast UI
     const cacheKey = `adminRequests_${filter}`;
-    const cachedRequests = localStorage.getItem(cacheKey);
-    
-    if (cachedRequests) {
-      const cached = JSON.parse(cachedRequests);
-      setRequests(cached.requests);
-      setNextPageUrl(cached.nextPageUrl);
-      setLoading(false);
-    } else {
-      getRequests();
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      const { requests, nextPageUrl } = JSON.parse(cached);
+      setRequests(requests);
+      setNextPageUrl(nextPageUrl);
     }
+
+    // Then fetch fresh data in background
+    getRequests();
+
+    // Auto-refresh pending requests every 10 seconds, but only fetch if count changed
+    let interval;
+    if (filter === "pending") {
+      interval = setInterval(() => {
+        getRequestsIfNewData();
+      }, 10000); // 10 seconds
+    }
+
+    return () => clearInterval(interval);
   }, [filter]);
 
   const getRequests = async () => {
     setLoading(true);
-    const res = await axios.get(
-      `https://costume-rental-system.onrender.com/api/requests?status=${filter}`,
-    );
+    try {
+      const res = await axios.get(
+        `https://costume-rental-system.onrender.com/api/requests?status=${filter}`,
+      );
 
-    setRequests(res.data.data);
-    setNextPageUrl(res.data.next_page_url);
-    
-    // Cache requests for current filter
-    const cacheKey = `adminRequests_${filter}`;
-    localStorage.setItem(cacheKey, JSON.stringify({
-      requests: res.data.data,
-      nextPageUrl: res.data.next_page_url
-    }));
-    
-    setLoading(false);
+      // Only update state if data actually changed
+      setRequests((prev) => {
+        const isDataChanged = JSON.stringify(prev) !== JSON.stringify(res.data.data);
+        if (isDataChanged) {
+          // Cache the fresh data
+          const cacheKey = `adminRequests_${filter}`;
+          localStorage.setItem(cacheKey, JSON.stringify({
+            requests: res.data.data,
+            nextPageUrl: res.data.next_page_url,
+            timestamp: Date.now()
+          }));
+        }
+        return isDataChanged ? res.data.data : prev;
+      });
+
+      setNextPageUrl(res.data.next_page_url);
+    } catch (error) {
+      console.error("Error fetching requests:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Lightweight check: only fetch full data if pending count changed
+  const getRequestsIfNewData = async () => {
+    try {
+      const res = await axios.get(
+        `https://costume-rental-system.onrender.com/api/requests?status=${filter}`,
+      );
+
+      // Compare with cached data
+      const cacheKey = `adminRequests_${filter}`;
+      const cached = localStorage.getItem(cacheKey);
+      const cachedRequests = cached ? JSON.parse(cached).requests : [];
+
+      // Only update if count or IDs changed (new data exists)
+      if (res.data.data.length !== cachedRequests.length || 
+          JSON.stringify(res.data.data.map(r => r.id)) !== JSON.stringify(cachedRequests.map(r => r.id))) {
+        
+        setRequests(res.data.data);
+        setNextPageUrl(res.data.next_page_url);
+        
+        // Update cache with new data
+        localStorage.setItem(cacheKey, JSON.stringify({
+          requests: res.data.data,
+          nextPageUrl: res.data.next_page_url,
+          timestamp: Date.now()
+        }));
+      }
+    } catch (error) {
+      console.error("Error checking for new requests:", error);
+    }
   };
 
   const loadMore = async () => {
@@ -90,16 +141,19 @@ function Requests() {
         action: "accepted"
       });
 
-      // Remove request from list instead of reloading
-      setRequests((prev) => prev.filter((req) => req.id !== id));
-      
-      // Update cache
-      const cacheKey = `adminRequests_${filter}`;
-      const updatedRequests = requests.filter((req) => req.id !== id);
-      localStorage.setItem(cacheKey, JSON.stringify({
-        requests: updatedRequests,
-        nextPageUrl: nextPageUrl
-      }));
+      // Remove request from list and update cache
+      setRequests((prev) => {
+        const updated = prev.filter((req) => req.id !== id);
+        // Update cache with the new list
+        const cacheKey = `adminRequests_${filter}`;
+        localStorage.setItem(cacheKey, JSON.stringify({
+          requests: updated,
+          nextPageUrl: nextPageUrl,
+          timestamp: Date.now()
+        }));
+        return updated;
+      });
+
     } catch (error) {
       window.dispatchEvent(new CustomEvent('showNotification', {
         detail: { message: `❌ ${error.response?.data?.message || "Cannot accept request right now."}`, type: 'error' }
@@ -146,16 +200,19 @@ function Requests() {
         action: "rejected"
       });
 
-      // Remove request from list instead of reloading
-      setRequests((prev) => prev.filter((req) => req.id !== id));
-      
-      // Update cache
-      const cacheKey = `adminRequests_${filter}`;
-      const updatedRequests = requests.filter((req) => req.id !== id);
-      localStorage.setItem(cacheKey, JSON.stringify({
-        requests: updatedRequests,
-        nextPageUrl: nextPageUrl
-      }));
+      // Remove request from list and update cache
+      setRequests((prev) => {
+        const updated = prev.filter((req) => req.id !== id);
+        // Update cache with the new list
+        const cacheKey = `adminRequests_${filter}`;
+        localStorage.setItem(cacheKey, JSON.stringify({
+          requests: updated,
+          nextPageUrl: nextPageUrl,
+          timestamp: Date.now()
+        }));
+        return updated;
+      });
+
     } catch (error) {
       console.error("Error rejecting request:", error);
       window.dispatchEvent(new CustomEvent('showNotification', {
