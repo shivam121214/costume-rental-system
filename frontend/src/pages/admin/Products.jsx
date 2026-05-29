@@ -869,7 +869,7 @@ function ProductCard({
         {/* Price */}
         <div className="mb-4">
           <div className="inline-block bg-[#ef476f] text-white border-3 border-black rounded-full px-4 py-1 font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-            ${product.rent_price}
+            ₹{product.rent_price}
           </div>
         </div>
 
