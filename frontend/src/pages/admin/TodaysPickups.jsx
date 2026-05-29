@@ -4,6 +4,7 @@ import axios from "axios";
 function TodaysPickups() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [processingId, setProcessingId] = useState(null);
 
   useEffect(() => {
     fetchPickups();
@@ -24,15 +25,30 @@ function TodaysPickups() {
   };
 
   const handlePickup = async (id) => {
+    const bookingToRemove = bookings.find(b => b.id === id);
+    
     try {
+      setProcessingId(id);
+      // Remove from UI instantly (optimistic update)
+      setBookings((prev) => prev.filter((b) => b.id !== id));
+      
       await axios.post(
         `https://costume-rental-system.onrender.com/api/bookings/${id}/pickup`,
       );
-
-      // remove from UI instantly
-      setBookings((prev) => prev.filter((b) => b.id !== id));
+      
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "✅ Pickup marked successfully!", type: 'success' }
+      }));
     } catch (err) {
-      alert("Failed to mark pickup");
+      // Restore item if API fails
+      if (bookingToRemove) {
+        setBookings((prev) => [...prev, bookingToRemove]);
+      }
+      window.dispatchEvent(new CustomEvent('showNotification', {
+        detail: { message: "❌ Failed to mark pickup", type: 'error' }
+      }));
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -85,9 +101,10 @@ function TodaysPickups() {
                     <td className="p-4">
                       <button
                         onClick={() => handlePickup(b.id)}
-                        className="px-4 py-2 bg-[#ffd166] text-black font-black border-2 border-black rounded-xl hover:bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+                        disabled={processingId === b.id}
+                        className="px-4 py-2 bg-[#ffd166] text-black font-black border-2 border-black rounded-xl hover:bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                       >
-                        Mark Picked
+                        {processingId === b.id ? '⏳...' : 'Mark Picked'}
                       </button>
                     </td>
                   </tr>
