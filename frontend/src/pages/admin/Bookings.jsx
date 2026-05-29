@@ -13,6 +13,7 @@ function Bookings() {
   const [whatsappModal, setWhatsappModal] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("newest");
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     // Load from localStorage if available
@@ -43,6 +44,12 @@ function Bookings() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await getBookings();
+    setRefreshing(false);
   };
 
   const updateStatus = async (id, status) => {
@@ -157,12 +164,23 @@ function Bookings() {
 
       <main className="max-w-7xl mx-auto px-4 relative z-10">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <h1 className="text-5xl font-black text-black" style={{ fontFamily: "'Chewy', cursive", textShadow: '2px 2px 0px rgba(0,0,0,0.3)' }}>
-            Bookings
-          </h1>
+        <div className="flex flex-col mb-8 space-y-2">
+          <div className="flex items-center justify-between gap-4">
+            <h1 className="text-5xl font-black text-black" style={{ fontFamily: "'Chewy', cursive", textShadow: '2px 2px 0px rgba(0,0,0,0.3)' }}>
+              Bookings
+            </h1>
+            <button
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="px-6 py-3 rounded-2xl font-black text-black border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 flex items-center gap-2"
+              style={{ backgroundColor: '#06d6a0' }}
+            >
+              <span className={refreshing ? 'inline-block animate-spin' : ''}>🔄</span>
+              {refreshing ? 'Refreshing...' : 'Refresh'}
+            </button>
+          </div>
           
-          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
             <div className="relative w-full sm:w-64">
               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-black" strokeWidth={3} />
               <input 
