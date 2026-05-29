@@ -15,29 +15,21 @@ function Requests() {
   const [loading, setLoading] = useState(false);
   const [processingId, setProcessingId] = useState(null);
   const [whatsappModal, setWhatsappModal] = useState(null); // {phone, message, customerName}
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    // Load cached data immediately for fast UI
+    // Load from localStorage if available for current filter
     const cacheKey = `adminRequests_${filter}`;
-    const cached = localStorage.getItem(cacheKey);
-    if (cached) {
-      const { requests, nextPageUrl } = JSON.parse(cached);
-      setRequests(requests);
-      setNextPageUrl(nextPageUrl);
+    const cachedRequests = localStorage.getItem(cacheKey);
+    
+    if (cachedRequests) {
+      const cached = JSON.parse(cachedRequests);
+      setRequests(cached.requests);
+      setNextPageUrl(cached.nextPageUrl);
+      setLoading(false);
+    } else {
+      getRequests();
     }
-
-    // Then fetch fresh data in background
-    getRequests();
-
-    // Auto-refresh pending requests every 10 seconds, but only fetch if count changed
-    let interval;
-    if (filter === "pending") {
-      interval = setInterval(() => {
-        getRequestsIfNewData();
-      }, 10000); // 10 seconds
-    }
-
-    return () => clearInterval(interval);
   }, [filter]);
 
   const getRequests = async () => {
@@ -47,57 +39,19 @@ function Requests() {
         `https://costume-rental-system.onrender.com/api/requests?status=${filter}`,
       );
 
-      // Only update state if data actually changed
-      setRequests((prev) => {
-        const isDataChanged = JSON.stringify(prev) !== JSON.stringify(res.data.data);
-        if (isDataChanged) {
-          // Cache the fresh data
-          const cacheKey = `adminRequests_${filter}`;
-          localStorage.setItem(cacheKey, JSON.stringify({
-            requests: res.data.data,
-            nextPageUrl: res.data.next_page_url,
-            timestamp: Date.now()
-          }));
-        }
-        return isDataChanged ? res.data.data : prev;
-      });
-
+      setRequests(res.data.data);
       setNextPageUrl(res.data.next_page_url);
+      
+      // Cache requests for current filter
+      const cacheKey = `adminRequests_${filter}`;
+      localStorage.setItem(cacheKey, JSON.stringify({
+        requests: res.data.data,
+        nextPageUrl: res.data.next_page_url
+      }));
     } catch (error) {
       console.error("Error fetching requests:", error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  // Lightweight check: only fetch full data if pending count changed
-  const getRequestsIfNewData = async () => {
-    try {
-      const res = await axios.get(
-        `https://costume-rental-system.onrender.com/api/requests?status=${filter}`,
-      );
-
-      // Compare with cached data
-      const cacheKey = `adminRequests_${filter}`;
-      const cached = localStorage.getItem(cacheKey);
-      const cachedRequests = cached ? JSON.parse(cached).requests : [];
-
-      // Only update if count or IDs changed (new data exists)
-      if (res.data.data.length !== cachedRequests.length || 
-          JSON.stringify(res.data.data.map(r => r.id)) !== JSON.stringify(cachedRequests.map(r => r.id))) {
-        
-        setRequests(res.data.data);
-        setNextPageUrl(res.data.next_page_url);
-        
-        // Update cache with new data
-        localStorage.setItem(cacheKey, JSON.stringify({
-          requests: res.data.data,
-          nextPageUrl: res.data.next_page_url,
-          timestamp: Date.now()
-        }));
-      }
-    } catch (error) {
-      console.error("Error checking for new requests:", error);
     }
   };
 
@@ -112,6 +66,12 @@ function Requests() {
     setNextPageUrl(res.data.next_page_url);
 
     setLoadingMore(false);
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await getRequests();
+    setRefreshing(false);
   };
 
   const acceptRequest = async (id) => {
@@ -240,11 +200,22 @@ function Requests() {
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         {/* Header */}
-        <div className="mb-8 space-y-2">
-          <h1 className="text-5xl font-black text-black uppercase tracking-tight" style={{ fontFamily: "'Chewy', cursive" }}>
-            Booking Requests
-          </h1>
-          <p className="text-black text-lg font-bold">Manage all your fancy dress bookings here! 👗✨</p>
+        <div className="mb-8 space-y-2 flex items-center justify-between">
+          <div>
+            <h1 className="text-5xl font-black text-black uppercase tracking-tight" style={{ fontFamily: "'Chewy', cursive" }}>
+              Booking Requests
+            </h1>
+            <p className="text-black text-lg font-bold">Manage all your fancy dress bookings here! 👗✨</p>
+          </div>
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="px-6 py-3 rounded-2xl font-black text-black border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 flex items-center gap-2"
+            style={{ backgroundColor: '#06d6a0' }}
+          >
+            <span className={refreshing ? 'inline-block animate-spin' : ''}>🔄</span>
+            {refreshing ? 'Refreshing...' : 'Refresh'}
+          </button>
         </div>
 
         {/* Filter Tabs */}
