@@ -305,35 +305,15 @@ function Products() {
   };
 
   const checkLiveStock = async (product) => {
-    // Fetch live availability for each variant for today's date
-    const today = new Date().toISOString().slice(0, 10);
+    // Show stored stock for the product
     setStockLoading(prev => ({ ...prev, [product.id]: true }));
 
     try {
-      const variants = product.variants || {};
-      const liveVariants = {};
-      let totalAvailable = 0;
-
-      for (const [size] of Object.entries(variants)) {
-        try {
-          const res = await axios.post(`${API_URL}/api/check-availability`, {
-            product_id: product.id,
-            variant: size,
-            start_date: today,
-            end_date: today,
-          });
-
-          liveVariants[size] = res.data;
-          totalAvailable += Number(res.data.available_quantity || 0);
-        } catch (err) {
-          // if an individual variant fails, fallback to stored value
-          liveVariants[size] = { available_quantity: variants[size] || 0 };
-        }
-      }
-
-      setShowStockModal({ ...product, liveVariants, total_available: totalAvailable });
+      // Simulate a small delay for UX consistency
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setShowStockModal(product);
     } catch (err) {
-      console.error('Failed to fetch live availability', err);
+      console.error('Error showing stock', err);
       setShowStockModal(product);
     } finally {
       setStockLoading(prev => ({ ...prev, [product.id]: false }));
