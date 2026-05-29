@@ -71,9 +71,8 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between font-bold text-lg gap-4 text-white">
-          <p>&copy; 2026 Party Palooza! All rules broken.</p>
+          <p>&copy; 2026 Aadya Fancy Dresses All rules broken.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-[#ffd166] transition-colors underline decoration-2 underline-offset-4">Privacy Rules</a>
             <Link to="/terms-and-conditions" className="hover:text-[#ffd166] transition-colors underline decoration-2 underline-offset-4">Terms & Conditions</Link>
           </div>
         </div>
