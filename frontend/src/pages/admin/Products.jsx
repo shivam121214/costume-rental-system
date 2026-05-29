@@ -741,6 +741,7 @@ function Products() {
                   onToggleSection={toggleFeaturedSection}
                   onToggleVisibility={toggleVisibility}
                   toggleLoading={toggleLoading}
+                  stockLoading={stockLoading}
                   onDelete={deleteProduct}
                   onCheckStock={() => checkLiveStock(product)}
                 />
@@ -830,6 +831,7 @@ function ProductCard({
   onDelete,
   onCheckStock,
   toggleLoading = {},
+  stockLoading = {},
 }) {
   const badgeColors = ["bg-[#ef476f]", "bg-[#ffd166]", "bg-[#06d6a0]"];
   const [badgeColor] = useState(
@@ -946,9 +948,10 @@ function ProductCard({
             whileHover={{ y: -1 }}
             whileTap={{ y: 1 }}
             onClick={onCheckStock}
-            className="w-full py-2 bg-[#06d6a0] text-black border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+            disabled={stockLoading[product.id]}
+            className="w-full py-2 bg-[#06d6a0] text-black border-3 border-black rounded-xl font-black text-xs uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            📦 CHECK STOCK
+            {stockLoading[product.id] ? "⏳..." : "📦 CHECK STOCK"}
           </motion.button>
 
           <motion.button
